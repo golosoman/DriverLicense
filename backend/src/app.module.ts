@@ -1,31 +1,47 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Ticket } from './ticket.entity';
-import { TicketModule } from './ticket/ticket.module';
-import { CarModule } from './car/car.module';
-import { SignModule } from './sign/sign.module';
-import { TrafficLightModule } from './traffic-light/traffic-light.module';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { ConfigModule } from "@nestjs/config";
+import { Car } from './regulation_objects/car/car.model';
+import { Sign } from './regulation_objects/sign/sign.model';
+import { TrafficLight } from './regulation_objects/traffic_light/traffic_light.model';
+import { TicketCar, TicketSign, TicketTrafficLight, Ticket } from './regulation_objects/ticket';
+import { CarModule } from './regulation_objects/car/car.module';
+import { SignModule } from './regulation_objects/sign/sign.module';
+import { TrafficLightModule } from './regulation_objects/traffic_light/traffic_light.module';
+import { TicketModule } from './regulation_objects/ticket/ticket.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'your_username',
-      password: 'your_password',
-      database: 'your_database_name',
-      entities: [Ticket, Car, Sign, TrafficLight],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true, // Делаем доступным во всех модулях
+      envFilePath: '.env', // Указываем путь к .env файлу
     }),
-    TicketModule,
+    SequelizeModule.forRoot({
+      dialect: 'postgres',
+      host: String(process.env.POSTGRES_HOST),
+      port: Number(process.env.POSTGRES_PORT),
+      username: String(process.env.POSTGRES_USER),
+      password: String(process.env.POSTGRES_PASSWORD),
+      database: String(process.env.POSTGRES_DB),
+      models: [
+        Car,
+        Sign,
+        TrafficLight,
+        Ticket,
+        TicketCar, // Добавьте модель сюда
+        TicketSign,
+        TicketTrafficLight,
+      ],
+      autoLoadModels: true,
+      synchronize: true, // Set to false in production!
+    }),
     CarModule,
     SignModule,
     TrafficLightModule,
+    TicketModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  // controllers: [AppController],
+  // providers: [AppService],
 })
+
 export class AppModule {}
