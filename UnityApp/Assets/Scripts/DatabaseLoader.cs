@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json; // Убедитесь, что у вас установлен Newtonsoft.Json через PackageManager
@@ -7,15 +8,19 @@ public class DatabaseLoader : MonoBehaviour
 {
     private const string baseUrl = "http://localhost:5000"; // Замените на ваш URL
     private const string prefabPath = "Prefabs";
+    private Dictionary<string, GameObject> carSpawnPoints = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> signSpawnPoints = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> trafficLightSpawnPoints = new Dictionary<string, GameObject>();
+
 
     void Start()
     {
         StartCoroutine(LoadTicketData());
     }
-
+    
     IEnumerator LoadTicketData()
     {
-        string ticketId = "1"; // Замените на нужный ID билета
+        string ticketId = "2"; // Замените на нужный ID билета
         string url = $"{baseUrl}/tickets/{ticketId}";
 
         UnityWebRequest request = UnityWebRequest.Get(url);
@@ -24,15 +29,16 @@ public class DatabaseLoader : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             string jsonData = request.downloadHandler.text;
+            try
+            {
             TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
-
             Debug.Log("Ticket Data Loaded: " + ticketData.type);
-
-            // Создание объектов на сцене
-            CreateIntersection(ticketData.type);
-            CreateCars(ticketData.carsArr);
-            CreateSigns(ticketData.signsArr);
-            CreateTrafficLights(ticketData.trafficLightsArr);
+            ProcessTicketData(ticketData);
+            }
+            catch (JsonException ex)
+            {
+                Debug.LogError("Failed to parse JSON data: " + ex.Message);
+            }
         }
         else
         {
@@ -40,153 +46,110 @@ public class DatabaseLoader : MonoBehaviour
         }
     }
 
+    void DictInit(){
+        carSpawnPoints.Add("left", GameObject.Find("CarSpawnLeft"));
+        carSpawnPoints.Add("right", GameObject.Find("CarSpawnRight"));
+        carSpawnPoints.Add("top", GameObject.Find("CarSpawnTop"));
+        carSpawnPoints.Add("bottom", GameObject.Find("CarSpawnBottom"));
+
+        signSpawnPoints.Add("left", GameObject.Find("SignSpawnLeft"));
+        signSpawnPoints.Add("right", GameObject.Find("SignSpawnRight"));
+        signSpawnPoints.Add("top", GameObject.Find("SignSpawnTop"));
+        signSpawnPoints.Add("bottom", GameObject.Find("SignSpawnBottom"));
+
+        trafficLightSpawnPoints.Add("left", GameObject.Find("TrafficLightSpawnLeft"));
+        trafficLightSpawnPoints.Add("right", GameObject.Find("TrafficLightSpawnRight"));
+        trafficLightSpawnPoints.Add("top", GameObject.Find("TrafficLightSpawnTop"));
+        trafficLightSpawnPoints.Add("bottom", GameObject.Find("TrafficLightSpawnBottom"));
+    }
+
+    void ProcessTicketData(TicketData ticketData)
+    {
+        CreateIntersection(ticketData.type);
+        CreateCars(ticketData.carsArr);
+        CreateSigns(ticketData.signsArr);
+        CreateTrafficLights(ticketData.trafficLightsArr);
+    }
+
     void CreateIntersection(string intersection){
-        // GameObject intersectionPrefab = Resources.Load<GameObject>($"{prefabPath}/intersections/{intersection}");
-        // Предполагается, что префабы находятся в папке Resources
         GameObject intersectionPrefab = Resources.Load<GameObject>($"{prefabPath}/intersections/{intersection}");
         Instantiate(intersectionPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        DictInit();
     }
 
     void CreateCars(CarData[] cars)
     {
-        GameObject[] carSpawnPoints = GameObject.FindGameObjectsWithTag("CarSpawn");
-
         foreach (CarData carData in cars)
         {
-            GameObject carPrefab = Resources.Load<GameObject>($"{prefabPath}/cars/{carData.modelName}"); // Предполагается, что префабы находятся в папке Resources
-
-            foreach (GameObject spawnPoint in carSpawnPoints)
+            GameObject carPrefab = Resources.Load<GameObject>($"{prefabPath}/cars/{carData.modelName}");
+            if (carPrefab!= null)
             {
-                if (spawnPoint.name == "CarSpawnLeft" && carData.position == "left")
+                GameObject spawnPoint;
+                if (carSpawnPoints.TryGetValue(carData.position, out spawnPoint))
                 {
                     Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
                 }
-                if (spawnPoint.name == "CarSpawnRight" && carData.position == "right")
+                else
                 {
-                    Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                if (spawnPoint.name == "CarSpawnBottom" && carData.position == "bottom")
-                {
-                    Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                if (spawnPoint.name == "CarSpawnTop" && carData.position == "top")
-                {
-                    Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
+                    Debug.LogError($"The spawn point for the position was not found {carData.position}");
                 }
             }
-            // GameObject car = Instantiate(carPrefab, carData.position, Quaternion.identity);
-            // Дополнительные настройки для машины
+            else
+            {
+                Debug.LogError($"The prefab for the position was not found {carData.modelName}");
+            }
         }
     }
 
     void CreateSigns(SignData[] signs)
     {
-        GameObject[] signSpawnPoints = GameObject.FindGameObjectsWithTag("SignSpawn");
-
         foreach (SignData signData in signs)
         {
-            GameObject signPrefab = Resources.Load<GameObject>($"{prefabPath}/signs/{signData.modelName}"); // Предполагается, что префабы находятся в папке Resources
-            foreach (GameObject spawnPoint in signSpawnPoints)
+            GameObject signPrefab = Resources.Load<GameObject>($"{prefabPath}/signs/{signData.modelName}");
+            if (signPrefab!= null)
             {
-                if (spawnPoint.name == "SignSpawnLeft" && signData.position == "left")
+                GameObject spawnPoint;
+                if (signSpawnPoints.TryGetValue(signData.position, out spawnPoint))
                 {
                     Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
                 }
-                if (spawnPoint.name == "SignSpawnRight" && signData.position == "right")
+                else
                 {
-                    Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
+                    Debug.LogError($"The spawn point for the position was not found {signData.position}");
                 }
-                if (spawnPoint.name == "SignSpawnBottom" && signData.position == "bottom")
-                {
-                    Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                if (spawnPoint.name == "SignSpawnTop" && signData.position == "top")
-                {
-                    Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                // GameObject sign = Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                // Дополнительные настройки для знака, если необходимо
             }
-          
-            // GameObject sign = Instantiate(signPrefab, signData.position, Quaternion.identity);
-            // Дополнительные настройки для знака
+            else
+            {
+                Debug.LogError($"The prefab for the position was not found {signData.modelName}");
+            }
         }
-       
-        
     }
 
     void CreateTrafficLights(TrafficLightData[] trafficLights)
     {
-        GameObject[] trafficLightSpawnPoints = GameObject.FindGameObjectsWithTag("TrafficLightSpawn");
         foreach (TrafficLightData trafficLightData in trafficLights)
         {
-            GameObject trafficLightPrefab = Resources.Load<GameObject>($"{prefabPath}/trafficLights/{trafficLightData.modelName}"); // Предполагается, что префабы находятся в папке Resources
-            foreach (GameObject spawnPoint in trafficLightSpawnPoints)
+            GameObject trafficLightPrefab = Resources.Load<GameObject>($"{prefabPath}/trafficLights/{trafficLightData.modelName}");
+            if (trafficLightPrefab!= null)
             {
-                if (spawnPoint.name == "TrafficLightSpawnLeft" && trafficLightData.position == "left")
+                GameObject spawnPoint;
+                if (trafficLightSpawnPoints.TryGetValue(trafficLightData.position, out spawnPoint))
                 {
                     Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
                 }
-                if (spawnPoint.name == "TrafficLightSpawnRight" && trafficLightData.position == "right")
+                else
                 {
-                    Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
+                    Debug.LogError($"The spawn point for the position was not found {trafficLightData.position}");
                 }
-                if (spawnPoint.name == "TrafficLightSpawnBottom" && trafficLightData.position == "bottom")
-                {
-                    Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                if (spawnPoint.name == "TrafficLightSpawnTop" && trafficLightData.position == "top")
-                {
-                    Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    // Специфическая настройка для машины слева
-                }
-                // GameObject sign = Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                // Дополнительные настройки для знака, если необходимо
             }
-           
-            // GameObject trafficLight = Instantiate(trafficLightPrefab, trafficLightData.position, Quaternion.identity);
-            // Дополнительные настройки для светофора
+            else
+            {
+                Debug.LogError($"The prefab for the position was not found {trafficLightData.modelName}");
+            }
         }
     }
-
-    // IEnumerator LoadTicketData()
-    // {
-    //     string ticketId = "1"; // Замените на нужный ID билета
-    //     string url = $"{BaseUrl}/tickets/{ticketId}";
-
-    //     UnityWebRequest request = UnityWebRequest.Get(url);
-    //     yield return request.SendWebRequest();
-
-    //     if (request.result == UnityWebRequest.Result.Success)
-    //     {
-    //         string jsonData = request.downloadHandler.text;
-    //         TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
-
-    //         // Теперь у вас есть данные билета, машины, знаки и светофоры
-    //         Debug.Log("Ticket Data Loaded: " + ticketData.type);
-    //         Debug.Log("Ticket Data Loaded: " + ticketData.cars_arr[0].sprite);
-    //         // Обработка данных, например, создание объектов на сцене
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Failed to load ticket data: " + request.error);
-    //     }
-    // }
-
 }
 
-// Пример класса для данных билета
 public class TicketData
 {
     public int id;
@@ -196,7 +159,6 @@ public class TicketData
     public CarData[] carsArr;
     public SignData[] signsArr;
     public TrafficLightData[] trafficLightsArr;
-    // Добавьте другие необходимые поля
 }
 
 public class CarData
@@ -206,7 +168,6 @@ public class CarData
     public string position;
     public int speed;
     public string movementDirection;
-    // Добавьте другие необходимые поля
 }
 
 public class SignData
@@ -222,5 +183,4 @@ public class TrafficLightData
     public string modelName;
     public string position;
     public string cycle;
-    // Добавьте другие необходимые поля
 }
