@@ -5,12 +5,12 @@ export class CreateCarDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  sprite: string;
+  modelName: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  direction: string;
+  position: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -20,5 +20,5 @@ export class CreateCarDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  movementPath: string;
+  movementDirection: string;
 }

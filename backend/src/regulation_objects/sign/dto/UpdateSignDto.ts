@@ -5,5 +5,10 @@ export class UpdateSignDto {
     @IsString()
     @IsOptional()
     @ApiProperty()
-    sprite: string;
+    modelName: string;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty()
+    position: string;
   }

@@ -17,13 +17,13 @@ export class Car extends Model<Car> {
     type: DataType.STRING,
     allowNull: false,
   })
-  sprite: string;
+  modelName: string;
 
   @Column({
     type: DataType.ENUM('left', 'right', 'top', 'bottom'),
     allowNull: false,
   })
-  direction: string;
+  position: string;
 
   @Column({
     type: DataType.INTEGER,
@@ -35,7 +35,7 @@ export class Car extends Model<Car> {
     type: DataType.STRING,
     allowNull: false,
   })
-  movementPath: string;
+  movementDirection: string;
 
   @Column({
     type: DataType.DATE,

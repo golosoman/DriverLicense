@@ -56,7 +56,7 @@ export class Ticket extends Model<Ticket> {
     otherKey: 'carId',
     // eager: true
   })
-  cars_arr: Car[];
+  carsArr: Car[];
 
   @BelongsToMany(() => Sign, {
     through: {
@@ -66,7 +66,7 @@ export class Ticket extends Model<Ticket> {
     foreignKey: 'ticketId',
     otherKey: 'signId',
   })
-  signs_arr: Sign[];
+  signsArr: Sign[];
 
   @BelongsToMany(() => TrafficLight, {
     through: {
@@ -76,5 +76,5 @@ export class Ticket extends Model<Ticket> {
     foreignKey: 'ticketId',
     otherKey: 'trafficLightId',
   })
-  trafficLights_arr: TrafficLight[];
+  trafficLightsArr: TrafficLight[];
 }

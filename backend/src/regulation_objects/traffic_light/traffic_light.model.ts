@@ -17,7 +17,13 @@ export class TrafficLight extends Model<TrafficLight> {
     type: DataType.STRING,
     allowNull: false,
   })
-  sprite: string;
+  modelName: string;
+
+  @Column({
+    type: DataType.ENUM('left', 'right', 'top', 'bottom'),
+    allowNull: false,
+  })
+  position: string;
 
   @Column({
     type: DataType.STRING,

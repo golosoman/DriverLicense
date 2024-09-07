@@ -5,12 +5,12 @@ export class UpdateCarDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  sprite: string;
+  modelName: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty()
-  direction: string;
+  position: string;
 
   @IsNumber()
   @IsOptional()
@@ -20,5 +20,5 @@ export class UpdateCarDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  movementPath: string;
+  movementDirection: string;
 }
