@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CarCollisionHandler : MonoBehaviour
 {
-    void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("Произошла колизия!");
         // Проверка столкновения с другим автомобилем
