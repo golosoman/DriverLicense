@@ -11,6 +11,7 @@ public class DatabaseLoader : MonoBehaviour
     private Dictionary<string, GameObject> carSpawnPoints = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> signSpawnPoints = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> trafficLightSpawnPoints = new Dictionary<string, GameObject>();
+    private IntersectionManager intersectionManager;
 
     void Start()
     {
@@ -56,12 +57,26 @@ public class DatabaseLoader : MonoBehaviour
     void CreateIntersection(string intersection)
     {
         GameObject intersectionPrefab = GetPrefab($"Prefabs/intersections/{intersection}");
-        Instantiate(intersectionPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject intersectionInstance = Instantiate(intersectionPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+
+        intersectionManager = intersectionInstance.GetComponent<IntersectionManager>();
+
+        if (intersectionManager == null)
+        {
+            Debug.LogError("IntersectionManager component is missing on the intersection prefab.");
+        }
+
         DictInit();
     }
 
     void CreateCars(CarData[] cars)
     {
+        if (intersectionManager == null)
+        {
+            Debug.LogError("IntersectionManager is not initialized. Please make sure to call CreateIntersection first.");
+            return;
+        }
+        
         foreach (CarData carData in cars)
         {
             GameObject carPrefab = GetPrefab($"Prefabs/cars/{carData.modelName}");
@@ -70,7 +85,17 @@ public class DatabaseLoader : MonoBehaviour
                 GameObject spawnPoint;
                 if (carSpawnPoints.TryGetValue(carData.position, out spawnPoint))
                 {
-                    Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    GameObject carInstance = Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    
+                    // Задаем направление и маршрут автомобиля
+                    IntersectionManager.Direction carDirection = GetDirectionFromData(carData.position);
+                    Transform[] route = intersectionManager.GetRoute(carDirection, carData.movementDirection);
+
+                    // Добавляем компонент для движения и передаем маршрут
+                    CarMovement carMovement = carInstance.GetComponent<CarMovement>();
+                    // Debug.Log("Route length: " + route.Length);
+                    carMovement.SetRoute(route, carData.speed);
+                    // Debug.Log(route);
                 }
                 else
                 {
@@ -81,6 +106,24 @@ public class DatabaseLoader : MonoBehaviour
             {
                 Debug.LogError($"The prefab for the position was not found {carData.modelName}");
             }
+        }
+    }
+
+    // Преобразование позиции автомобиля в направление
+    IntersectionManager.Direction GetDirectionFromData(string position)
+    {
+        switch (position)
+        {
+            case "left":
+                return IntersectionManager.Direction.West;
+            case "right":
+                return IntersectionManager.Direction.East;
+            case "top":
+                return IntersectionManager.Direction.North;
+            case "bottom":
+                return IntersectionManager.Direction.South;
+            default:
+                return IntersectionManager.Direction.North; // Дефолтное направление
         }
     }
 
@@ -183,7 +226,7 @@ public class DatabaseLoader : MonoBehaviour
         public string modelName;
         public string position;
         public float speed;
-        public float direction;
+        public string movementDirection;
     }
 
     public class SignData
@@ -191,7 +234,6 @@ public class DatabaseLoader : MonoBehaviour
         public int id;
         public string modelName;
         public string position;
-        public float rotation;
     }
 
     public class TrafficLightData
@@ -199,8 +241,7 @@ public class DatabaseLoader : MonoBehaviour
         public int id;
         public string modelName;
         public string position;
-        public float rotation;
-        public bool isRed;
+        public string cycle;
     }
 }
 
