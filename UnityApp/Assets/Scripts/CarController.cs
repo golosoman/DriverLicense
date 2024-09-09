@@ -9,10 +9,10 @@ public class CarController : MonoBehaviour
     void Start()
     {
         carMovement = GetComponent<CarMovement>();
-        Debug.Log(carMovement.route.Length);
+        Debug.Log(carMovement.GetLengthRoute());
         if (carMovement != null)
         {
-            Debug.Log("CarMovement is found. Route length: " + carMovement.route.Length);
+            Debug.Log("CarMovement is found. Route length: " + carMovement.GetLengthRoute());
         }
         else
         {

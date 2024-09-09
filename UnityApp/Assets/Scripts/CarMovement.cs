@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
-    public Transform[] route;
+    [SerializeField]
+    private float maxSpeed = 5f; // Максимальная скорость
+    [SerializeField]
+    private float acceleration = 1f; // Ускорение автомобиля
+    [SerializeField]
+    private float decelerationFactor = 0.5f; // Фактор замедления перед поворотом
+    [SerializeField]
+    private float rotationSpeed = 5f; // Скорость поворота
+    private Transform[] route;
     private int currentPoint = 0;
-    public float speed = 5f;
-    public float rotationSpeed = 5f;
     private bool isMoving = false;
+    private float currentSpeed = 0f; // Текущая скорость автомобиля
 
     public bool IsMoving => isMoving;
 
     public void SetRoute(Transform[] route, float speed)
     {
         this.route = route;
-        this.speed = speed;
+        this.maxSpeed = speed;
+    }
+
+    public int GetLengthRoute(){
+        return route.Length;
     }
 
     public void StartMovement()
@@ -33,7 +44,7 @@ public class CarMovement : MonoBehaviour
     public void StopMovement()
     {
         StopAllCoroutines();
-        speed = 0f;
+        currentSpeed = 0f;
         isMoving = false;
         Debug.Log("Car movement stopped.");
     }
@@ -59,16 +70,28 @@ public class CarMovement : MonoBehaviour
             float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
             // Получаем текущий угол вращения
-            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ+90);
+            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ + 90);
 
             // Пока автомобиль не достиг следующей точки
             while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
             {
+                // Если автомобиль находится вблизи следующей точки, замедляем его перед поворотом
+                float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+                if (distanceToTarget < 2f) // Здесь вы можете настроить расстояние, на котором автомобиль начнет замедляться
+                {
+                    currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed * decelerationFactor, Time.deltaTime * acceleration);
+                }
+                else
+                {
+                    // Постепенное увеличение скорости до максимальной
+                    currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed, Time.deltaTime * acceleration);
+                }
+
                 // Плавно поворачиваем автомобиль по оси Z
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
                 
-                // Перемещаем автомобиль к следующей точке
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+                // Перемещаем автомобиль к следующей точке с текущей скоростью
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
 
                 yield return null;
             }
