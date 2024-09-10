@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Transaction } from 'sequelize';
-import { Car } from '../car/car.model';
+import { RoadUser } from '../car/roadUsers.model';
 import { Sign } from '../sign/sign.model';
 import { TrafficLight } from '../traffic_light/traffic_light.model';
 import { Ticket } from './ticket.model';
-import { TicketCar } from './ticket_cars.model';
-import { TicketSign } from './ticket_signs.model';
-import { TicketTrafficLight } from './ticket_traffic_lights.model';
+import { TicketRoadUser } from './ticketRoadUser.model';
+import { TicketSign } from './ticketSign.model';
+import { TicketTrafficLight } from './ticketTrafficLight.model';
 import { CreateTicketDto, UpdateTicketDto } from './dto';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectModel(Ticket) private ticketModel: typeof Ticket,
-    @InjectModel(TicketCar) private ticketCarsRepository: typeof TicketCar, 
+    @InjectModel(TicketRoadUser) private ticketCarsRepository: typeof TicketRoadUser, 
     @InjectModel(TicketSign) private ticketSignsRepository: typeof TicketSign, 
     @InjectModel(TicketTrafficLight) private ticketTrafficLightsRepository: typeof TicketTrafficLight,
   ) {}
@@ -26,11 +25,11 @@ export class TicketService {
       const ticket = await this.ticketModel.create(createTicketDto, { transaction });
   
       // Связывание с машинами
-      const carIds = createTicketDto.cars;
-      for (const carId of carIds) {
+      const roadUserIds = createTicketDto.cars;
+      for (const roadUserId of roadUserIds) {
         await this.ticketCarsRepository.create({
           ticketId: ticket.id,
-          carId,
+          roadUserId,
         }, { transaction }); 
       }
   
@@ -62,13 +61,20 @@ export class TicketService {
 
   async findAll(): Promise<Ticket[]> {
     return await this.ticketModel.findAll({
-      include: [Car, Sign, TrafficLight],
+      include: [RoadUser, Sign, TrafficLight],
+    });
+  }
+
+  async test(): Promise<Ticket[]>{
+    return await this.ticketModel.findAll({
+      offset:1, 
+      limit:1, 
     });
   }
 
   async findOne(id: number): Promise<Ticket | null> {
     return await this.ticketModel.findByPk(id, {
-      include: [Car, Sign, TrafficLight],
+      include: [RoadUser, Sign, TrafficLight],
     });
   }
 
@@ -82,5 +88,15 @@ export class TicketService {
 
   async remove(id: number): Promise<void> {
     await this.ticketModel.destroy({ where: { id } });
+  }
+
+  
+
+  async findQuestions(offset: number, limit: number): Promise<Ticket[]> {
+    return await this.ticketModel.findAll({
+      attributes: ['question'], // Выбираем только поле "question"
+      offset, // Смещение
+      limit, // Лимит количества записей
+    });
   }
 }

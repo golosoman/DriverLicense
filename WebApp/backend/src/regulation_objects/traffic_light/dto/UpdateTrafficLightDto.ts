@@ -10,10 +10,10 @@ export class UpdateTrafficLightDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  position: string;
+  sidePosition: string;
 
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  cycle: string;
+  // @IsString()
+  // @IsOptional()
+  // @ApiProperty()
+  // cycle: string;
 }

@@ -6,7 +6,12 @@ export class CreateTicketDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  type: TicketType;
+  typeIntersection: TicketType;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  title: string;
 
   @IsString()
   @IsNotEmpty()

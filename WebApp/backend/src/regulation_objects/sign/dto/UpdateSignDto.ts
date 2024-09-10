@@ -10,5 +10,5 @@ export class UpdateSignDto {
     @IsString()
     @IsOptional()
     @ApiProperty()
-    position: string;
+    sidePosition: string;
   }

@@ -1,5 +1,4 @@
 import {
-  BelongsToMany,
   Column,
   DataType,
   Model,
@@ -7,10 +6,10 @@ import {
 } from 'sequelize-typescript';
 
 @Table({
-  tableName: 'ticket_cars',
+  tableName: 'ticketRoadUser',
   timestamps: true
 })
-export class TicketCar extends Model<TicketCar> {
+export class TicketRoadUser extends Model<TicketRoadUser> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -21,7 +20,7 @@ export class TicketCar extends Model<TicketCar> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  carId: number;
+  roadUserId: number;
 
   @Column({
     type: DataType.DATE,

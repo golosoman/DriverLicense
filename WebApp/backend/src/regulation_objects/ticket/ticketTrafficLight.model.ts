@@ -7,7 +7,7 @@ import {
   } from 'sequelize-typescript';
   
   @Table({
-    tableName: 'ticket_traffic_lights',
+    tableName: 'ticketTrafficLight',
     timestamps: true
   })
   export class TicketTrafficLight extends Model<TicketTrafficLight> {

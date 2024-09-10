@@ -5,12 +5,12 @@ import {
   Table,
   BelongsToMany
 } from 'sequelize-typescript';
-import { Car } from '../car/car.model';
-import { TicketCar } from './ticket_cars.model';
+import { RoadUser } from '../car/roadUsers.model';
+import { TicketRoadUser } from './ticketRoadUser.model';
 import { Sign } from '../sign/sign.model';
-import { TicketSign } from './ticket_signs.model';
+import { TicketSign } from './ticketSign.model';
 import { TrafficLight } from '../traffic_light/traffic_light.model';
-import { TicketTrafficLight } from './ticket_traffic_lights.model';
+import { TicketTrafficLight } from './ticketTrafficLight.model';
 
 @Table({
   tableName: 'tickets',
@@ -21,7 +21,13 @@ export class Ticket extends Model<Ticket> {
     type: DataType.STRING,
     allowNull: false,
   })
-  type: string;
+  typeIntersection: string;
+
+  @Column ({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  title: string;
 
   @Column({
     type: DataType.STRING,
@@ -47,16 +53,16 @@ export class Ticket extends Model<Ticket> {
   })
   updatedAt: Date;
 
-  @BelongsToMany(() => Car, {
+  @BelongsToMany(() => RoadUser, {
     through: {
-      model: () => TicketCar,
+      model: () => TicketRoadUser,
       unique: false,
     },
     foreignKey: 'ticketId',
-    otherKey: 'carId',
+    otherKey: 'roadUserId',
     // eager: true
   })
-  carsArr: Car[];
+  roadUsersArr: RoadUser[];
 
   @BelongsToMany(() => Sign, {
     through: {

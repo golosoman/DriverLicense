@@ -1,12 +1,9 @@
 import {
-  BelongsToMany,
   Column,
   DataType,
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Ticket } from '../ticket/ticket.model';
-import { TicketSign } from '../ticket/ticket_signs.model';
 
 @Table({
   tableName: 'signs',
@@ -20,10 +17,10 @@ export class Sign extends Model<Sign> {
   modelName: string;
 
   @Column({
-    type: DataType.ENUM('left', 'right', 'top', 'bottom'),
+    type: DataType.ENUM('west', 'east', 'north', 'south'),
     allowNull: false,
   })
-  position: string;
+  sidePosition: string;
 
   @Column({
     type: DataType.DATE,
@@ -36,14 +33,4 @@ export class Sign extends Model<Sign> {
     allowNull: true
   })
   updatedAt: Date;
-
-  // @BelongsToMany(() => Ticket, {
-  //   through: {
-  //     model: () => TicketSign,
-  //     unique: false,
-  //   },
-  //   foreignKey: 'signId',
-  //   otherKey: 'ticketId',
-  // })
-  // tickets: Ticket[];
 }

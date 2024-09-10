@@ -1,15 +1,12 @@
 import {
-  BelongsToMany,
   Column,
   DataType,
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Ticket } from '../ticket/ticket.model';
-import { TicketTrafficLight } from '../ticket/ticket_traffic_lights.model';
 
 @Table({
-  tableName: 'traffic_lights',
+  tableName: 'trafficLights',
   timestamps: true
 })
 export class TrafficLight extends Model<TrafficLight> {
@@ -20,16 +17,16 @@ export class TrafficLight extends Model<TrafficLight> {
   modelName: string;
 
   @Column({
-    type: DataType.ENUM('left', 'right', 'top', 'bottom'),
+    type: DataType.ENUM('west', 'east', 'north', 'south'),
     allowNull: false,
   })
-  position: string;
+  sidePosition: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  cycle: string;
+  // @Column({
+  //   type: DataType.STRING,
+  //   allowNull: false,
+  // })
+  // cycle: string;
 
   @Column({
     type: DataType.DATE,
@@ -42,14 +39,4 @@ export class TrafficLight extends Model<TrafficLight> {
     allowNull: true
   })
   updatedAt: Date;
-
-  // @BelongsToMany(() => Ticket, {
-  //   through: {
-  //     model: () => TicketTrafficLight,
-  //     unique: false,
-  //   },
-  //   foreignKey: 'trafficLightId',
-  //   otherKey: 'ticketId',
-  // })
-  // tickets: Ticket[];
 }

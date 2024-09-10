@@ -10,5 +10,5 @@ export class CreateSignDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  position: string;
+  sidePosition: string;
 }

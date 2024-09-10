@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from "@nestjs/config";
-import { Car } from './regulation_objects/car/car.model';
+import { RoadUser } from './regulation_objects/car/roadUsers.model';
 import { Sign } from './regulation_objects/sign/sign.model';
 import { TrafficLight } from './regulation_objects/traffic_light/traffic_light.model';
-import { TicketCar, TicketSign, TicketTrafficLight, Ticket } from './regulation_objects/ticket';
-import { CarModule } from './regulation_objects/car/car.module';
+import { TicketRoadUser, TicketSign, TicketTrafficLight, Ticket } from './regulation_objects/ticket';
+import { CarModule } from './regulation_objects/car/roadUsers.module';
 import { SignModule } from './regulation_objects/sign/sign.module';
 import { TrafficLightModule } from './regulation_objects/traffic_light/traffic_light.module';
 import { TicketModule } from './regulation_objects/ticket/ticket.module';
@@ -24,24 +24,22 @@ import { TicketModule } from './regulation_objects/ticket/ticket.module';
       password: String(process.env.POSTGRES_PASSWORD),
       database: String(process.env.POSTGRES_DB),
       models: [
-        Car,
+        RoadUser,
         Sign,
         TrafficLight,
         Ticket,
-        TicketCar, // Добавьте модель сюда
+        TicketRoadUser,
         TicketSign,
         TicketTrafficLight,
       ],
       autoLoadModels: true,
-      synchronize: true, // Set to false in production!
+      synchronize: true,
     }),
     CarModule,
     SignModule,
     TrafficLightModule,
     TicketModule,
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 
 export class AppModule {}

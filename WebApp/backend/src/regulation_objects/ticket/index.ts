@@ -1,6 +1,6 @@
-import { TicketCar } from "./ticket_cars.model";
-import { TicketSign } from "./ticket_signs.model";
-import { TicketTrafficLight } from "./ticket_traffic_lights.model";
+import { TicketRoadUser } from "./ticketRoadUser.model";
+import { TicketSign } from "./ticketSign.model";
+import { TicketTrafficLight } from "./ticketTrafficLight.model";
 import { Ticket } from "./ticket.model";
 
-export {TicketCar, TicketSign, TicketTrafficLight, Ticket}
+export {TicketRoadUser, TicketSign, TicketTrafficLight, Ticket}

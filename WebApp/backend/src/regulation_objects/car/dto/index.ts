@@ -1,4 +1,5 @@
-import { CreateCarDto } from "./CreateCarDto";
-import { UpdateCarDto } from "./UpdateCarDto";
+import { CreateRoadUserDto } from "./CreateRoadUsersDto";
+import { UpdateRoadUserDto } from "./UpdateRoadUsersDto";
+import { ParticipantType, MovementDirectionType, SidePosition } from "./RoadUsersType";
 
-export { CreateCarDto as CreateCarDto, UpdateCarDto as UpdateCarDto}
+export { CreateRoadUserDto, UpdateRoadUserDto, ParticipantType, MovementDirectionType, SidePosition }

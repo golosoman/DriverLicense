@@ -10,10 +10,10 @@ export class CreateTrafficLightDto {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  position: string;
+  sidePosition: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  cycle: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // @ApiProperty()
+  // cycle: string;
 }
