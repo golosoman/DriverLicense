@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 7351618016017259956}
   - component: {fileID: 6759666605668473680}
   m_Layer: 0
-  m_Name: TIntersection
+  m_Name: TShapedTypeOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

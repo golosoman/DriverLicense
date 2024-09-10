@@ -2,36 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarCollisionHandler : MonoBehaviour
+public class RoadUsersCollisionHandler : MonoBehaviour
 {
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Произошла колизия!");
+        // Debug.Log("Произошла колизия!");
         // Проверка столкновения с другим автомобилем
         if (collision.gameObject.CompareTag("Car"))
         {
             Debug.Log("Collision with another car detected!");
             // Логика для обработки столкновения, например, остановка автомобиля
-            StopCar();
+            StopRoadUser();
         }
         // Проверка столкновения с препятствием
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Collision with an obstacle detected!");
             // Логика для обработки столкновения с препятствием
-            StopCar();
+            StopRoadUser();
         }
     }
 
-    private void StopCar()
+    private void StopRoadUser()
     {
-        CarMovement carMovement = GetComponent<CarMovement>();
-        if (carMovement != null)
+        RoadUserMovement roadUserMovement = GetComponent<RoadUserMovement>();
+        if (roadUserMovement != null)
         {
-            carMovement.StopMovement();
+            roadUserMovement.StopMovement();
         }
         else {
-            Debug.LogError("CarMovement is null. Cannot start movement.");
+            Debug.LogError("RoadUserMovement is null. Cannot start movement.");
         }
     }
 }

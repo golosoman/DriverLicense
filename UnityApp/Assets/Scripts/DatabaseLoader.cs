@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 
 public class DatabaseLoader : MonoBehaviour
 {
     private const string baseUrl = "http://localhost:5000";
     private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
-    private Dictionary<string, GameObject> carSpawnPoints = new Dictionary<string, GameObject>();
+    private Dictionary<string, GameObject> roadUserSpawnPoints = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> signSpawnPoints = new Dictionary<string, GameObject>();
     private Dictionary<string, GameObject> trafficLightSpawnPoints = new Dictionary<string, GameObject>();
     private IntersectionManager intersectionManager;
@@ -32,7 +33,7 @@ public class DatabaseLoader : MonoBehaviour
             try
             {
                 TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
-                Debug.Log("Ticket Data Loaded: " + ticketData.type);
+                Debug.Log("Ticket Data Loaded: " + ticketData.typeIntersection);
                 ProcessTicketData(ticketData);
             }
             catch (JsonException ex)
@@ -48,8 +49,8 @@ public class DatabaseLoader : MonoBehaviour
 
     void ProcessTicketData(TicketData ticketData)
     {
-        CreateIntersection(ticketData.type);
-        CreateCars(ticketData.carsArr);
+        CreateIntersection(ticketData.typeIntersection);
+        CreateRoadUsers(ticketData.roadUsersArr);
         CreateSigns(ticketData.signsArr);
         CreateTrafficLights(ticketData.trafficLightsArr);
     }
@@ -69,7 +70,7 @@ public class DatabaseLoader : MonoBehaviour
         DictInit();
     }
 
-    void CreateCars(CarData[] cars)
+    void CreateRoadUsers(RoadUserData[] roadUsers)
     {
         if (intersectionManager == null)
         {
@@ -77,34 +78,32 @@ public class DatabaseLoader : MonoBehaviour
             return;
         }
         
-        foreach (CarData carData in cars)
+        foreach (RoadUserData roadUserData in roadUsers)
         {
-            GameObject carPrefab = GetPrefab($"Prefabs/cars/{carData.modelName}");
-            if (carPrefab!= null)
+            GameObject roadUserPrefab = GetPrefab($"Prefabs/roadUsers/{roadUserData.modelName}");
+            if (roadUserPrefab!= null)
             {
                 GameObject spawnPoint;
-                if (carSpawnPoints.TryGetValue(carData.position, out spawnPoint))
+                if (roadUserSpawnPoints.TryGetValue(roadUserData.sidePosition, out spawnPoint))
                 {
-                    GameObject carInstance = Instantiate(carPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                    GameObject roadUserInstance = Instantiate(roadUserPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
                     
                     // Задаем направление и маршрут автомобиля
-                    IntersectionManager.Direction carDirection = GetDirectionFromData(carData.position);
-                    Transform[] route = intersectionManager.GetRoute(carDirection, carData.movementDirection);
+                    IntersectionManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.sidePosition);
+                    Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.movementDirection);
 
                     // Добавляем компонент для движения и передаем маршрут
-                    CarMovement carMovement = carInstance.GetComponent<CarMovement>();
-                    // Debug.Log("Route length: " + route.Length);
-                    carMovement.SetRoute(route, carData.speed);
-                    // Debug.Log(route);
+                    RoadUserMovement roadUserMovement = roadUserInstance.GetComponent<RoadUserMovement>();
+                    roadUserMovement.SetRoute(route);
                 }
                 else
                 {
-                    Debug.LogError($"The spawn point for the position was not found {carData.position}");
+                    Debug.LogError($"The spawn point for the position was not found {roadUserData.sidePosition}");
                 }
             }
             else
             {
-                Debug.LogError($"The prefab for the position was not found {carData.modelName}");
+                Debug.LogError($"The prefab for the position was not found {roadUserData.modelName}");
             }
         }
     }
@@ -114,13 +113,13 @@ public class DatabaseLoader : MonoBehaviour
     {
         switch (position)
         {
-            case "left":
+            case "west":
                 return IntersectionManager.Direction.West;
-            case "right":
+            case "east":
                 return IntersectionManager.Direction.East;
-            case "top":
+            case "north":
                 return IntersectionManager.Direction.North;
-            case "bottom":
+            case "south":
                 return IntersectionManager.Direction.South;
             default:
                 return IntersectionManager.Direction.North; // Дефолтное направление
@@ -135,13 +134,13 @@ public class DatabaseLoader : MonoBehaviour
             if (signPrefab!= null)
             {
                 GameObject spawnPoint;
-                if (signSpawnPoints.TryGetValue(signData.position, out spawnPoint))
+                if (signSpawnPoints.TryGetValue(signData.sidePosition, out spawnPoint))
                 {
                     Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
                 }
                 else
                 {
-                    Debug.LogError($"The spawn point for the position was not found {signData.position}");
+                    Debug.LogError($"The spawn point for the position was not found {signData.sidePosition}");
                 }
             }
             else
@@ -159,7 +158,7 @@ public class DatabaseLoader : MonoBehaviour
             if (trafficLightPrefab!= null)
             {
                 GameObject spawnPoint;
-                if (trafficLightSpawnPoints.TryGetValue(trafficLightData.position, out spawnPoint))
+                if (trafficLightSpawnPoints.TryGetValue(trafficLightData.sidePosition, out spawnPoint))
                 {
                     Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
                 }
@@ -193,39 +192,41 @@ public class DatabaseLoader : MonoBehaviour
     }
 
     private void DictInit(){
-        carSpawnPoints.Add("left", GameObject.Find("CarSpawnLeft"));
-        carSpawnPoints.Add("right", GameObject.Find("CarSpawnRight"));
-        carSpawnPoints.Add("top", GameObject.Find("CarSpawnTop"));
-        carSpawnPoints.Add("bottom", GameObject.Find("CarSpawnBottom"));
+        roadUserSpawnPoints.Add("west", GameObject.Find("CarSpawnLeft"));
+        roadUserSpawnPoints.Add("east", GameObject.Find("CarSpawnRight"));
+        roadUserSpawnPoints.Add("north", GameObject.Find("CarSpawnTop"));
+        roadUserSpawnPoints.Add("south", GameObject.Find("CarSpawnBottom"));
 
-        signSpawnPoints.Add("left", GameObject.Find("SignSpawnLeft"));
-        signSpawnPoints.Add("right", GameObject.Find("SignSpawnRight"));
-        signSpawnPoints.Add("top", GameObject.Find("SignSpawnTop"));
-        signSpawnPoints.Add("bottom", GameObject.Find("SignSpawnBottom"));
+        signSpawnPoints.Add("west", GameObject.Find("SignSpawnLeft"));
+        signSpawnPoints.Add("east", GameObject.Find("SignSpawnRight"));
+        signSpawnPoints.Add("north", GameObject.Find("SignSpawnTop"));
+        signSpawnPoints.Add("south", GameObject.Find("SignSpawnBottom"));
 
-        trafficLightSpawnPoints.Add("left", GameObject.Find("TrafficLightSpawnLeft"));
-        trafficLightSpawnPoints.Add("right", GameObject.Find("TrafficLightSpawnRight"));
-        trafficLightSpawnPoints.Add("top", GameObject.Find("TrafficLightSpawnTop"));
-        trafficLightSpawnPoints.Add("bottom", GameObject.Find("TrafficLightSpawnBottom"));
+        trafficLightSpawnPoints.Add("west", GameObject.Find("TrafficLightSpawnLeft"));
+        trafficLightSpawnPoints.Add("east", GameObject.Find("TrafficLightSpawnRight"));
+        trafficLightSpawnPoints.Add("north", GameObject.Find("TrafficLightSpawnTop"));
+        trafficLightSpawnPoints.Add("south", GameObject.Find("TrafficLightSpawnBottom"));
     }
 
     public class TicketData
     {
         public int id;
-        public string type;
+        public string typeIntersection;
+        public string title;
         public string question;
         public string correctAnswer;
-        public CarData[] carsArr;
+        public RoadUserData[] roadUsersArr;
         public SignData[] signsArr;
         public TrafficLightData[] trafficLightsArr;
     }
 
-    public class CarData
+    public class RoadUserData
     {
         public int id;
+        public string typeParticipant;
         public string modelName;
-        public string position;
-        public float speed;
+        public string sidePosition;
+        public string numberPosition;
         public string movementDirection;
     }
 
@@ -233,15 +234,14 @@ public class DatabaseLoader : MonoBehaviour
     {
         public int id;
         public string modelName;
-        public string position;
+        public string sidePosition;
     }
 
     public class TrafficLightData
     {
         public int id;
         public string modelName;
-        public string position;
-        public string cycle;
+        public string sidePosition;
     }
 }
 

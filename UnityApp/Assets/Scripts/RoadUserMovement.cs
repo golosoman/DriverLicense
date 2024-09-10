@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarMovement : MonoBehaviour
+public class RoadUserMovement : MonoBehaviour
 {
     [SerializeField]
-    private float maxSpeed = 5f; // Максимальная скорость
+    private float maxSpeed = 10f; // Максимальная скорость
     [SerializeField]
     private float acceleration = 1f; // Ускорение автомобиля
     [SerializeField]
@@ -19,10 +19,9 @@ public class CarMovement : MonoBehaviour
 
     public bool IsMoving => isMoving;
 
-    public void SetRoute(Transform[] route, float speed)
+    public void SetRoute(Transform[] route)
     {
         this.route = route;
-        this.maxSpeed = speed;
     }
 
     public int GetLengthRoute(){
@@ -46,7 +45,7 @@ public class CarMovement : MonoBehaviour
         StopAllCoroutines();
         currentSpeed = 0f;
         isMoving = false;
-        Debug.Log("Car movement stopped.");
+        Debug.Log("RoadUser movement stopped.");
     }
 
     IEnumerator MoveAlongRoute()
@@ -101,6 +100,6 @@ public class CarMovement : MonoBehaviour
         }
 
         isMoving = false;
-        Debug.Log("Car has finished the route.");
+        Debug.Log("RoadUser has finished the route.");
     }
 }

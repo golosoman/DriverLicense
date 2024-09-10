@@ -21772,7 +21772,7 @@ GameObject:
   - component: {fileID: 9152842849775937891}
   - component: {fileID: 6415439753951474336}
   m_Layer: 0
-  m_Name: CrossIntersection
+  m_Name: crossTypeOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
