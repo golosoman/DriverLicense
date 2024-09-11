@@ -158,8 +158,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1e84b28a7edcd49959b06797d5d228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  route: []
-  speed: 5
+  maxSpeed: 10
+  acceleration: 1
+  decelerationFactor: 0.5
+  rotationSpeed: 7
 --- !u!114 &2909773720516537389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +198,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1

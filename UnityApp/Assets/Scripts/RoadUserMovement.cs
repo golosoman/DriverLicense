@@ -12,6 +12,8 @@ public class RoadUserMovement : MonoBehaviour
     private float decelerationFactor = 0.5f; // Фактор замедления перед поворотом
     [SerializeField]
     private float rotationSpeed = 5f; // Скорость поворота
+    [SerializeField]
+    private float decelerationStartDistance = 2f; // Расстояние, на котором автомобиль начнет замедляться
     private Transform[] route;
     private int currentPoint = 0;
     private bool isMoving = false;
@@ -66,17 +68,17 @@ public class RoadUserMovement : MonoBehaviour
             Vector3 direction = targetPosition - transform.position;
 
             // Рассчитываем угол поворота только по оси Z
-            float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
             // Получаем текущий угол вращения
-            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ + 90);
+            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
 
             // Пока автомобиль не достиг следующей точки
             while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
             {
                 // Если автомобиль находится вблизи следующей точки, замедляем его перед поворотом
                 float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
-                if (distanceToTarget < 2f) // Здесь вы можете настроить расстояние, на котором автомобиль начнет замедляться
+                if (distanceToTarget < decelerationStartDistance)
                 {
                     currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed * decelerationFactor, Time.deltaTime * acceleration);
                 }
