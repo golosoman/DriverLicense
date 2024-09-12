@@ -5,11 +5,13 @@ using UnityEngine;
 public class RoadUserController : MonoBehaviour
 {
     private RoadUserMovement roadUserMovement;
+    private TrafficRulesManager trafficRulesManager;
 
     void Start()
     {
         roadUserMovement = GetComponent<RoadUserMovement>();
-        Debug.Log(roadUserMovement.GetLengthRoute());
+        trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
+
         if (roadUserMovement != null)
         {
             Debug.Log("RoadUserMovement is found. Route length: " + roadUserMovement.GetLengthRoute());
@@ -22,13 +24,15 @@ public class RoadUserController : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (roadUserMovement != null)
+        if (roadUserMovement != null && trafficRulesManager != null)
         {
+            trafficRulesManager.UserSelectRoadUser(roadUserMovement);
             roadUserMovement.StartMovement();
         }
         else
         {
-            Debug.LogError("RoadUserMovement is null. Cannot start movement.");
+            Debug.LogError("RoadUserMovement or TrafficRulesManager is null. Cannot start movement.");
         }
     }
 }
+

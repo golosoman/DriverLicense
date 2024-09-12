@@ -7,10 +7,19 @@ public class DatabaseLoader : MonoBehaviour
 {
     private const string baseUrl = "http://localhost:5000";
     private CreateObjectManager createObjectManager;
+    private TrafficRulesManager trafficRulesManager;
 
     void Start()
     {
         createObjectManager = ScriptableObject.CreateInstance<CreateObjectManager>();
+        trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
+
+        if (trafficRulesManager == null)
+        {
+            Debug.LogError("TrafficRulesManager not found in the scene.");
+            return;
+        }
+
         StartCoroutine(LoadTicketData());
     }
 
@@ -30,6 +39,7 @@ public class DatabaseLoader : MonoBehaviour
                 TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
                 Debug.Log("Ticket Data Loaded: " + ticketData.typeIntersection);
                 createObjectManager.ProcessTicketData(ticketData);
+                trafficRulesManager.Initialize(ticketData);
             }
             catch (JsonException ex)
             {
@@ -41,9 +51,8 @@ public class DatabaseLoader : MonoBehaviour
             Debug.LogError("Failed to load ticket data: " + request.error);
         }
     }
-
-    
 }
+
 
         
 

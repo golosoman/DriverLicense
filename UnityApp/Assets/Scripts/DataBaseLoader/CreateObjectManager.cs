@@ -38,17 +38,36 @@ public class CreateObjectManager : ScriptableObject
             Debug.LogError("IntersectionManager is not initialized. Please make sure to call CreateIntersection first.");
             return;
         }
-        
+
         foreach (RoadUserData roadUserData in roadUsers)
         {
             GameObject roadUserPrefab = PrefabManager.GetPrefab($"Prefabs/roadUsers/{roadUserData.modelName}");
-            if (roadUserPrefab!= null)
+            if (roadUserPrefab != null)
             {
                 GameObject spawnPoint;
                 if (roadUserSpawnPoints.TryGetValue(roadUserData.sidePosition, out spawnPoint))
                 {
                     GameObject roadUserInstance = Instantiate(roadUserPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
-                    
+
+                    // Добавляем уникальное имя и тег
+                    roadUserInstance.name = $"{roadUserData.modelName}_{roadUserData.sidePosition}_{roadUserData.numberPosition}";
+                    switch (roadUserData.typeParticipant)
+                    {
+                        case "Car":
+                            roadUserInstance.tag = "Car";
+                            break;
+                        case "Human":
+                            roadUserInstance.tag = "Human";
+                            break;
+                        case "Tram":
+                            roadUserInstance.tag = "Tram";
+                            break;
+                        default:
+                            Debug.LogWarning($"Unknown typeParticipant: {roadUserData.typeParticipant}. Using default tag.");
+                            // roadUserInstance.tag = "Untagged";
+                            break;
+                    }
+
                     IntersectionManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.sidePosition);
                     Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.movementDirection);
 
@@ -66,6 +85,7 @@ public class CreateObjectManager : ScriptableObject
             }
         }
     }
+
 
     IntersectionManager.Direction GetDirectionFromData(string position)
     {

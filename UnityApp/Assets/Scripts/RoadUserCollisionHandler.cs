@@ -15,9 +15,15 @@ public class RoadUsersCollisionHandler : MonoBehaviour
             StopRoadUser();
         }
         // Проверка столкновения с препятствием
-        else if (collision.gameObject.CompareTag("Obstacle"))
+        else if (collision.gameObject.CompareTag("Tram"))
         {
-            Debug.Log("Collision with an obstacle detected!");
+            Debug.Log("Collision with an tram detected!");
+            // Логика для обработки столкновения с препятствием
+            StopRoadUser();
+        }
+        else if (collision.gameObject.CompareTag("Human"))
+        {
+            Debug.Log("Collision with an human detected!");
             // Логика для обработки столкновения с препятствием
             StopRoadUser();
         }
