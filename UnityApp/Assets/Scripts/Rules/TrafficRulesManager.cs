@@ -18,10 +18,10 @@ public class TrafficRulesManager : MonoBehaviour
         correctSequence = new List<int>();
 
         // Заполняем список участников движения
-        foreach (var roadUserData in ticketData.roadUsersArr)
+        foreach (var roadUserData in ticketData.RoadUsersArr)
         {
             GameObject[] roadUserObjects;
-            switch (roadUserData.typeParticipant)
+            switch (roadUserData.TypeParticipant)
             {
                 case "car":
                     roadUserObjects = GameObject.FindGameObjectsWithTag("Car");
@@ -33,19 +33,19 @@ public class TrafficRulesManager : MonoBehaviour
                     roadUserObjects = GameObject.FindGameObjectsWithTag("Tram");
                     break;
                 default:
-                    Debug.LogWarning($"Unknown typeParticipant: {roadUserData.typeParticipant}. Using default tag.");
+                    Debug.LogWarning($"Unknown typeParticipant: {roadUserData.TypeParticipant}. Using default tag.");
                     roadUserObjects = GameObject.FindGameObjectsWithTag("Untagged");
                     break;
             }
 
-            var roadUser = roadUserObjects.FirstOrDefault(r => r.name == $"{roadUserData.modelName}_{roadUserData.sidePosition}_{roadUserData.numberPosition}")?.GetComponent<RoadUserMovement>();
+            var roadUser = roadUserObjects.FirstOrDefault(r => r.name == $"{roadUserData.ModelName}_{roadUserData.SidePosition}_{roadUserData.NumberPosition}")?.GetComponent<RoadUserMovement>();
             if (roadUser != null)
             {
                 roadUsers.Add(roadUser);
             }
             else
             {
-                Debug.LogError($"RoadUserMovement component not found for model: {roadUserData.modelName} and position: {roadUserData.sidePosition}");
+                Debug.LogError($"RoadUserMovement component not found for model: {roadUserData.ModelName} and position: {roadUserData.SidePosition}");
             }
         }
 

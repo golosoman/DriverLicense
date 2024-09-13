@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RoadUserMovement : MonoBehaviour
@@ -14,21 +13,23 @@ public class RoadUserMovement : MonoBehaviour
     private float rotationSpeed = 5f; // Скорость поворота
     [SerializeField]
     private float decelerationStartDistance = 2f; // Расстояние, на котором автомобиль начнет замедляться
+
     private Transform[] route;
     private int currentPoint = 0;
     private bool isMoving = false;
     private float currentSpeed = 0f; // Текущая скорость автомобиля
 
-    public bool IsMoving => isMoving;
+    public Transform[] Route { get => route; set => route = value; }
+    public bool IsMoving { get => isMoving; set => isMoving = value; }
+    public int CurrentPoint { get => currentPoint; set => currentPoint = value; }
+    public float Acceleration => acceleration;
+    public float RotationSpeed => rotationSpeed;
+    public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
+    public float MaxSpeed => maxSpeed;
+    public float DecelerationFactor => decelerationFactor;
+    public float DecelerationStartDistance => decelerationStartDistance;
 
-    public void SetRoute(Transform[] route)
-    {
-        this.route = route;
-    }
-
-    public int GetLengthRoute(){
-        return route.Length;
-    }
+    public int GetLengthRoute() => route.Length;
 
     public void StartMovement()
     {
@@ -50,7 +51,7 @@ public class RoadUserMovement : MonoBehaviour
         Debug.Log("RoadUser movement stopped.");
     }
 
-    IEnumerator MoveAlongRoute()
+    private IEnumerator MoveAlongRoute()
     {
         if (route == null || route.Length == 0)
         {
@@ -63,37 +64,10 @@ public class RoadUserMovement : MonoBehaviour
         while (isMoving && currentPoint < route.Length)
         {
             Vector3 targetPosition = route[currentPoint].position;
-            
-            // Получаем направление к следующей точке
-            Vector3 direction = targetPosition - transform.position;
 
-            // Рассчитываем угол поворота только по оси Z
-            float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
-
-            // Получаем текущий угол вращения
-            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
-
-            // Пока автомобиль не достиг следующей точки
             while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
             {
-                // Если автомобиль находится вблизи следующей точки, замедляем его перед поворотом
-                float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
-                if (distanceToTarget < decelerationStartDistance)
-                {
-                    currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed * decelerationFactor, Time.deltaTime * acceleration);
-                }
-                else
-                {
-                    // Постепенное увеличение скорости до максимальной
-                    currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed, Time.deltaTime * acceleration);
-                }
-
-                // Плавно поворачиваем автомобиль по оси Z
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-                
-                // Перемещаем автомобиль к следующей точке с текущей скоростью
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
-
+                MoveTowardsTarget(targetPosition);
                 yield return null;
             }
 
@@ -103,5 +77,30 @@ public class RoadUserMovement : MonoBehaviour
 
         isMoving = false;
         Debug.Log("RoadUser has finished the route.");
+    }
+
+    private void MoveTowardsTarget(Vector3 targetPosition)
+    {
+        Vector3 direction = targetPosition - transform.position;
+        float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
+
+        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        AdjustSpeed(distanceToTarget);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
+    }
+
+    private void AdjustSpeed(float distanceToTarget)
+    {
+        if (distanceToTarget < decelerationStartDistance)
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed * decelerationFactor, Time.deltaTime * acceleration);
+        }
+        else
+        {
+            currentSpeed = Mathf.Lerp(currentSpeed, maxSpeed, Time.deltaTime * acceleration);
+        }
     }
 }

@@ -37,7 +37,7 @@ public class DatabaseLoader : MonoBehaviour
             try
             {
                 TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
-                Debug.Log("Ticket Data Loaded: " + ticketData.typeIntersection);
+                Debug.Log("Ticket Data Loaded: " + ticketData.TypeIntersection);
                 createObjectManager.ProcessTicketData(ticketData);
                 trafficRulesManager.Initialize(ticketData);
             }

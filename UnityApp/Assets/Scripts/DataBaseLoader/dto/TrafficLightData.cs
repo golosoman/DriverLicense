@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrafficLightData
 {
-    public int id;
-    public string modelName;
-    public string sidePosition;
+    public int Id { get; set; }
+    public string ModelName { get; set; }
+    public string SidePosition { get; set; }
 }

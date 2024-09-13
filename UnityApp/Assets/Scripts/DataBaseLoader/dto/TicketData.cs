@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TicketData
 {
-    public int id;
-    public string typeIntersection;
-    public string title;
-    public string question;
-    public string correctAnswer;
-    public RoadUserData[] roadUsersArr;
-    public SignData[] signsArr;
-    public TrafficLightData[] trafficLightsArr;
+    public int Id { get; set; }
+    public string TypeIntersection { get; set; }
+    public string Title { get; set; }
+    public string Question { get; set; }
+    public string CorrectAnswer { get; set; }
+    public RoadUserData[] RoadUsersArr { get; set; }
+    public SignData[] SignsArr { get; set; }
+    public TrafficLightData[] TrafficLightsArr { get; set; }
 }

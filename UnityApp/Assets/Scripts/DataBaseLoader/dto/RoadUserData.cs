@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RoadUserData
 {
-    public int id;
-    public string typeParticipant;
-    public string modelName;
-    public string sidePosition;
-    public string numberPosition;
-    public string movementDirection;
+    public int Id { get; set; }
+    public string TypeParticipant { get; set; }
+    public string ModelName { get; set; }
+    public string SidePosition { get; set; }
+    public string NumberPosition { get; set; }
+    public string MovementDirection { get; set; }
 }

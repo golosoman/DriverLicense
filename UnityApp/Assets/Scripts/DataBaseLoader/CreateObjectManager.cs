@@ -10,10 +10,10 @@ public class CreateObjectManager : ScriptableObject
 
     public void ProcessTicketData(TicketData ticketData)
     {
-        CreateIntersection(ticketData.typeIntersection);
-        CreateRoadUsers(ticketData.roadUsersArr);
-        CreateSigns(ticketData.signsArr);
-        CreateTrafficLights(ticketData.trafficLightsArr);
+        CreateIntersection(ticketData.TypeIntersection);
+        CreateRoadUsers(ticketData.RoadUsersArr);
+        CreateSigns(ticketData.SignsArr);
+        CreateTrafficLights(ticketData.TrafficLightsArr);
     }
 
     void CreateIntersection(string intersection)
@@ -41,47 +41,47 @@ public class CreateObjectManager : ScriptableObject
 
         foreach (RoadUserData roadUserData in roadUsers)
         {
-            GameObject roadUserPrefab = PrefabManager.GetPrefab($"Prefabs/roadUsers/{roadUserData.modelName}");
+            GameObject roadUserPrefab = PrefabManager.GetPrefab($"Prefabs/roadUsers/{roadUserData.ModelName}");
             if (roadUserPrefab != null)
             {
                 GameObject spawnPoint;
-                if (roadUserSpawnPoints.TryGetValue(roadUserData.sidePosition, out spawnPoint))
+                if (roadUserSpawnPoints.TryGetValue(roadUserData.SidePosition, out spawnPoint))
                 {
                     GameObject roadUserInstance = Instantiate(roadUserPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
 
                     // Добавляем уникальное имя и тег
-                    roadUserInstance.name = $"{roadUserData.modelName}_{roadUserData.sidePosition}_{roadUserData.numberPosition}";
-                    switch (roadUserData.typeParticipant)
+                    roadUserInstance.name = $"{roadUserData.ModelName}_{roadUserData.SidePosition}_{roadUserData.NumberPosition}";
+                    switch (roadUserData.TypeParticipant)
                     {
-                        case "Car":
+                        case "сar":
                             roadUserInstance.tag = "Car";
                             break;
-                        case "Human":
+                        case "human":
                             roadUserInstance.tag = "Human";
                             break;
-                        case "Tram":
+                        case "tram":
                             roadUserInstance.tag = "Tram";
                             break;
                         default:
-                            Debug.LogWarning($"Unknown typeParticipant: {roadUserData.typeParticipant}. Using default tag.");
+                            Debug.LogWarning($"Unknown typeParticipant: {roadUserData.TypeParticipant}. Using default tag.");
                             // roadUserInstance.tag = "Untagged";
                             break;
                     }
 
-                    IntersectionManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.sidePosition);
-                    Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.movementDirection);
+                    IntersectionManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.SidePosition);
+                    Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.MovementDirection);
 
                     RoadUserMovement roadUserMovement = roadUserInstance.GetComponent<RoadUserMovement>();
-                    roadUserMovement.SetRoute(route);
+                    roadUserMovement.Route = route;
                 }
                 else
                 {
-                    Debug.LogError($"The spawn point for the position was not found {roadUserData.sidePosition}");
+                    Debug.LogError($"The spawn point for the position was not found {roadUserData.SidePosition}");
                 }
             }
             else
             {
-                Debug.LogError($"The prefab for the position was not found {roadUserData.modelName}");
+                Debug.LogError($"The prefab for the position was not found {roadUserData.ModelName}");
             }
         }
     }
@@ -108,22 +108,22 @@ public class CreateObjectManager : ScriptableObject
     {
         foreach (SignData signData in signs)
         {
-            GameObject signPrefab = PrefabManager.GetPrefab($"Prefabs/signs/{signData.modelName}");
+            GameObject signPrefab = PrefabManager.GetPrefab($"Prefabs/signs/{signData.ModelName}");
             if (signPrefab!= null)
             {
                 GameObject spawnPoint;
-                if (signSpawnPoints.TryGetValue(signData.sidePosition, out spawnPoint))
+                if (signSpawnPoints.TryGetValue(signData.SidePosition, out spawnPoint))
                 {
                     Instantiate(signPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
                 }
                 else
                 {
-                    Debug.LogError($"The spawn point for the position was not found {signData.sidePosition}");
+                    Debug.LogError($"The spawn point for the position was not found {signData.SidePosition}");
                 }
             }
             else
             {
-                Debug.LogError($"The prefab for the position was not found {signData.modelName}");
+                Debug.LogError($"The prefab for the position was not found {signData.ModelName}");
             }
         }
     }
@@ -132,11 +132,11 @@ public class CreateObjectManager : ScriptableObject
     {
         foreach (TrafficLightData trafficLightData in trafficLights)
         {
-           GameObject trafficLightPrefab = PrefabManager.GetPrefab($"Prefabs/trafficLights/{trafficLightData.modelName}");
+           GameObject trafficLightPrefab = PrefabManager.GetPrefab($"Prefabs/trafficLights/{trafficLightData.ModelName}");
             if (trafficLightPrefab!= null)
             {
                 GameObject spawnPoint;
-                if (trafficLightSpawnPoints.TryGetValue(trafficLightData.sidePosition, out spawnPoint))
+                if (trafficLightSpawnPoints.TryGetValue(trafficLightData.SidePosition, out spawnPoint))
                 {
                     Instantiate(trafficLightPrefab, spawnPoint.transform.position, spawnPoint.transform.rotation);
                 }
