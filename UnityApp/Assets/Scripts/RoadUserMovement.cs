@@ -15,10 +15,12 @@ public class RoadUserMovement : MonoBehaviour
     private float decelerationStartDistance = 2f; // Расстояние, на котором автомобиль начнет замедляться
 
     private Transform[] route;
+    private RoadUserData roadUserData;
     private int currentPoint = 0;
     private bool isMoving = false;
     private float currentSpeed = 0f; // Текущая скорость автомобиля
 
+    public RoadUserData RUD { get => roadUserData; set => roadUserData = value; }
     public Transform[] Route { get => route; set => route = value; }
     public bool IsMoving { get => isMoving; set => isMoving = value; }
     public int CurrentPoint { get => currentPoint; set => currentPoint = value; }

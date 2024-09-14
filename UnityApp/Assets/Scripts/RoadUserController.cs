@@ -5,12 +5,16 @@ using UnityEngine;
 public class RoadUserController : MonoBehaviour
 {
     private RoadUserMovement roadUserMovement;
-    private TrafficRulesManager trafficRulesManager;
+    private RuleChecker ruleChecker;
+    private RoadUserManager roadUserManager;
+    // private TrafficRulesManager trafficRulesManager;
 
     void Start()
     {
+        ruleChecker = GetComponent<CarRuleChecker>();
         roadUserMovement = GetComponent<RoadUserMovement>();
-        trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
+        roadUserManager = FindObjectOfType<RoadUserManager>();
+        // trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
 
         if (roadUserMovement != null)
         {
@@ -24,10 +28,13 @@ public class RoadUserController : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (roadUserMovement != null && trafficRulesManager != null)
+        // if (roadUserMovement != null && trafficRulesManager != null)
+        if (roadUserMovement != null)
         {
-            trafficRulesManager.UserSelectRoadUser(roadUserMovement);
+            // trafficRulesManager.UserSelectRoadUser(roadUserMovement);
             roadUserMovement.StartMovement();
+            roadUserManager.DeleteRoadUser(roadUserMovement.RUD);
+            Debug.Log(ruleChecker.IsMovementAllowed(roadUserMovement.RUD));
         }
         else
         {
