@@ -7,4 +7,5 @@ public class TrafficLightData
     public int Id { get; set; }
     public string ModelName { get; set; }
     public string SidePosition { get; set; }
+    public string State { get; set; }
 }

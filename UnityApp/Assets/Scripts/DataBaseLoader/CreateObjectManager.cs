@@ -104,7 +104,7 @@ public class CreateObjectManager : ScriptableObject
 
     void CreateTrafficLight(TrafficLightData trafficLightData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"Prefabs/trafficLights/{trafficLightData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        Instantiate(PrefabManager.GetPrefab($"Prefabs/trafficLights/{trafficLightData.ModelName}{trafficLightData.State}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 
     string GetModelName<T>(T entity)
@@ -133,9 +133,9 @@ public class CreateObjectManager : ScriptableObject
     {
         return typeParticipant switch
         {
-            "car" => "Car",
-            "human" => "Human",
-            "tram" => "Tram",
+            "Car" => "Car",
+            "Human" => "Human",
+            "Tram" => "Tram",
             _ => "Untagged"
         };
     }

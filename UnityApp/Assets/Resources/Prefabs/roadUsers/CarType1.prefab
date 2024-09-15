@@ -95,14 +95,14 @@ GameObject:
   - component: {fileID: 997605621891095931}
   - component: {fileID: 4156515052798935980}
   - component: {fileID: 6132070437305108943}
-  - component: {fileID: 5901223413679519309}
-  - component: {fileID: 8385014424397523783}
   - component: {fileID: 4700654363516398515}
-  - component: {fileID: 4266069091686932183}
-  - component: {fileID: 4273058641035677272}
+  - component: {fileID: 8385014424397523783}
   - component: {fileID: 2420843683656476970}
+  - component: {fileID: 6705875288476869104}
+  - component: {fileID: 9106395953161560032}
+  - component: {fileID: 4254695889587674749}
   m_Layer: 0
-  m_Name: Car
+  m_Name: CarType1
   m_TagString: Car
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,35 +234,6 @@ PolygonCollider2D:
       - {x: 0.7154762, y: 1.09666}
       - {x: 0.60944444, y: 1.2797949}
   m_UseDelaunayMesh: 0
---- !u!114 &5901223413679519309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562564070963048245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1e84b28a7edcd49959b06797d5d228, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 10
-  acceleration: 1
-  decelerationFactor: 0.5
-  rotationSpeed: 7
-  decelerationStartDistance: 2
---- !u!114 &8385014424397523783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562564070963048245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c49201ac9c5fa3a418793d208dab0767, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &4700654363516398515
 Rigidbody2D:
   serializedVersion: 4
@@ -290,7 +261,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 2
---- !u!114 &4266069091686932183
+--- !u!114 &8385014424397523783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -299,24 +270,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3562564070963048245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9741d196b28894c4f86209361d1484c6, type: 3}
+  m_Script: {fileID: 11500000, guid: c49201ac9c5fa3a418793d208dab0767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4273058641035677272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562564070963048245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4122049f734a1f54da2431e600f52e8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftHandleIndicator: {fileID: 939440806515822457}
-  rightHandleIndicator: {fileID: 8174332758674222355}
-  signalTime: 0.5
 --- !u!114 &2420843683656476970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +285,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c23cacf3e05794e92f930774d69c3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6705875288476869104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562564070963048245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce7ab018b200fd4a84e89319f91bc1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 10
+  acceleration: 1
+  decelerationFactor: 0.5
+  rotationSpeed: 5
+  decelerationStartDistance: 2
+  brakingFactor: 2
+--- !u!114 &9106395953161560032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562564070963048245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5cafb9b84d17c41935fa0e9e6ff587, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4254695889587674749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3562564070963048245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c7ec7f4df195c64fb3a1d2b72a24d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftHandleIndicator: {fileID: 939440806515822457}
+  rightHandleIndicator: {fileID: 8174332758674222355}
+  blinkInterval: 0.4
 --- !u!1 &8174332758674222355
 GameObject:
   m_ObjectHideFlags: 0

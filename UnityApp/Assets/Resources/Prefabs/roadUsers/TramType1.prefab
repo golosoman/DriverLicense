@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5263274157427855258}
   - component: {fileID: 1012276449949622883}
   m_Layer: 0
-  m_Name: Tram
+  m_Name: TramType1
   m_TagString: Tram
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

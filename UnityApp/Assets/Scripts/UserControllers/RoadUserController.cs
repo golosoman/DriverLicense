@@ -11,7 +11,7 @@ public class RoadUserController : MonoBehaviour
 
     void Start()
     {
-        ruleChecker = GetComponent<CarRuleChecker>();
+        ruleChecker = GetComponent<RuleChecker>();
         roadUserMovement = GetComponent<RoadUserMovement>();
         roadUserManager = FindObjectOfType<RoadUserManager>();
         // trafficRulesManager = FindObjectOfType<TrafficRulesManager>();

@@ -25,7 +25,7 @@ public class DatabaseLoader : MonoBehaviour
 
     IEnumerator LoadTicketData()
     {
-        string ticketId = "2";
+        string ticketId = "1";
         string url = $"{baseUrl}/tickets/{ticketId}";
 
         UnityWebRequest request = UnityWebRequest.Get(url);

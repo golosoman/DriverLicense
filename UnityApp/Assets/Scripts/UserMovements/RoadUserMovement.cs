@@ -27,8 +27,8 @@ public class RoadUserMovement : MonoBehaviour
     public float Acceleration => acceleration;
     public float RotationSpeed => rotationSpeed;
     public float CurrentSpeed { get => currentSpeed; set => currentSpeed = value; }
-    public float MaxSpeed => maxSpeed;
-    public float DecelerationFactor => decelerationFactor;
+    public float MaxSpeed { get => maxSpeed; set => maxSpeed = value; }
+    public float DecelerationFactor { get => decelerationFactor; set => decelerationFactor = value; }
     public float DecelerationStartDistance => decelerationStartDistance;
 
     public int GetLengthRoute() => route.Length;

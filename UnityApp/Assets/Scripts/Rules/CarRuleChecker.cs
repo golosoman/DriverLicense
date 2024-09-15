@@ -52,7 +52,7 @@ public class CarRuleChecker : RuleChecker
             {
                 //  TODO: Логика проверки состояния светофора (красный, зеленый, желтый)
                 //  Пример:
-                if (trafficLight.ModelName == "green") {
+                if (trafficLight.State == "green") {
                     return true; // Движение разрешено
                 }
             }
@@ -93,29 +93,34 @@ public class CarRuleChecker : RuleChecker
             foreach (RoadUserData otherCar in carRoadUsers)
             {
                 if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
+                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ||
+                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="right") ) return false;
             }
         }
         if (roadUserData.SidePosition == "south" && roadUserData.MovementDirection == "left") {
             foreach (RoadUserData otherCar in carRoadUsers)
             {
                 if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
+                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ||
+                     (otherCar.SidePosition == "east" && otherCar.MovementDirection=="right") ) return false;
 
                 if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
                      (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
             }
         }
+        
         if (roadUserData.SidePosition == "south" && roadUserData.MovementDirection == "backward") {
             foreach (RoadUserData otherCar in carRoadUsers)
             {
-                // if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
+                if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
+                    (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") || 
+                    (otherCar.SidePosition == "east" && otherCar.MovementDirection=="right") ) return false;
 
-                // if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
+                if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
+                     (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
 
-                //Пропускай всех
+                if ( (otherCar.SidePosition == "west" && otherCar.MovementDirection=="forward") || 
+                     (otherCar.SidePosition == "west" && otherCar.MovementDirection=="right") ) return false;
             }
         }
 
@@ -140,16 +145,10 @@ public class CarRuleChecker : RuleChecker
             }
         }
         if (roadUserData.SidePosition == "south" && roadUserData.MovementDirection == "backward") {
-            foreach (RoadUserData otherCar in carRoadUsers)
-            {
-                // if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
-
-                // if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
-
-                //Пропускай всех
-            }
+            // foreach (RoadUserData otherCar in carRoadUsers)
+            // {
+               
+            // }
         }
 
         // Проверка помехи справа для движения прямо или направо
@@ -171,16 +170,9 @@ public class CarRuleChecker : RuleChecker
             }
         }
         if (roadUserData.SidePosition == "south" && roadUserData.MovementDirection == "backward") {
-            foreach (RoadUserData otherCar in carRoadUsers)
-            {
-                // if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
-
-                // if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
-
-                //Пропускай всех
-            }
+            // foreach (RoadUserData otherCar in carRoadUsers)
+            // {
+            // }
         }
 
         // Проверка помехи справа для движения прямо или направо
@@ -202,20 +194,11 @@ public class CarRuleChecker : RuleChecker
             }
         }
         if (roadUserData.SidePosition == "south" && roadUserData.MovementDirection == "backward") {
-            foreach (RoadUserData otherCar in carRoadUsers)
-            {
-                // if ( (otherCar.SidePosition == "east" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "east" && otherCar.MovementDirection=="left") ) return false;
-
-                // if ( (otherCar.SidePosition == "north" && otherCar.MovementDirection=="forward") || 
-                //      (otherCar.SidePosition == "north" && otherCar.MovementDirection=="right") ) return false;
-
-                //Пропускай всех
-            }
+            // foreach (RoadUserData otherCar in carRoadUsers)
+            // {
+            // }
         }
         
-
-        // Если машина поворачивает н, то пропускаем всех
         return true;
     }
 
