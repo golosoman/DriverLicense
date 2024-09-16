@@ -53,7 +53,7 @@ public class RoadUserMovement : MonoBehaviour
         Debug.Log("RoadUser movement stopped.");
     }
 
-    private IEnumerator MoveAlongRoute()
+    public virtual IEnumerator MoveAlongRoute()
     {
         if (route == null || route.Length == 0)
         {
@@ -81,7 +81,7 @@ public class RoadUserMovement : MonoBehaviour
         Debug.Log("RoadUser has finished the route.");
     }
 
-    private void MoveTowardsTarget(Vector3 targetPosition)
+    public virtual void MoveTowardsTarget(Vector3 targetPosition)
     {
         Vector3 direction = targetPosition - transform.position;
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
@@ -94,7 +94,7 @@ public class RoadUserMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
     }
 
-    private void AdjustSpeed(float distanceToTarget)
+    public virtual void AdjustSpeed(float distanceToTarget)
     {
         if (distanceToTarget < decelerationStartDistance)
         {
