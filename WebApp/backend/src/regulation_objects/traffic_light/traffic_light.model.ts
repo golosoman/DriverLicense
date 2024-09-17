@@ -17,16 +17,16 @@ export class TrafficLight extends Model<TrafficLight> {
   modelName: string;
 
   @Column({
-    type: DataType.ENUM('west', 'east', 'north', 'south'),
+    type: DataType.ENUM('West', 'East', 'North', 'South'),
     allowNull: false,
   })
   sidePosition: string;
 
-  // @Column({
-  //   type: DataType.STRING,
-  //   allowNull: false,
-  // })
-  // cycle: string;
+  @Column({
+    type:DataType.ENUM('Red', 'Green', 'Yellow', 'Initial'),
+    allowNull: false,
+  })
+  state: string;
 
   @Column({
     type: DataType.DATE,

@@ -12,8 +12,8 @@ export class CreateTrafficLightDto {
   @ApiProperty()
   sidePosition: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // @ApiProperty()
-  // cycle: string;
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty()
+  state: string;
 }

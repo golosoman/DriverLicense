@@ -1,19 +1,19 @@
 export enum ParticipantType {
-    WALKER = 'walker',
-    PASSENGERCAR = 'passengerCar',
-    TRAM = 'tram'
+    HUMAN = 'Human',
+    CAR = 'Car',
+    TRAM = 'Tram'
 }
 
 export enum SidePosition {
-    WEST = 'west',
-    EAST = 'east',
-    NORTH = 'north',
-    SOUTH = 'south'
+    WEST = 'West',
+    EAST = 'East',
+    NORTH = 'North',
+    SOUTH = 'South'
 }
 
 export enum MovementDirectionType {
-    FORWARD = 'forward',
-    BACKWORD = 'backward',
-    LEFT = 'left',
-    RIGHT = 'right'
+    FORWARD = 'Forward',
+    BACKWORD = 'Backward',
+    LEFT = 'Left',
+    RIGHT = 'Right'
 }

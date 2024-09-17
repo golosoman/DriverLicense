@@ -12,7 +12,7 @@ import { ParticipantType, MovementDirectionType, SidePosition } from './dto';
 })
 export class RoadUser extends Model<RoadUser> {
   @Column({
-    type: DataType.ENUM('passengerCar', 'walker', 'tram'),
+    type: DataType.ENUM('Car', 'Human', 'Tram'),
     allowNull: false,
   })
   typeParticipant: string;
@@ -24,7 +24,7 @@ export class RoadUser extends Model<RoadUser> {
   modelName: string;
 
   @Column({
-    type: DataType.ENUM('west', 'east', 'north', 'south'),
+    type: DataType.ENUM('West', 'East', 'North', 'South'),
     allowNull: false,
   })
   sidePosition: string;
@@ -36,7 +36,7 @@ export class RoadUser extends Model<RoadUser> {
   numberPosition: number;
 
   @Column({
-    type: DataType.ENUM('forward', 'backward', 'left', 'right'),
+    type: DataType.ENUM('Forward', 'Backward', 'Left', 'Right'),
     allowNull: false,
   })
   movementDirection: string;

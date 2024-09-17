@@ -17,7 +17,7 @@ export class Sign extends Model<Sign> {
   modelName: string;
 
   @Column({
-    type: DataType.ENUM('west', 'east', 'north', 'south'),
+    type: DataType.ENUM('West', 'East', 'North', 'South'),
     allowNull: false,
   })
   sidePosition: string;

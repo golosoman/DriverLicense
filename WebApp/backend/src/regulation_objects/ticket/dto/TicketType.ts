@@ -1,4 +1,4 @@
 export enum TicketType {
-  CROSSTYPEONE = 'crossTypeOne',
+  CROSSTYPEONE = 'CrossTypeOne',
   TSHAPED = 'TShapedTypeOne',
 }
