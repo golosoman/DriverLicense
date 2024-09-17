@@ -97,10 +97,9 @@ GameObject:
   - component: {fileID: 6132070437305108943}
   - component: {fileID: 4700654363516398515}
   - component: {fileID: 8385014424397523783}
-  - component: {fileID: 2420843683656476970}
   - component: {fileID: 6705875288476869104}
   - component: {fileID: 9106395953161560032}
-  - component: {fileID: 4254695889587674749}
+  - component: {fileID: 4854981729239525004}
   m_Layer: 0
   m_Name: CarType1
   m_TagString: Car
@@ -273,18 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c49201ac9c5fa3a418793d208dab0767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2420843683656476970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562564070963048245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c23cacf3e05794e92f930774d69c3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6705875288476869104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5cafb9b84d17c41935fa0e9e6ff587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4254695889587674749
+--- !u!114 &4854981729239525004
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -329,7 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandleIndicator: {fileID: 939440806515822457}
   rightHandleIndicator: {fileID: 8174332758674222355}
-  blinkInterval: 0.4
+  blinkInterval: 0.3
 --- !u!1 &8174332758674222355
 GameObject:
   m_ObjectHideFlags: 0

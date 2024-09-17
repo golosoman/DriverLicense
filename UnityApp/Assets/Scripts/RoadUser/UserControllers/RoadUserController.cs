@@ -16,13 +16,9 @@ public class RoadUserController : MonoBehaviour
         roadUserManager = FindObjectOfType<RoadUserManager>();
         // trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
 
-        if (roadUserMovement != null)
+        if (roadUserMovement is null)
         {
-            Debug.Log("RoadUserMovement is found. Route length: " + roadUserMovement.GetLengthRoute());
-        }
-        else
-        {
-            Debug.LogError("RoadUserMovement component is missing on the roadUser object.");
+             Debug.LogError("RoadUserMovement component is missing on the roadUser object.");
         }
     }
 
@@ -33,8 +29,8 @@ public class RoadUserController : MonoBehaviour
         {
             // trafficRulesManager.UserSelectRoadUser(roadUserMovement);
             roadUserMovement.StartMovement();
-            roadUserManager.DeleteRoadUser(roadUserMovement.RUD);
-            Debug.Log(ruleChecker.IsMovementAllowed(roadUserMovement.RUD));
+            // roadUserManager.DeleteRoadUser(roadUserMovement.RUD);
+            // Debug.Log(ruleChecker.IsMovementAllowed(roadUserMovement.RUD));
         }
         else
         {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class IntersectionManager : MonoBehaviour
+public class IntersectionRoutesManager : MonoBehaviour
 {
     // Используем словарь для хранения маршрутов для каждого направления и типа движения
     private Dictionary<(Direction, string), Transform[]> routes = new Dictionary<(Direction, string), Transform[]>();
@@ -26,31 +26,31 @@ public class IntersectionManager : MonoBehaviour
     [SerializeField] private Transform[] eastRightRoute;
     [SerializeField] private Transform[] eastBackwardRoute;
 
-    public enum Direction { North, South, West, East }
+    public enum Direction { NORTH, SOUTH, WEST, EAST }
 
     // Инициализация словаря в Awake, чтобы быть уверенным, что данные установлены до любых вызовов
     private void Awake()
     {
         // Заполняем словарь маршрутами
-        routes[(Direction.North, "forward")] = northForwardRoute;
-        routes[(Direction.North, "left")] = northLeftRoute;
-        routes[(Direction.North, "right")] = northRightRoute;
-        routes[(Direction.North, "backward")] = northBackwardRoute;
+        routes[(Direction.NORTH, DirectionMovementTypes.FORWARD)] = northForwardRoute;
+        routes[(Direction.NORTH, DirectionMovementTypes.LEFT)] = northLeftRoute;
+        routes[(Direction.NORTH, DirectionMovementTypes.RIGHT)] = northRightRoute;
+        routes[(Direction.NORTH, DirectionMovementTypes.BACKWARD)] = northBackwardRoute;
 
-        routes[(Direction.South, "forward")] = southForwardRoute;
-        routes[(Direction.South, "left")] = southLeftRoute;
-        routes[(Direction.South, "right")] = southRightRoute;
-        routes[(Direction.South, "backward")] = southBackwardRoute;
+        routes[(Direction.SOUTH, DirectionMovementTypes.FORWARD)] = southForwardRoute;
+        routes[(Direction.SOUTH, DirectionMovementTypes.LEFT)] = southLeftRoute;
+        routes[(Direction.SOUTH, DirectionMovementTypes.RIGHT)] = southRightRoute;
+        routes[(Direction.SOUTH, DirectionMovementTypes.BACKWARD)] = southBackwardRoute;
 
-        routes[(Direction.West, "forward")] = westForwardRoute;
-        routes[(Direction.West, "left")] = westLeftRoute;
-        routes[(Direction.West, "right")] = westRightRoute;
-        routes[(Direction.West, "backward")] = westBackwardRoute;
+        routes[(Direction.WEST, DirectionMovementTypes.FORWARD)] = westForwardRoute;
+        routes[(Direction.WEST, DirectionMovementTypes.LEFT)] = westLeftRoute;
+        routes[(Direction.WEST, DirectionMovementTypes.RIGHT)] = westRightRoute;
+        routes[(Direction.WEST, DirectionMovementTypes.BACKWARD)] = westBackwardRoute;
 
-        routes[(Direction.East, "forward")] = eastForwardRoute;
-        routes[(Direction.East, "left")] = eastLeftRoute;
-        routes[(Direction.East, "right")] = eastRightRoute;
-        routes[(Direction.East, "backward")] = eastBackwardRoute;
+        routes[(Direction.EAST, DirectionMovementTypes.FORWARD)] = eastForwardRoute;
+        routes[(Direction.EAST, DirectionMovementTypes.LEFT)] = eastLeftRoute;
+        routes[(Direction.EAST, DirectionMovementTypes.RIGHT)] = eastRightRoute;
+        routes[(Direction.EAST, DirectionMovementTypes.BACKWARD)] = eastBackwardRoute;
     }
 
     // Функция для получения маршрута на основе направления автомобиля

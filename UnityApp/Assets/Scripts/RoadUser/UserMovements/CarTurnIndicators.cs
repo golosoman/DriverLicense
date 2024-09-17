@@ -26,12 +26,12 @@ public class CarTurnIndicators : MonoBehaviour
     private void Update()
     {
         // Включение и выключение поворотников в зависимости от направления движения
-        if ( currentSignal == "left" || currentSignal == "backward")
+        if ( currentSignal == DirectionMovementTypes.LEFT || currentSignal == DirectionMovementTypes.BACKWARD)
         {
             TurnOnLeftIndicator();
             TurnOffRightIndicator();
         }
-        else if (currentSignal == "right")
+        else if (currentSignal == DirectionMovementTypes.RIGHT)
         {
             TurnOnRightIndicator();
             TurnOffLeftIndicator();

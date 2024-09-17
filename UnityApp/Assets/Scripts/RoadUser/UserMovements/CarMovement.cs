@@ -7,13 +7,9 @@ public class CarMovement : RoadUserMovement
 {
     [SerializeField]
     private  float brakingFactor = 2f; // Фактор для экстренного торможения
-    private CarTurnIndicators turnIndicators;
-    private bool isStopped;
-    private bool pointByPointRotation = false;
-    public bool PBPR { get => pointByPointRotation; set => pointByPointRotation = value; }
     private void Start()
     {
-        turnIndicators = GetComponent<CarTurnIndicators>();
+        // turnIndicators = GetComponent<CarTurnIndicators>();
     }
 
     public override void AdjustSpeed(float distanceToTarget)
@@ -64,22 +60,22 @@ public class CarMovement : RoadUserMovement
                 yield return null;
             }
 
-            if (pointByPointRotation && IsMoving && CurrentPoint + 1 < Route.Length) // Проверяем, есть ли следующая точка
-            {
-                // Проверяем, нужно ли останавливаться
-                // Debug.Log(ShouldStopAtNextPoint(CurrentPoint + 1) + "da suda");
-                if (ShouldStopAtNextPoint(CurrentPoint + 1))
-                {
-                    if (!isStopped)
-                    {
-                        StopMovement();
-                    }
-                }
-                else
-                {
-                    isStopped = false; // Сбрасываем флаг остановки
-                }
-            }
+            // if (pointByPointRotation && IsMoving && CurrentPoint + 1 < Route.Length) // Проверяем, есть ли следующая точка
+            // {
+            //     // Проверяем, нужно ли останавливаться
+            //     // Debug.Log(ShouldStopAtNextPoint(CurrentPoint + 1) + "da suda");
+            //     if (ShouldStopAtNextPoint(CurrentPoint + 1))
+            //     {
+            //         if (!isStopped)
+            //         {
+            //             StopMovement();
+            //         }
+            //     }
+            //     else
+            //     {
+            //         isStopped = false; // Сбрасываем флаг остановки
+            //     }
+            // }
 
             CurrentPoint++;
             yield return null;
@@ -90,25 +86,25 @@ public class CarMovement : RoadUserMovement
     }
 
 
-    private bool ShouldStopAtNextPoint(int nextPointIndex)
-    {
-        switch (RUD.MovementDirection)
-        {
-            case "forward":
-                if(nextPointIndex == 1) return true;
-                break;
-            case "left":
-                if (nextPointIndex == 1 || nextPointIndex == 2) return true;
-                break;
-            case "backward":
-                if (nextPointIndex == 1 || nextPointIndex == 2 || nextPointIndex == 3 || nextPointIndex == 4 ) return true;
-                break;
-            default:
-                break;
-        }
+    // private bool ShouldStopAtNextPoint(int nextPointIndex)
+    // {
+    //     switch (RUD.MovementDirection)
+    //     {
+    //         case "forward":
+    //             if(nextPointIndex == 1) return true;
+    //             break;
+    //         case "left":
+    //             if (nextPointIndex == 1 || nextPointIndex == 2) return true;
+    //             break;
+    //         case "backward":
+    //             if (nextPointIndex == 1 || nextPointIndex == 2 || nextPointIndex == 3 || nextPointIndex == 4 ) return true;
+    //             break;
+    //         default:
+    //             break;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     public override void MoveTowardsTarget(Vector3 targetPosition)
     {

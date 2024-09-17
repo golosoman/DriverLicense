@@ -6,30 +6,33 @@ public class CreateObjectManager : ScriptableObject
     private Dictionary<string, GameObject> roadUserSpawnPoints = new();
     private Dictionary<string, GameObject> signSpawnPoints = new();
     private Dictionary<string, GameObject> trafficLightSpawnPoints = new();
-    private IntersectionManager intersectionManager;
-    private TicketData ticketData;
+    private IntersectionRoutesManager intersectionManager;
+    RoadUserManager roadUserManager;
+    // private RuleChecker ruleChecker;
+
+    // private TicketData ticketData;
 
     public void ProcessTicketData(TicketData ticketData)
     {
-        this.ticketData = ticketData;
-        InitRuleManager(ticketData.RoadUsersArr);
+        // this.ticketData = ticketData;
+        InitRuleManager(ticketData.TypeIntersection);
         CreateIntersection(ticketData.TypeIntersection);
-        CreateEntities(ticketData.RoadUsersArr, roadUserSpawnPoints, "Prefabs/roadUsers/", CreateRoadUser);
-        CreateEntities(ticketData.SignsArr, signSpawnPoints, "Prefabs/signs/", CreateSign);
-        CreateEntities(ticketData.TrafficLightsArr, trafficLightSpawnPoints, "Prefabs/trafficLights/", CreateTrafficLight);
+        CreateEntities(ticketData.RoadUsersArr, roadUserSpawnPoints, FilePath.PATH_PREFAB_ROAD_USERS, CreateRoadUser);
+        CreateEntities(ticketData.SignsArr, signSpawnPoints, FilePath.PATH_PREFAB_SIGNS, CreateSign);
+        CreateEntities(ticketData.TrafficLightsArr, trafficLightSpawnPoints, FilePath.PATH_PREFAB_TRAFFIC_LIGHTS, CreateTrafficLight);
     }
 
-    void InitRuleManager(RoadUserData[] roadUserData){
-        RoadUserManager roadUserManager = FindObjectOfType<RoadUserManager>();
-        roadUserManager.Initialize(roadUserData);
+    void InitRuleManager(string intersection){
+        roadUserManager = FindObjectOfType<RoadUserManager>();
+        roadUserManager.Initialize(intersection);
     }
 
     void CreateIntersection(string intersection)
     {
-        GameObject intersectionPrefab = PrefabManager.GetPrefab($"Prefabs/intersections/{intersection}");
+        GameObject intersectionPrefab = PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_INTERSECTIONS}{intersection}");
         GameObject intersectionInstance = Instantiate(intersectionPrefab, Vector3.zero, Quaternion.identity);
 
-        intersectionManager = intersectionInstance.GetComponent<IntersectionManager>();
+        intersectionManager = intersectionInstance.GetComponent<IntersectionRoutesManager>();
 
         if (intersectionManager == null)
         {
@@ -66,45 +69,48 @@ public class CreateObjectManager : ScriptableObject
 
     void CreateRoadUser(RoadUserData roadUserData, GameObject spawnPoint)
     {
-        GameObject roadUserInstance = Instantiate(PrefabManager.GetPrefab($"Prefabs/roadUsers/{roadUserData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        // Debug.Log($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.ModelName}");
+        GameObject roadUserInstance = Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
         roadUserInstance.name = $"{roadUserData.ModelName}_{roadUserData.SidePosition}_{roadUserData.NumberPosition}";
         roadUserInstance.tag = GetTagFromTypeParticipant(roadUserData.TypeParticipant);
 
-        IntersectionManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.SidePosition);
+        IntersectionRoutesManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.SidePosition);
         Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.MovementDirection);
 
         RoadUserMovement roadUserMovement = roadUserInstance.GetComponent<RoadUserMovement>();
         roadUserMovement.Route = route;
         roadUserMovement.RUD = roadUserData;
+        
+        // RoadRuleChecker roadRuleChecker = roadUserInstance.GetComponent<RoadRuleChecker>();
+        // roadRuleChecker.Initialize(roadUserManager);ы
 
-        RuleChecker ruleChecker = roadUserInstance.GetComponent<CarRuleChecker>();
-        ruleChecker.Initialize(ticketData);
+        roadUserManager.AddRoadUser(roadUserData, roadUserInstance);
     }
 
-    private RuleChecker CreateRuleChecker(RoadUserData roadUserData)
-    {
-        switch (roadUserData.TypeParticipant)
-        {
-            case "car":
-                return new CarRuleChecker();
-            // case "human":
-            //     return new HumanRuleChecker();
-            // case "tram":
-            //     return new TramRuleChecker();
-            default:
-                Debug.LogError("Unknown participant type: " + roadUserData.TypeParticipant);
-                return null;
-        }
-    }
+    // private RuleChecker CreateRuleChecker(RoadUserData roadUserData)
+    // {
+    //     switch (roadUserData.TypeParticipant)
+    //     {
+    //         case "car":
+    //             return new CarRuleChecker();
+    //         // case "human":
+    //         //     return new HumanRuleChecker();
+    //         // case "tram":
+    //         //     return new TramRuleChecker();
+    //         default:
+    //             Debug.LogError("Unknown participant type: " + roadUserData.TypeParticipant);
+    //             return null;
+    //     }
+    // }
 
     void CreateSign(SignData signData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"Prefabs/signs/{signData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_SIGNS}{signData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 
     void CreateTrafficLight(TrafficLightData trafficLightData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"Prefabs/trafficLights/{trafficLightData.ModelName}{trafficLightData.State}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_TRAFFIC_LIGHTS}{trafficLightData.ModelName}{trafficLightData.State}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 
     string GetModelName<T>(T entity)
@@ -131,24 +137,25 @@ public class CreateObjectManager : ScriptableObject
 
     string GetTagFromTypeParticipant(string typeParticipant)
     {
+        // Выдача тегов по типу участника движения
         return typeParticipant switch
         {
-            "Car" => "Car",
-            "Human" => "Human",
-            "Tram" => "Tram",
-            _ => "Untagged"
+            RoadUserTypes.CAR => TagObjectNamesTypes.CAR,
+            RoadUserTypes.HUMAN => TagObjectNamesTypes.HUMAN,
+            RoadUserTypes.TRAM => TagObjectNamesTypes.TRAM,
+            _ => TagObjectNamesTypes.UNTAGGED
         };
     }
 
-    IntersectionManager.Direction GetDirectionFromData(string position)
+    IntersectionRoutesManager.Direction GetDirectionFromData(string position)
     {
         return position switch
         {
-            "west" => IntersectionManager.Direction.West,
-            "east" => IntersectionManager.Direction.East,
-            "north" => IntersectionManager.Direction.North,
-            "south" => IntersectionManager.Direction.South,
-            _ => IntersectionManager.Direction.North
+            SideDirectionTypes.WEST => IntersectionRoutesManager.Direction.WEST,
+            SideDirectionTypes.EAST => IntersectionRoutesManager.Direction.EAST,
+            SideDirectionTypes.NORTH => IntersectionRoutesManager.Direction.NORTH,
+            SideDirectionTypes.SOUTH => IntersectionRoutesManager.Direction.SOUTH,
+            _ => IntersectionRoutesManager.Direction.NORTH
         };
     }
 
@@ -156,26 +163,26 @@ public class CreateObjectManager : ScriptableObject
     {
         roadUserSpawnPoints = new Dictionary<string, GameObject>
         {
-            { "west", GameObject.Find("CarSpawnLeft") },
-            { "east", GameObject.Find("CarSpawnRight") },
-            { "north", GameObject.Find("CarSpawnTop") },
-            { "south", GameObject.Find("CarSpawnBottom") }
+            { SideDirectionTypes.WEST, GameObject.Find(CarSpawnPoint.CAR_SPAWN_WEST) },
+            { SideDirectionTypes.EAST, GameObject.Find(CarSpawnPoint.CAR_SPAWN_EAST) },
+            { SideDirectionTypes.NORTH, GameObject.Find(CarSpawnPoint.CAR_SPAWN_NORTH) },
+            { SideDirectionTypes.SOUTH, GameObject.Find(CarSpawnPoint.CAR_SPAWN_SOUTH) }
         };
 
         signSpawnPoints = new Dictionary<string, GameObject>
         {
-            { "west", GameObject.Find("SignSpawnLeft") },
-            { "east", GameObject.Find("SignSpawnRight") },
-            { "north", GameObject.Find("SignSpawnTop") },
-            { "south", GameObject.Find("SignSpawnBottom") }
+            { SideDirectionTypes.WEST, GameObject.Find(SignSpawnPoint.SIGN_SPAWN_WEST) },
+            { SideDirectionTypes.EAST, GameObject.Find(SignSpawnPoint.SIGN_SPAWN_EAST) },
+            { SideDirectionTypes.NORTH, GameObject.Find(SignSpawnPoint.SIGN_SPAWN_NORTH) },
+            { SideDirectionTypes.SOUTH, GameObject.Find(SignSpawnPoint.SIGN_SPAWN_SOUTH) }
         };
 
         trafficLightSpawnPoints = new Dictionary<string, GameObject>
         {
-            { "west", GameObject.Find("TrafficLightSpawnLeft") },
-            { "east", GameObject.Find("TrafficLightSpawnRight") },
-            { "north", GameObject.Find("TrafficLightSpawnTop") },
-            { "south", GameObject.Find("TrafficLightSpawnBottom") }
+            { SideDirectionTypes.WEST, GameObject.Find(TrafficLightSpawnPoint.TRAFFIC_LIGHT_SPAWN_WEST) },
+            { SideDirectionTypes.EAST, GameObject.Find(TrafficLightSpawnPoint.TRAFFIC_LIGHT_SPAWN_EAST) },
+            { SideDirectionTypes.NORTH, GameObject.Find(TrafficLightSpawnPoint.TRAFFIC_LIGHT_SPAWN_NORTH) },
+            { SideDirectionTypes.SOUTH, GameObject.Find(TrafficLightSpawnPoint.TRAFFIC_LIGHT_SPAWN_SOUTH) }
         };
     }
 }

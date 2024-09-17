@@ -5,30 +5,18 @@ using Newtonsoft.Json;
 
 public class DatabaseLoader : MonoBehaviour
 {
-    private const string baseUrl = "http://localhost:5000";
     private CreateObjectManager createObjectManager;
     // private TrafficRulesManager trafficRulesManager;
 
     void Start()
     {
         createObjectManager = ScriptableObject.CreateInstance<CreateObjectManager>();
-        // trafficRulesManager = FindObjectOfType<TrafficRulesManager>();
-
-        // if (trafficRulesManager == null)
-        // {
-        //     Debug.LogError("TrafficRulesManager not found in the scene.");
-        //     return;
-        // }
-
         StartCoroutine(LoadTicketData());
     }
 
     IEnumerator LoadTicketData()
     {
-        string ticketId = "1";
-        string url = $"{baseUrl}/tickets/{ticketId}";
-
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        UnityWebRequest request = UnityWebRequest.Get(TicketURL.GET_TICKET_BY_ID);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -37,9 +25,7 @@ public class DatabaseLoader : MonoBehaviour
             try
             {
                 TicketData ticketData = JsonConvert.DeserializeObject<TicketData>(jsonData);
-                Debug.Log("Ticket Data Loaded: " + ticketData.TypeIntersection);
                 createObjectManager.ProcessTicketData(ticketData);
-                // trafficRulesManager.Initialize(ticketData);
             }
             catch (JsonException ex)
             {
