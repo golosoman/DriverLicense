@@ -4,37 +4,28 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class TrafficRuleEnforcerPoint1 : TrafficRuleEnforcer
 {
-    public override bool CheckObstacleOnRight(GameObject roadUserDataObject, RoadUserData roadUserData)
+    public override bool CheckObstacleOnRight(GameObject roadUserDataObject, RoadUserMovement roadUserMovement)
     {
-        Dictionary<string, Dictionary<RoadUserData, GameObject>> roadUsers = RoadUserManager.RoadUsers;
-
+        RoadUserData roadUserData = roadUserMovement.RUD;
         bool hasObstacleOnRight = false;
 
-        foreach (KeyValuePair<RoadUserData, GameObject> roadUser in roadUsers[TagObjectNamesTypes.CAR])
+        GameObject visibilityZoneTrigger = roadUserDataObject.transform.Find(SceneObjectNames.VISIBILITY_AREA).gameObject;
+
+        VisibilityZoneTrigger visibilityZoneScript = visibilityZoneTrigger.GetComponent<VisibilityZoneTrigger>();
+        List<GameObject> visibleObjects = visibilityZoneScript.VisibleObjects;
+
+        foreach (GameObject visibleObject in visibleObjects)
         {
-            // Пропустить текущий автомобиль
-            if (roadUser.Value == roadUserDataObject)
-                continue;
-
             Vector3 carPosition = roadUserDataObject.transform.position;
-            Vector3 otherCarPosition = roadUser.Value.transform.position;
+            Vector3 otherCarPosition = visibleObject.transform.position;
 
-            if (otherCarPosition.x < carPosition.x)
+            if (otherCarPosition.x < carPosition.x && CheckObstaclesConditions(SideDirectionTypes.NORTH, SideDirectionTypes.EAST, 
+                SideDirectionTypes.SOUTH, roadUserData))
             {
-                if (roadUserData.SidePosition == SideDirectionTypes.NORTH && (roadUserData.MovementDirection == DirectionMovementTypes.FORWARD || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.LEFT || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD))
-                    { hasObstacleOnRight = true; break; }
-
-                if (roadUserData.SidePosition == SideDirectionTypes.EAST && (roadUserData.MovementDirection == DirectionMovementTypes.LEFT || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD))
-                    { hasObstacleOnRight = true; break; }
-                
-                if (roadUserData.SidePosition == SideDirectionTypes.SOUTH && roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD)
-                    { hasObstacleOnRight = true; break; }
+                hasObstacleOnRight = true;
+                break;
             }
         }
-
         return hasObstacleOnRight;
     }
 }

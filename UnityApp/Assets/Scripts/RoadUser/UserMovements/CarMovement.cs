@@ -9,7 +9,6 @@ public class CarMovement : RoadUserMovement
     private  float brakingFactor = 2f; // Фактор для экстренного торможения
     private void Start()
     {
-        // turnIndicators = GetComponent<CarTurnIndicators>();
     }
 
     public override void AdjustSpeed(float distanceToTarget)
@@ -27,18 +26,6 @@ public class CarMovement : RoadUserMovement
             CurrentSpeed = Mathf.Lerp(CurrentSpeed, MaxSpeed, Time.deltaTime * Acceleration);
         }
     }
-
-    // public new void StartMovement()
-    // {
-    //     if (!IsMoving && Route != null && Route.Length > 0)
-    //     {
-    //         StartCoroutine(MoveAlongRoute());
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Route is not set or is empty.");
-    //     }
-    // }
 
     public override IEnumerator MoveAlongRoute()
     {
@@ -60,23 +47,6 @@ public class CarMovement : RoadUserMovement
                 yield return null;
             }
 
-            // if (pointByPointRotation && IsMoving && CurrentPoint + 1 < Route.Length) // Проверяем, есть ли следующая точка
-            // {
-            //     // Проверяем, нужно ли останавливаться
-            //     // Debug.Log(ShouldStopAtNextPoint(CurrentPoint + 1) + "da suda");
-            //     if (ShouldStopAtNextPoint(CurrentPoint + 1))
-            //     {
-            //         if (!isStopped)
-            //         {
-            //             StopMovement();
-            //         }
-            //     }
-            //     else
-            //     {
-            //         isStopped = false; // Сбрасываем флаг остановки
-            //     }
-            // }
-
             CurrentPoint++;
             yield return null;
         }
@@ -85,26 +55,6 @@ public class CarMovement : RoadUserMovement
         Debug.Log("RoadUser has finished the route.");
     }
 
-
-    // private bool ShouldStopAtNextPoint(int nextPointIndex)
-    // {
-    //     switch (RUD.MovementDirection)
-    //     {
-    //         case "forward":
-    //             if(nextPointIndex == 1) return true;
-    //             break;
-    //         case "left":
-    //             if (nextPointIndex == 1 || nextPointIndex == 2) return true;
-    //             break;
-    //         case "backward":
-    //             if (nextPointIndex == 1 || nextPointIndex == 2 || nextPointIndex == 3 || nextPointIndex == 4 ) return true;
-    //             break;
-    //         default:
-    //             break;
-    //     }
-
-    //     return false;
-    // }
 
     public override void MoveTowardsTarget(Vector3 targetPosition)
     {

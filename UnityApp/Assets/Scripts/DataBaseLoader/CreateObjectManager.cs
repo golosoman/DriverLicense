@@ -84,7 +84,7 @@ public class CreateObjectManager : ScriptableObject
         // RoadRuleChecker roadRuleChecker = roadUserInstance.GetComponent<RoadRuleChecker>();
         // roadRuleChecker.Initialize(roadUserManager);ы
 
-        roadUserManager.AddRoadUser(roadUserData, roadUserInstance);
+        // roadUserManager.AddRoadUser(roadUserData, roadUserInstance);
     }
 
     // private RuleChecker CreateRuleChecker(RoadUserData roadUserData)
