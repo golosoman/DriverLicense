@@ -6,9 +6,6 @@ public class TrafficRuleEnforcerPoint4 : TrafficRuleEnforcer
 {
     public override bool CheckObstacleOnRight(GameObject roadUserDataObject, RoadUserMovement roadUserMovement)
     {
-        RoadUserData roadUserData = roadUserMovement.RUD;
-        bool hasObstacleOnRight = false;
-
         GameObject visibilityZoneTrigger = roadUserDataObject.transform.Find(SceneObjectNames.VISIBILITY_AREA).gameObject;
 
         VisibilityZoneTrigger visibilityZoneScript = visibilityZoneTrigger.GetComponent<VisibilityZoneTrigger>();
@@ -16,14 +13,26 @@ public class TrafficRuleEnforcerPoint4 : TrafficRuleEnforcer
 
         foreach (GameObject visibleObject in visibleObjects)
         {
-            Vector3 carPosition = roadUserDataObject.transform.position;
-            Vector3 otherCarPosition = visibleObject.transform.position;
-
-            if (otherCarPosition.x > carPosition.x && CheckObstaclesConditions(SideDirectionTypes.SOUTH, SideDirectionTypes.WEST, 
-                SideDirectionTypes.NORTH, roadUserData))
+            Vector3 userPosition = roadUserDataObject.transform.position;
+            Vector3 otherUserPosition = visibleObject.transform.position;
+            
+            if (otherUserPosition.x > userPosition.x)
             {
-                hasObstacleOnRight = true;
-                break;
+                RoadUserMovement otherCarMovement = visibleObject.GetComponent<RoadUserMovement>();
+                // Проверка индексов для обеих машин
+                if (otherCarMovement.CurrentPoint + 1 < otherCarMovement.Route.Length && roadUserMovement.CurrentPoint + 1 < roadUserMovement.Route.Length)
+                {
+                    Vector3 otherUserPositionEnd = otherCarMovement.Route[otherCarMovement.CurrentPoint + 1].transform.position;
+                    Vector3 userPositionEnd = roadUserMovement.Route[roadUserMovement.CurrentPoint + 1].transform.position;
+                    
+                    // Debug.Log(otherCarMovement.CurrentPoint + "        " + roadUserMovement.CurrentPoint);
+                    
+                    if (CheckIntersectionSecondType(userPosition, userPositionEnd, otherUserPosition, otherUserPositionEnd))
+                    {
+                        hasObstacleOnRight = true;
+                        break;
+                    }
+                } 
             }
         }
 

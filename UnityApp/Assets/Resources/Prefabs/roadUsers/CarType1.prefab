@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 997605621891095931}
   - component: {fileID: 4156515052798935980}
-  - component: {fileID: 6132070437305108943}
+  - component: {fileID: 8480916413958675389}
   - component: {fileID: 4700654363516398515}
   - component: {fileID: 8385014424397523783}
   - component: {fileID: 6705875288476869104}
@@ -177,8 +177,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!60 &6132070437305108943
-PolygonCollider2D:
+--- !u!61 &8480916413958675389
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -193,7 +193,7 @@ PolygonCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 10
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -209,7 +209,7 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.4}
+  m_Offset: {x: -0.0120690465, y: 1.40625}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -219,21 +219,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.6143123, y: 1.279795}
-      - {x: -0.72803444, y: 1.0899359}
-      - {x: -0.73799247, y: -0.2549405}
-      - {x: -0.88626206, y: -0.43177164}
-      - {x: -0.7298215, y: -0.5892684}
-      - {x: -0.69018525, y: -1.2861183}
-      - {x: 0.671217, y: -1.2861176}
-      - {x: 0.67176926, y: -0.6138275}
-      - {x: 0.8340992, y: -0.49342993}
-      - {x: 0.707815, y: -0.2588864}
-      - {x: 0.7154762, y: 1.09666}
-      - {x: 0.60944444, y: 1.2797949}
-  m_UseDelaunayMesh: 0
+  serializedVersion: 2
+  m_Size: {x: 1.4255229, y: 2.4938822}
+  m_EdgeRadius: 0
 --- !u!50 &4700654363516398515
 Rigidbody2D:
   serializedVersion: 4
@@ -303,6 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5cafb9b84d17c41935fa0e9e6ff587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carCollider: {fileID: 8480916413958675389}
 --- !u!114 &4854981729239525004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,7 +418,7 @@ Transform:
   m_GameObject: {fileID: 8261739718865087982}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.01, y: -0.11, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -451,7 +440,7 @@ PolygonCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: -10
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -479,10 +468,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -6.5, y: 5.5}
+    - - {x: -11, y: 5}
       - {x: -0.5, y: -0.2}
       - {x: 0.5, y: -0.2}
-      - {x: 6.5, y: 5.5}
+      - {x: 11, y: 5}
   m_UseDelaunayMesh: 0
 --- !u!114 &7698150957892884431
 MonoBehaviour:
@@ -496,4 +485,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72f2f6cbaa33a854ca523c7c51efb61b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visibleObjects: []

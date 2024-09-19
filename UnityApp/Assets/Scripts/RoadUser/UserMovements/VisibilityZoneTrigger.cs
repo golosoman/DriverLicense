@@ -15,6 +15,7 @@ public class VisibilityZoneTrigger: MonoBehaviour
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             VisibleObjects.Add(other.gameObject);
+            // Debug.Log(VisibleObjects.Count + " Вошел!");
         }
     }
 
@@ -23,6 +24,7 @@ public class VisibilityZoneTrigger: MonoBehaviour
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             VisibleObjects.Remove(other.gameObject);
+            // Debug.Log(VisibleObjects.Count + " Вышел!");
         }
     }
 }

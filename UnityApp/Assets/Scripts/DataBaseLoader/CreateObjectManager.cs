@@ -7,7 +7,7 @@ public class CreateObjectManager : ScriptableObject
     private Dictionary<string, GameObject> signSpawnPoints = new();
     private Dictionary<string, GameObject> trafficLightSpawnPoints = new();
     private IntersectionRoutesManager intersectionManager;
-    RoadUserManager roadUserManager;
+    RoadManager roadUserManager;
     // private RuleChecker ruleChecker;
 
     // private TicketData ticketData;
@@ -15,16 +15,16 @@ public class CreateObjectManager : ScriptableObject
     public void ProcessTicketData(TicketData ticketData)
     {
         // this.ticketData = ticketData;
-        InitRuleManager(ticketData.TypeIntersection);
+        InitRuleManager(ticketData.TypeIntersection, ticketData.TrafficLightsArr, ticketData.SignsArr);
         CreateIntersection(ticketData.TypeIntersection);
         CreateEntities(ticketData.RoadUsersArr, roadUserSpawnPoints, FilePath.PATH_PREFAB_ROAD_USERS, CreateRoadUser);
         CreateEntities(ticketData.SignsArr, signSpawnPoints, FilePath.PATH_PREFAB_SIGNS, CreateSign);
         CreateEntities(ticketData.TrafficLightsArr, trafficLightSpawnPoints, FilePath.PATH_PREFAB_TRAFFIC_LIGHTS, CreateTrafficLight);
     }
 
-    void InitRuleManager(string intersection){
-        roadUserManager = FindObjectOfType<RoadUserManager>();
-        roadUserManager.Initialize(intersection);
+    void InitRuleManager(string intersection, TrafficLightData[] trafficLightDatas, SignData[] signDatas){
+        roadUserManager = FindObjectOfType<RoadManager>();
+        roadUserManager.Initialize(intersection, trafficLightDatas, signDatas);
     }
 
     void CreateIntersection(string intersection)

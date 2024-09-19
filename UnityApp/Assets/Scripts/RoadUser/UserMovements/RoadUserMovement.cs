@@ -35,9 +35,10 @@ public class RoadUserMovement : MonoBehaviour
 
     public void StartMovement()
     {
-        if (!isMoving && route != null && route.Length > 0)
+        if (route != null && route.Length > 0)
         {
-            StartCoroutine(MoveAlongRoute());
+            if(!isMoving) { StartCoroutine(MoveAlongRoute()); }
+            
         }
         else
         {
