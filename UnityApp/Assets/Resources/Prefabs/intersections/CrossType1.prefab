@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2598476698566130747}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TrafficLightSpawnNorth
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4719708529074193385}
   - component: {fileID: 5191905181269521951}
   - component: {fileID: 5737954339410323778}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FinishPoint4
   m_TagString: WayPoint
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 5952521214062983655}
   - component: {fileID: 1137281140176207097}
   - component: {fileID: 9101946170421070509}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FinishPoint1
   m_TagString: WayPoint
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -222,7 +222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5733906666264390320}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Points
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 7159928013615122919}
   - component: {fileID: 2725475645565481011}
   - component: {fileID: 8854402133138306876}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WayPoint4
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22053cc58b00e534f8b375efe9a5ae69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trafficViolation: 0
+  hasObstacleOnRight: 0
 --- !u!1 &1689231351294008282
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 4433530099927678675}
   - component: {fileID: 5623774004241621369}
   - component: {fileID: 3343608434711091038}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: decoration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +557,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8202878358421149773}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TrafficLightSpawnSouth
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -588,7 +588,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6676051593046444124}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SignSpawnWest
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -619,7 +619,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3676365949354990539}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarSpawnNorth
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -650,7 +650,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6001387792040461667}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TrafficLightSpawnEast
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -681,7 +681,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1284762607508717839}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarSpawnWest
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -712,7 +712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 719525512239120621}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SignSpawnSouth
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -745,7 +745,7 @@ GameObject:
   - component: {fileID: 7939141387093029290}
   - component: {fileID: 8336076872136825809}
   - component: {fileID: 3837101599880363504}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21887,7 +21887,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8124052731362487360}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TrafficLightSpawnWest
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -21918,7 +21918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 548263583214297253}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TrafficLightSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21953,7 +21953,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2589601404226940730}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SignSpawnNorth
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -21985,7 +21985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9152842849775937891}
   - component: {fileID: 6415439753951474336}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CrossType1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22108,7 +22108,7 @@ GameObject:
   - component: {fileID: 215266087593929380}
   - component: {fileID: 385751591429714685}
   - component: {fileID: 619810390480089566}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WayPoint3
   m_TagString: WayPoint
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -22187,7 +22187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33bab28e7ed13214fb71867f1b6b1065, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trafficViolation: 0
+  hasObstacleOnRight: 0
 --- !u!1 &4336747994213665961
 GameObject:
   m_ObjectHideFlags: 0
@@ -22197,7 +22197,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4033057282475660977}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SignSpawnEast
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -22228,7 +22228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7006996836496948983}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22263,7 +22263,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4739863397315444821}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarSpawnSouth
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -22294,7 +22294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8319141506899884807}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarSpawnEast
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
@@ -22327,7 +22327,7 @@ GameObject:
   - component: {fileID: 5524859225507763817}
   - component: {fileID: 2445795731627656575}
   - component: {fileID: 6747976512422160481}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: intersection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30383,7 +30383,7 @@ GameObject:
   - component: {fileID: 5807896017919927893}
   - component: {fileID: 1211355474307410150}
   - component: {fileID: 7771473986057520696}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FinishPoint3
   m_TagString: WayPoint
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -30472,7 +30472,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8427141980003294955}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30508,7 +30508,7 @@ GameObject:
   - component: {fileID: 7878290586661095728}
   - component: {fileID: 7661942175912561430}
   - component: {fileID: 7398720768479055706}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FinishPoint2
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -30597,7 +30597,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 959156653380530039}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WayPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30634,7 +30634,7 @@ GameObject:
   - component: {fileID: 1185114075304067348}
   - component: {fileID: 3370290190368785368}
   - component: {fileID: 100827444638956294}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WayPoint1
   m_TagString: WayPoint
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -30713,7 +30713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d36f3dcdc9ddb94eb64404e8f17799f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trafficViolation: 0
+  hasObstacleOnRight: 0
 --- !u!1 &7814134900158532566
 GameObject:
   m_ObjectHideFlags: 0
@@ -30724,7 +30724,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1548157066045428194}
   - component: {fileID: 5594110510674007943}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30772,7 +30772,7 @@ GameObject:
   - component: {fileID: 7029257772797460795}
   - component: {fileID: 9222918688502682554}
   - component: {fileID: 3102828775829468683}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WayPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -30851,7 +30851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f680b419bc44d354f826389af152aad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trafficViolation: 0
+  hasObstacleOnRight: 0
 --- !u!1 &8795997764094864607
 GameObject:
   m_ObjectHideFlags: 0
@@ -30861,7 +30861,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8606763885653853725}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: FinshPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30896,7 +30896,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7809012278976820141}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: SignSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,40 +18,47 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == TagObjectNamesTypes.CAR)
-        {
+         if (other.gameObject.tag == TagObjectNamesTypes.CAR){
             RoadUserMovement userMovement = other.gameObject.GetComponent<RoadUserMovement>();
+            CheckRuleForEquivalentIntersection(other.gameObject, userMovement);
+         }
+        // if (other.gameObject.tag == TagObjectNamesTypes.CAR)
+        // {
+        //     RoadUserMovement userMovement = other.gameObject.GetComponent<RoadUserMovement>();
 
-            if(RoadUserManager.TrafficLightDatas.Length > 0) {
-                CheckRuleForRegulatedIntersection(other.gameObject, userMovement);
-            }
-            else if (RoadUserManager.SignDatas.Length > 0) {
-                CheckRuleForUnregulatedIntersection(other.gameObject, userMovement);
-            }
+        //     if(RoadUserManager.TrafficLightDatas.Length > 0) {
+        //         CheckRuleForRegulatedIntersection(other.gameObject, userMovement);
+        //     }
+        //     else if (RoadUserManager.SignDatas.Length > 0) {
+        //         CheckRuleForUnregulatedIntersection(other.gameObject, userMovement);
+        //     }
 
-            if(true) {
-                CheckRuleForEquivalentIntersection(other.gameObject, userMovement);
-            }
-        }
+        //     if(true) {
+        //         CheckRuleForEquivalentIntersection(other.gameObject, userMovement);
+        //     }
+        // }
     }
+
+
 
     public virtual void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
+            hasObstacleOnRight = CheckObstacleOnRight(gameObject.transform.position);
             // Проверяем, была ли помеха справа
             if (hasObstacleOnRight)
             {
                 Debug.Log("Машина не пропустила помеху!");
                 RoadUserManager.ViolationRules = true;
             }
-            // Сбрасываем флаг
-            hasObstacleOnRight = false;
         }
     }
 
     public void CheckRuleForEquivalentIntersection(GameObject gameObject, RoadUserMovement userMovement){
-        bool hasObstacleOnRight = CheckObstacleOnRight(gameObject, userMovement);
+
+        // hasObstacleOnRight = CheckRoadUserOnRight(LetOutRay(gameObject.transform.position, Quaternion.Euler(0f, 0f, 270f) * Vector2.right, 20f));
+        hasObstacleOnRight = CheckObstacleOnRight(gameObject.transform.position);
 
         if (hasObstacleOnRight)
         {
@@ -67,23 +75,7 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
 
     }
 
-    protected bool CheckIntersectionFirstType(string firstSideDirection, string secondSideDirection, 
-        string thirdSideDirection, RoadUserData roadUserData) {
-        if (roadUserData.SidePosition == firstSideDirection && (roadUserData.MovementDirection == DirectionMovementTypes.FORWARD || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.LEFT || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD))
-                    { return true; }
-
-        if (roadUserData.SidePosition == secondSideDirection && (roadUserData.MovementDirection == DirectionMovementTypes.LEFT || 
-                    roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD))
-                    { return true; }
-                
-        if (roadUserData.SidePosition == thirdSideDirection && roadUserData.MovementDirection == DirectionMovementTypes.BACKWARD)
-                    { return true; }
-        return false;
-    }
-
-    protected bool CheckIntersectionSecondType(Vector2 P1_0, Vector2 P1_1, Vector2 P2_0, Vector2 P2_1)
+    protected static bool CheckIntersectionSecondType(Vector2 P1_0, Vector2 P1_1, Vector2 P2_0, Vector2 P2_1)
     {
         Vector2 d1 = P1_1 - P1_0; // Вектор направления первого участника
         Vector2 d2 = P2_1 - P2_0; // Вектор направления второго участника
@@ -109,7 +101,36 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         return false;
     }
 
-    public abstract bool CheckObstacleOnRight(GameObject roadUserDataObject, RoadUserMovement roadUserMovement);
+    public bool CheckRoadUserOnRight(RaycastHit2D hit){
+        if (hit.collider != null && hit.collider.gameObject.CompareTag("Car")) 
+        {
+            // Обнаружено препятствие, которое является машиной
+            Debug.Log("Обнаружено препятствие (машина): " + hit.collider.gameObject.name);
+            return true;
+            // Выполните ваши действия здесь
+        } 
+        else 
+        {
+            // Препятствие не найдено или это не машина
+            Debug.Log("Препятствие не найдено или это не машина");
+            // Выполните ваши действия здесь
+        }
+
+        return false;
+    }
+
+    public RaycastHit2D LetOutRay(Vector3 startPostition, Vector3 nextPosition, float langthRay){
+        RaycastHit2D hit = Physics2D.Raycast(startPostition, nextPosition, langthRay);
+
+        Debug.DrawLine(startPostition, 
+                       gameObject.transform.position + 
+                       nextPosition * langthRay,
+                       Color.red, // Цвет линии
+                       2f); // Длительность отображения линии (в секундах)
+        return hit;
+    }
+
+    public abstract bool CheckObstacleOnRight(Vector3 startPosition);
 
     public virtual void ShowUserDialog()
     {

@@ -4,34 +4,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class TrafficRuleEnforcerPoint1 : TrafficRuleEnforcer
 {
-    public override bool CheckObstacleOnRight(GameObject roadUserDataObject, RoadUserMovement roadUserMovement)
+    public override bool CheckObstacleOnRight(Vector3 startPosition)
     {
-        GameObject visibilityZoneTrigger = roadUserDataObject.transform.Find(SceneObjectNames.VISIBILITY_AREA).gameObject;
-
-        VisibilityZoneTrigger visibilityZoneScript = visibilityZoneTrigger.GetComponent<VisibilityZoneTrigger>();
-        List<GameObject> visibleObjects = visibilityZoneScript.VisibleObjects;
-
-        foreach (GameObject visibleObject in visibleObjects)
-        {
-            Vector3 userPosition = roadUserDataObject.transform.position;
-            Vector3 otherUserPosition = visibleObject.transform.position;
-            
-            if (otherUserPosition.x < userPosition.x)
-            {
-                RoadUserMovement otherCarMovement = visibleObject.GetComponent<RoadUserMovement>();
-                if (otherCarMovement.CurrentPoint + 1 < otherCarMovement.Route.Length && roadUserMovement.CurrentPoint + 1 < roadUserMovement.Route.Length)
-                {
-                    Vector3 otherUserPositionEnd = otherCarMovement.Route[otherCarMovement.CurrentPoint + 1].transform.position;
-                    Vector3 userPositionEnd = roadUserMovement.Route[roadUserMovement.CurrentPoint + 1].transform.position;
-                    // Debug.Log(otherCarMovement.CurrentPoint + "        " + roadUserMovement.CurrentPoint);
-                    if (CheckIntersectionSecondType(userPosition, userPositionEnd, otherUserPosition, otherUserPositionEnd)){
-                        hasObstacleOnRight = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return hasObstacleOnRight;
+       return CheckRoadUserOnRight(LetOutRay(startPosition, Quaternion.Euler(0f, 0f, -60f) * Vector2.down, 20f));
     }
 }
