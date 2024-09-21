@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+
 public class TrafficRuleEnforcerPoint3 : TrafficRuleEnforcer
 {
-    public override bool CheckObstacleOnRight(Vector3 startPosition)
+    public override bool CheckObstacleOnRight(GameObject gameObject, RoadUserMovement userMovement, Vector3 rayPosition)
     {
-       return CheckRoadUserOnRight(LetOutRay(startPosition, Quaternion.Euler(0f, 0f, -55f) * Vector2.right, 20f));
+        Vector3 direction = RoadUserManager.RoadUserSpawnPoints[SideDirectionTypes.SOUTH].transform.position;
+        return CheckObstacleWithRays(gameObject, userMovement, rayPosition, direction);
+    }
+
+    public override bool ReCheckObstacleOnRight(Vector3 rayPosition)
+    {
+        return CheckRoadUser(LetOutRay(rayPosition, Vector2.left));
     }
 }

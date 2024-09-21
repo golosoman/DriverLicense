@@ -7,9 +7,9 @@ public class CarMovement : RoadUserMovement
 {
     [SerializeField]
     private  float brakingFactor = 2f; // Фактор для экстренного торможения
-    private void Start()
-    {
-    }
+    private bool hasPriority = false;
+    public bool HasPriority { get => hasPriority; set => hasPriority = value; }
+
 
     public override void AdjustSpeed(float distanceToTarget)
     {

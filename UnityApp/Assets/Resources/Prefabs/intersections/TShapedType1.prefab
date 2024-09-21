@@ -25,14 +25,16 @@ Transform:
   m_GameObject: {fileID: 158850590226919124}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2651222, y: -3.8831127, z: -0.0003264444}
+  m_LocalPosition: {x: 0.27267945, y: 1.7464135, z: -0.11587457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2394386903377463673}
   - {fileID: 3411484688247242698}
   - {fileID: 1088390696470955987}
-  m_Father: {fileID: 7351618016017259956}
+  - {fileID: 8591733438589118458}
+  - {fileID: 3506974509787598116}
+  m_Father: {fileID: 6589794049496816912}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &406021793495394326
 GameObject:
@@ -91,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 671146410701915069}
   m_Layer: 0
-  m_Name: SignSpawnTop
+  m_Name: SignSpawnNorth
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -106,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 692184071636091366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.31, y: 11.23, z: 0}
+  m_LocalPosition: {x: -7.87, y: 9.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,8 +145,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1456881752612945711}
-  - {fileID: 3506974509787598116}
-  - {fileID: 4141557929380824030}
+  - {fileID: 6589794049496816912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6759666605668473680
@@ -167,11 +168,7 @@ MonoBehaviour:
   - {fileID: 7221904067248660124}
   - {fileID: 313669835050595812}
   northRightRoute: []
-  nortBackwardRoute:
-  - {fileID: 6124759612708533840}
-  - {fileID: 7221904067248660124}
-  - {fileID: 8178316314291827077}
-  - {fileID: 7862172976734069205}
+  northBackwardRoute: []
   southForwardRoute:
   - {fileID: 720174639682498653}
   - {fileID: 7862172976734069205}
@@ -213,9 +210,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7862172976734069205}
   m_Layer: 0
-  m_Name: WayPoint6
+  m_Name: FinishPoint3
   m_TagString: Untagged
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -228,11 +225,11 @@ Transform:
   m_GameObject: {fileID: 1196531294265223860}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4, y: 17, z: 0}
+  m_LocalPosition: {x: -0.5, y: 24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3506974509787598116}
+  m_Father: {fileID: 8591733438589118458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307785134518996875
 GameObject:
@@ -244,7 +241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 720174639682498653}
   m_Layer: 0
-  m_Name: CarSpawnBottom
+  m_Name: CarSpawnSouth
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -259,7 +256,7 @@ Transform:
   m_GameObject: {fileID: 1307785134518996875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 7.27, y: -1.54, z: 0}
+  m_LocalPosition: {x: -0.5, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -275,9 +272,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3733927536750210172}
   m_Layer: 0
-  m_Name: WayPoint1
+  m_Name: FinishPoint1
   m_TagString: WayPoint
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -290,11 +287,11 @@ Transform:
   m_GameObject: {fileID: 1540191641961603185}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2, y: -20, z: 0}
+  m_LocalPosition: {x: -5, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3506974509787598116}
+  m_Father: {fileID: 8591733438589118458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904140385696837005
 GameObject:
@@ -306,7 +303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1231094988456912042}
   m_Layer: 0
-  m_Name: SignSpawnRight
+  m_Name: SignSpawnEast
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -321,7 +318,7 @@ Transform:
   m_GameObject: {fileID: 1904140385696837005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.84, y: 9.43, z: 0}
+  m_LocalPosition: {x: 4.7, y: 7.27, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6853,7 +6850,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6259160857208705364}
   m_Layer: 0
-  m_Name: TrafficLightSpawnRight
+  m_Name: TrafficLightSpawnEast
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6868,7 +6865,7 @@ Transform:
   m_GameObject: {fileID: 2815187353179744103}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.17, y: 10.12, z: 0}
+  m_LocalPosition: {x: 3.69, y: 8.78, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6899,7 +6896,7 @@ Transform:
   m_GameObject: {fileID: 3188320936978656326}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.432225, y: -2.187218, z: -0.09567643}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6918,7 +6915,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7768712739007660773}
   m_Layer: 0
-  m_Name: TrafficLightSpawnTop
+  m_Name: TrafficLightSpawnNorth
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6933,7 +6930,7 @@ Transform:
   m_GameObject: {fileID: 3643617824019898003}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7, y: 10.07, z: 0}
+  m_LocalPosition: {x: -10.36, y: 8.76, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6949,7 +6946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6124759612708533840}
   m_Layer: 0
-  m_Name: CarSpawnTop
+  m_Name: CarSpawnNorth
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6964,7 +6961,7 @@ Transform:
   m_GameObject: {fileID: 3791902210031427028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.76, y: 11.53, z: 0}
+  m_LocalPosition: {x: -5, y: 8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6980,7 +6977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8178316314291827077}
   m_Layer: 0
-  m_Name: WayPoint5
+  m_Name: WayPoint3
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -6995,7 +6992,7 @@ Transform:
   m_GameObject: {fileID: 4439274169111832720}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4, y: -3.93, z: 0}
+  m_LocalPosition: {x: -5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7011,9 +7008,9 @@ GameObject:
   m_Component:
   - component: {fileID: 313669835050595812}
   m_Layer: 0
-  m_Name: WayPoint4
+  m_Name: FinishPoint2
   m_TagString: WayPoint
-  m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -7026,11 +7023,11 @@ Transform:
   m_GameObject: {fileID: 4858563700695903640}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22, y: -3.93, z: 0}
+  m_LocalPosition: {x: 19, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3506974509787598116}
+  m_Father: {fileID: 8591733438589118458}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5043301731094385111
 GameObject:
@@ -7042,7 +7039,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5577007195585594454}
   m_Layer: 0
-  m_Name: CarSpawnRight
+  m_Name: CarSpawnEast
   m_TagString: CarSpawn
   m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7057,7 +7054,7 @@ Transform:
   m_GameObject: {fileID: 5043301731094385111}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: 0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: 10.88, y: 6.38, z: 0}
+  m_LocalPosition: {x: 3, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7088,7 +7085,7 @@ Transform:
   m_GameObject: {fileID: 5595939986212119083}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.432225, y: -2.187218, z: -0.09567643}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7107,7 +7104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7616045590749106130}
   m_Layer: 0
-  m_Name: SignSpawnBottom
+  m_Name: SignSpawnSouth
   m_TagString: SignSpawn
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7122,7 +7119,7 @@ Transform:
   m_GameObject: {fileID: 6135083076678521784}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.43, y: -3.07, z: 0}
+  m_LocalPosition: {x: 2.17, y: -6.29, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7138,7 +7135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7609291614583953428}
   m_Layer: 0
-  m_Name: TrafficLightSpawnBottom
+  m_Name: TrafficLightSpawnSouth
   m_TagString: TrafficLightSpawn
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7153,7 +7150,7 @@ Transform:
   m_GameObject: {fileID: 6189535569257357735}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.42, y: -1.67, z: 0}
+  m_LocalPosition: {x: 3.65, y: -5.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7169,7 +7166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2159583006769043138}
   m_Layer: 0
-  m_Name: WayPoint2
+  m_Name: WayPoint1
   m_TagString: WayPoint
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7184,7 +7181,7 @@ Transform:
   m_GameObject: {fileID: 6223624190496130472}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2, y: 0.52, z: 0}
+  m_LocalPosition: {x: -5, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7200,7 +7197,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7221904067248660124}
   m_Layer: 0
-  m_Name: WayPoint3
+  m_Name: WayPoint2
   m_TagString: WayPoint
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -7215,7 +7212,7 @@ Transform:
   m_GameObject: {fileID: 6768784488958198454}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.2, y: -3.93, z: 0}
+  m_LocalPosition: {x: -0.5, y: 4.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7385,6 +7382,72 @@ TilemapRenderer:
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
+--- !u!1 &6935469869896238973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6589794049496816912}
+  m_Layer: 0
+  m_Name: Points
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6589794049496816912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6935469869896238973}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.9924427, y: -5.629526, z: 0.11554813}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4141557929380824030}
+  m_Father: {fileID: 7351618016017259956}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6940567781746266527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8591733438589118458}
+  m_Layer: 0
+  m_Name: FinshPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8591733438589118458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6940567781746266527}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3733927536750210172}
+  - {fileID: 313669835050595812}
+  - {fileID: 7862172976734069205}
+  m_Father: {fileID: 4141557929380824030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7506305129057701331
 GameObject:
   m_ObjectHideFlags: 0
@@ -30434,18 +30497,15 @@ Transform:
   m_GameObject: {fileID: 7990509503494996145}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.02, y: -0.2, z: -0.0425366}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3733927536750210172}
   - {fileID: 2159583006769043138}
   - {fileID: 7221904067248660124}
-  - {fileID: 313669835050595812}
   - {fileID: 8178316314291827077}
-  - {fileID: 7862172976734069205}
   - {fileID: 1648241961880917523}
-  m_Father: {fileID: 7351618016017259956}
+  m_Father: {fileID: 4141557929380824030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8304656056997611599
 GameObject:
@@ -30472,7 +30532,7 @@ Transform:
   m_GameObject: {fileID: 8304656056997611599}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.432225, y: -2.05, z: -0.09567643}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -30491,7 +30551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1648241961880917523}
   m_Layer: 0
-  m_Name: WayPoint7
+  m_Name: WayPoint4
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -30506,7 +30566,7 @@ Transform:
   m_GameObject: {fileID: 8593726812363398615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.4, y: 0.52, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
