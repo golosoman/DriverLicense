@@ -6,8 +6,9 @@ using UnityEngine;
 public class CarMovement : RoadUserMovement
 {
     [SerializeField]
-    private  float brakingFactor = 2f; // Фактор для экстренного торможения
+    private float brakingFactor = 2f; // Фактор для экстренного торможения
     private bool hasPriority = false;
+    private float previousRotationAngle; // Предыдущий угол поворота
     public bool HasPriority { get => hasPriority; set => hasPriority = value; }
 
 
@@ -36,7 +37,7 @@ public class CarMovement : RoadUserMovement
         }
 
         IsMoving = true;
-
+        previousRotationAngle = gameObject.transform.rotation.eulerAngles.z;
         while (IsMoving && CurrentPoint < Route.Length)
         {
             Vector3 targetPosition = Route[CurrentPoint].position;
@@ -46,7 +47,7 @@ public class CarMovement : RoadUserMovement
                 MoveTowardsTarget(targetPosition);
                 yield return null;
             }
-
+            // Debug.Log(CurrentPoint);
             CurrentPoint++;
             yield return null;
         }
@@ -55,6 +56,22 @@ public class CarMovement : RoadUserMovement
         Debug.Log("RoadUser has finished the route.");
     }
 
+    public bool HasTurned()
+    {
+
+        // Получаем текущий угол поворота
+        float currentRotationAngle = gameObject.transform.rotation.eulerAngles.z;
+        // Debug.Log(currentRotationAngle + "    " + previousRotationAngle);
+        // Проверяем, превышает ли разница между предыдущим и текущим углом порог
+        if (Mathf.Abs(currentRotationAngle - previousRotationAngle) > 5f)
+        {
+            // Если превышает, запоминаем текущий угол поворота
+            previousRotationAngle = currentRotationAngle;
+            return true; // Возвращаем true, если поворот произошел
+        }
+
+        return false; // Возвращаем false, если поворота не было
+    }
 
     public override void MoveTowardsTarget(Vector3 targetPosition)
     {
@@ -62,11 +79,11 @@ public class CarMovement : RoadUserMovement
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
-
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
         AdjustSpeed(distanceToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+        // Debug.Log(transform.rotation);
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, CurrentSpeed * Time.deltaTime);
     }
 }

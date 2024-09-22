@@ -8,7 +8,7 @@ public class RoadUserController : MonoBehaviour
     private RuleChecker ruleChecker;
     private RoadManager roadUserManager;
     [SerializeField]
-    private Collider2D carCollider; 
+    private Collider2D carCollider;
 
     void Start()
     {

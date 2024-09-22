@@ -13,6 +13,16 @@ public class TrafficRuleEnforcerPoint1 : TrafficRuleEnforcer
 
     public override bool ReCheckObstacleOnRight(Vector3 rayPosition)
     {
-        return CheckRoadUser(LetOutRay(rayPosition, Vector2.up));
+        return CheckRoadUser(LetOutRay(rayPosition, Vector2.up)) != null;
+    }
+
+    public override bool CheckPriority(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition)
+    {
+        return CheckPriorityInternal(gameObject, userMovement, rayPosition, SideDirectionTypes.WEST);
+    }
+
+    public override bool ReCheckPriority(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition)
+    {
+        return ReCheckPriorityInternal(gameObject, userMovement, rayPosition, Vector2.up, Vector2.right);
     }
 }
