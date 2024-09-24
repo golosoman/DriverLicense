@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class TrafficRuleEnforcer : MonoBehaviour
@@ -19,52 +16,78 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             CarMovement userMovement = other.gameObject.GetComponent<CarMovement>();
-            // if (RoadUserManager.TrafficLightDatas.Length > 0)
-            // {
-            //     CheckRuleForRegulatedIntersection(other.gameObject, userMovement);
-            // }
-            if (RoadUserManager.SignDatas.Length > 0)
+            Vector3 position = gameObject.transform.position;
+
+            if (RoadUserManager.TrafficLightDatas.Length > 0)
             {
-                CheckRuleForUnregulatedIntersection(other.gameObject, userMovement);
+                CheckRuleForRegulatedIntersection(other.gameObject, userMovement, position);
+            }
+            else if (RoadUserManager.SignDatas.Length > 0)
+            {
+                CheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
             }
             else
             {
-                CheckRuleForEquivalentIntersection(other.gameObject, userMovement);
+                CheckRuleForEquivalentIntersection(other.gameObject, userMovement, position);
             }
         }
     }
 
     public virtual void OnTriggerExit2D(Collider2D other)
     {
-        // if (other.gameObject.tag == TagObjectNamesTypes.CAR)
-        // {
-        //     hasObstacle = ReCheckObstacleOnRight(gameObject.transform.position);
-        //     if (hasObstacle)
-        //     {
-        //         Debug.Log("Машина не пропустила помеху!");
-        //         RoadUserManager.ViolationRules = true;
-        //     }
-        // }
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             CarMovement userMovement = other.gameObject.GetComponent<CarMovement>();
-            hasObstacle = !ReCheckPriority(other.gameObject, userMovement, gameObject.transform.position);
-            if (userMovement.HasTurned())
+            Vector3 position = gameObject.transform.position;
+
+            if (RoadUserManager.TrafficLightDatas.Length > 0)
             {
-                userMovement.HasPriority = !userMovement.HasPriority;
-                Debug.Log("Приритет был изменен!");
+                ReCheckRuleForRegulatedIntersection(position);
             }
-            if (hasObstacle)
+            else if (RoadUserManager.SignDatas.Length > 0)
             {
-                Debug.Log("Машина не пропустила помеху!");
-                RoadUserManager.ViolationRules = true;
+                ReCheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
+            }
+            else
+            {
+                ReCheckRuleForEquivalentIntersection(position);
             }
         }
     }
 
-    protected void CheckRuleForEquivalentIntersection(GameObject gameObject, CarMovement userMovement)
+    protected void ReCheckRuleForRegulatedIntersection(Vector3 pointPosition)
     {
-        hasObstacle = CheckObstacleOnRight(gameObject, userMovement, this.gameObject.transform.position);
+        // Реализация для повторной проверки регулируемого перекрестка
+    }
+
+    protected void ReCheckRuleForUnregulatedIntersection(GameObject car, CarMovement userMovement, Vector3 pointPosition)
+    {
+        hasObstacle = !ReCheckPriority(car, userMovement, pointPosition);
+        if (userMovement.HasTurned())
+        {
+            userMovement.HasPriority = !userMovement.HasPriority;
+            Debug.Log("Приоритет был изменен!");
+        }
+        if (hasObstacle)
+        {
+            Debug.Log("Машина не пропустила помеху!");
+            RoadUserManager.ViolationRules = true;
+        }
+    }
+
+    protected void ReCheckRuleForEquivalentIntersection(Vector3 pointPosition)
+    {
+        hasObstacle = ReCheckObstacleOnRight(pointPosition);
+        if (hasObstacle)
+        {
+            Debug.Log("Машина не пропустила помеху!");
+            RoadUserManager.ViolationRules = true;
+        }
+    }
+
+    protected void CheckRuleForEquivalentIntersection(GameObject gameObject, CarMovement userMovement, Vector3 pointPosition)
+    {
+        hasObstacle = CheckObstacleOnRight(gameObject, userMovement, pointPosition);
 
         if (hasObstacle)
         {
@@ -73,10 +96,10 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         }
     }
 
-    public void CheckRuleForUnregulatedIntersection(GameObject gameObject, CarMovement userMovement)
+    public void CheckRuleForUnregulatedIntersection(GameObject gameObject, CarMovement userMovement, Vector3 pointPosition)
     {
         Debug.Log("Проверяем ПДД на нерегулируемом перекрестке!");
-        hasObstacle = !CheckPriority(gameObject, userMovement, this.gameObject.transform.position);
+        hasObstacle = !CheckPriority(gameObject, userMovement, pointPosition);
         if (hasObstacle)
         {
             userMovement.StopMovement();
@@ -154,7 +177,7 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         return CheckRoadUserOnRight(gameObject, userMovement, firstRay) ? true : CheckRoadUserOnRight(gameObject, userMovement, secondRay);
     }
 
-    public void CheckRuleForRegulatedIntersection(GameObject gameObject, RoadUserMovement userMovement)
+    public void CheckRuleForRegulatedIntersection(GameObject gameObject, RoadUserMovement userMovement, Vector3 pointPosition)
     {
         // Реализация для регулируемого перекрестка
     }
