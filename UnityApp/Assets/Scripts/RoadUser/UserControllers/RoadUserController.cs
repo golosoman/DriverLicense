@@ -5,14 +5,12 @@ using UnityEngine;
 public class RoadUserController : MonoBehaviour
 {
     private RoadUserMovement roadUserMovement;
-    private RuleChecker ruleChecker;
     private RoadManager roadUserManager;
     [SerializeField]
     private Collider2D carCollider;
 
     void Start()
     {
-        ruleChecker = GetComponent<RuleChecker>();
         roadUserMovement = GetComponent<RoadUserMovement>();
         roadUserManager = FindObjectOfType<RoadManager>();
 
