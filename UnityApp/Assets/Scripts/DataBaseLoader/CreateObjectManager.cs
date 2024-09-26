@@ -22,7 +22,8 @@ public class CreateObjectManager : ScriptableObject
         CreateEntities(ticketData.RoadUsersArr, roadUserSpawnPoints, FilePath.PATH_PREFAB_ROAD_USERS, CreateRoadUser);
     }
 
-    void InitRuleManager(string intersection, TrafficLightData[] trafficLightDatas, SignData[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints){
+    void InitRuleManager(string intersection, TrafficLightData[] trafficLightDatas, SignData[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints)
+    {
         roadUserManager = FindObjectOfType<RoadManager>();
         roadUserManager.Initialize(intersection, trafficLightDatas, signDatas, roadUserSpawnPoints);
     }
@@ -80,7 +81,7 @@ public class CreateObjectManager : ScriptableObject
         RoadUserMovement roadUserMovement = roadUserInstance.GetComponent<RoadUserMovement>();
         roadUserMovement.Route = route;
         roadUserMovement.RUD = roadUserData;
-        
+
         // RoadRuleChecker roadRuleChecker = roadUserInstance.GetComponent<RoadRuleChecker>();
         // roadRuleChecker.Initialize(roadUserManager);ы
 

@@ -10,7 +10,7 @@ public class SetPriority : MonoBehaviour
         if (other.CompareTag("Car"))
         {
             CarMovement carMovement = other.gameObject.GetComponent<CarMovement>();
-            carMovement.HasPriority = gameObject.name.Contains("YieldSign")? true: false;
+            carMovement.HasPriority = gameObject.name.Contains("YieldSign") ? true : false;
             Debug.Log(other.gameObject.name + "    " + carMovement.HasPriority);
         }
     }

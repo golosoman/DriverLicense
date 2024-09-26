@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FinishPoint : MonoBehaviour {
+public class FinishPoint : MonoBehaviour
+{
     [SerializeField]
     private bool destroyObject = false;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CarController : RoadUserController 
+public class CarController : RoadUserController
 {
-    
+
 }

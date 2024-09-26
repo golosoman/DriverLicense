@@ -36,7 +36,8 @@ public class RoadUsersCollisionHandler : MonoBehaviour
         {
             roadUserMovement.StopMovement();
         }
-        else {
+        else
+        {
             Debug.LogError("RoadUserMovement is null. Cannot start movement.");
         }
     }

@@ -1,6 +1,6 @@
 public class HumanMovement : RoadUserMovement
-   {
-       public float maxPersonSpeed = 2f; // Максимальная скорость человека
+{
+    public float maxPersonSpeed = 2f; // Максимальная скорость человека
 
-       // ... Добавить код для анимации ...
-   }
+    // ... Добавить код для анимации ...
+}
