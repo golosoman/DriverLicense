@@ -78,7 +78,6 @@ public class QuestionService {
         Optional<Question> existingQuestionOptional = questionRepository.findById(id);
         if (existingQuestionOptional.isPresent()) {
             Question existingQuestion = existingQuestionOptional.get();
-            existingQuestion.setTitle(question.getTitle());
             existingQuestion.setQuestion(question.getQuestion());
             existingQuestion.setExplanation(question.getExplanation());
             existingQuestion.setIntersectionType(question.getIntersectionType());

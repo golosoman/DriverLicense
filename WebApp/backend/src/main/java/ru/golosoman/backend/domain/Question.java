@@ -1,20 +1,11 @@
 package ru.golosoman.backend.domain;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
 
 @Entity
 @Getter
@@ -24,13 +15,11 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private String question;
     private String explanation;
     private String intersectionType;
 
     public Question(String title, String question, String explanation, String intersectionType) {
-        this.title = title;
         this.question = question;
         this.explanation = explanation;
         this.intersectionType = intersectionType;
@@ -48,6 +37,7 @@ public class Question {
     @JoinTable(name = "QuestionSign", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "sign_id"))
     private Set<Sign> signs = new HashSet<>();
 
-    @OneToMany(mappedBy = "question")
-    Set<AttemptQuestion> attemptQuestions;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }
