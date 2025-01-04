@@ -1,14 +1,17 @@
-DROP TABLE IF EXISTS "attempt_ticket" CASCADE;
-DROP TABLE IF EXISTS "question" CASCADE;
-DROP TABLE IF EXISTS "question_sign" CASCADE;
-DROP TABLE IF EXISTS "question_traffic_light" CASCADE;
-DROP TABLE IF EXISTS "question_traffic_participant" CASCADE;
-DROP TABLE IF EXISTS "sign" CASCADE;
-DROP TABLE IF EXISTS "statistic" CASCADE;
-DROP TABLE IF EXISTS "ticket" CASCADE;
-DROP TABLE IF EXISTS "ticket_question" CASCADE;
-DROP TABLE IF EXISTS "traffic_light" CASCADE;
-DROP TABLE IF EXISTS "traffic_participant" CASCADE;
-DROP TABLE IF EXISTS "attempt_question" CASCADE;
-DROP TABLE IF EXISTS "user" CASCADE;
+DROP TABLE 
+    public.attempt_ticket,
+    public.attempt_ticket_answers,
+    public.category,
+    public.question,
+    public.question_sign,
+    public.question_traffic_light,
+    public.question_traffic_participant,
+    public.sign,
+    public.statistic,
+    public.ticket,
+    public.ticket_question,
+    public.traffic_light,
+    public.traffic_participant,
+    public.user
+CASCADE;
 

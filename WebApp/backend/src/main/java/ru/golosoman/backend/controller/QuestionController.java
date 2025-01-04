@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import ru.golosoman.backend.domain.Question;
-import ru.golosoman.backend.dto.request.CreateQuestionDTO;
+import ru.golosoman.backend.domain.dto.CreateQuestionDTO;
+import ru.golosoman.backend.domain.model.Question;
 import ru.golosoman.backend.service.QuestionService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     @Autowired
@@ -36,6 +35,17 @@ public class QuestionController {
     public ResponseEntity<List<Question>> getAllQuestions() {
         List<Question> questions = questionService.getAllQuestions();
         return new ResponseEntity<>(questions, HttpStatus.OK);
+    }
+
+    // Получение случайного вопроса
+    @GetMapping("/random")
+    public ResponseEntity<Question> getRandomQuestion() {
+        Question question = questionService.getRandomQuestion();
+        if (question != null) {
+            return new ResponseEntity<>(question, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // Получение вопроса по ID

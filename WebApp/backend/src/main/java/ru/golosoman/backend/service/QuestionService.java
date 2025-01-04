@@ -2,18 +2,20 @@ package ru.golosoman.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Optional;
-import ru.golosoman.backend.domain.Question;
-import ru.golosoman.backend.domain.Sign;
-import ru.golosoman.backend.domain.TrafficLight;
-import ru.golosoman.backend.domain.TrafficParticipant;
+import ru.golosoman.backend.domain.model.Question;
+import ru.golosoman.backend.domain.model.Sign;
+import ru.golosoman.backend.domain.model.TrafficLight;
+import ru.golosoman.backend.domain.model.TrafficParticipant;
 import ru.golosoman.backend.repository.QuestionRepository;
 import ru.golosoman.backend.repository.SignRepository;
 import ru.golosoman.backend.repository.TrafficLightRepository;
 import ru.golosoman.backend.repository.TrafficParticipantRepository;
+
+import java.util.Random;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class QuestionService {
@@ -31,7 +33,7 @@ public class QuestionService {
     private SignRepository signRepository;
 
     public Question createQuestion(String title, String question, String explanation, String intersectionType,
-            List<Long> trafficLightIds, List<Long> trafficParticipantIds, List<Long> signIds) {
+                                   List<Long> trafficLightIds, List<Long> trafficParticipantIds, List<Long> signIds) {
 
         Question newQuestion = new Question(title, question, explanation, intersectionType);
 
@@ -94,5 +96,9 @@ public class QuestionService {
             return true;
         }
         return false; // Вопрос не найден
+    }
+
+    public Question getRandomQuestion() {
+        return questionRepository.findRandomQuestion();
     }
 }
