@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9741d196b28894c4f86209361d1484c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  carCollider: {fileID: 0}
 --- !u!114 &1570331180429135118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +191,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_Sprite: {fileID: -473496784789382452, guid: b79f22cd227d76c4b9c9986dcf0514f0, type: 3}
   m_Color: {r: 0.41312408, g: 0, b: 1, a: 1}
   m_FlipX: 0
