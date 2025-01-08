@@ -5,4 +5,6 @@ public static class TagObjectNamesTypes
     public const string TRAM = "Tram";
     public const string SPECIAL_TRANSPORT = "SpecialTransport";
     public const string UNTAGGED = "Untagged";
+    public const string CAR_IMG = "CarImg";
+    public const string CAR_SPAWN = "CarSpawn";
 }

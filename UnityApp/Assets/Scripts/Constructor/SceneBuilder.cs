@@ -1,11 +1,13 @@
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SceneBuilder : MonoBehaviour
 {
     public TMP_Dropdown intersectionDropdown; // Дропдаун для выбора перекрестка
     public GameObject[] intersections; // Массив префабов перекрестков
     public Transform mainArea; // Точка, где будет отображаться перекресток
+    public List<GameObject> placedObjects = new List<GameObject>(); // Список размещенных объектов
 
     private GameObject currentIntersection;
 
@@ -28,17 +30,11 @@ public class SceneBuilder : MonoBehaviour
         // Устанавливаем масштаб перекрестка
         float scaleValue = 28f;
         currentIntersection.transform.localScale = new Vector3(scaleValue, scaleValue, 1f);
-
-        SetupSpawnPoints();
     }
 
-    private void SetupSpawnPoints()
+    public void AddPlacedObject(GameObject obj)
     {
-        // Здесь можно установить точки спавна для автомобилей, знаков и светофоров
-    }
-
-    public void PlaceObject(GameObject prefab)
-    {
-        // Логика для размещения объектов на соответствующих точках
+        placedObjects.Add(obj);
+        Debug.Log("Объект добавлен в список: " + obj.name);
     }
 }
