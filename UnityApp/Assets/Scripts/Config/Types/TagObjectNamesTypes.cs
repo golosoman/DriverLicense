@@ -7,4 +7,5 @@ public static class TagObjectNamesTypes
     public const string UNTAGGED = "Untagged";
     public const string CAR_IMG = "CarImg";
     public const string CAR_SPAWN = "CarSpawn";
+    public const string SIGN_SPAWN = "SignSpawn";
 }

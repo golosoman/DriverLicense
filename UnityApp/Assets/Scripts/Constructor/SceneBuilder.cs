@@ -7,7 +7,7 @@ public class SceneBuilder : MonoBehaviour
     public TMP_Dropdown intersectionDropdown; // Дропдаун для выбора перекрестка
     public GameObject[] intersections; // Массив префабов перекрестков
     public Transform mainArea; // Точка, где будет отображаться перекресток
-    public List<GameObject> placedObjects = new List<GameObject>(); // Список размещенных объектов
+    public List<GameObject> carObjects = new List<GameObject>(); // Список размещенных объектов
 
     private GameObject currentIntersection;
 
@@ -32,9 +32,15 @@ public class SceneBuilder : MonoBehaviour
         currentIntersection.transform.localScale = new Vector3(scaleValue, scaleValue, 1f);
     }
 
-    public void AddPlacedObject(GameObject obj)
+    public void AddPlacedCarObject(GameObject obj)
     {
-        placedObjects.Add(obj);
+        carObjects.Add(obj);
         Debug.Log("Объект добавлен в список: " + obj.name);
+    }
+
+    public void AddPlacedSignObject(GameObject obj)
+    {
+        // Добавьте логику для хранения знаков, если это необходимо
+        Debug.Log("Знак добавлен в список: " + obj.name);
     }
 }

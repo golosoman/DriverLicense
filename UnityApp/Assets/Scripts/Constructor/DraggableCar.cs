@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DraggableObject : MonoBehaviour, IDragHandler, IEndDragHandler
+public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public GameObject carPrefab; // Префаб машины
     public Canvas canvas; // Ссылка на Canvas
@@ -52,13 +52,13 @@ public class DraggableObject : MonoBehaviour, IDragHandler, IEndDragHandler
                 car.transform.position = hit.collider.transform.position; // Устанавливаем позицию
 
                 // Удаляем компонент DraggableObject
-                Destroy(car.GetComponent<DraggableObject>());
+                Destroy(car.GetComponent<DraggableCar>());
 
                 // Добавляем компонент ClickableObject к машине
                 car.AddComponent<ClickableObject>();
 
                 // Добавляем объект в список размещенных объектов
-                FindObjectOfType<SceneBuilder>().AddPlacedObject(car);
+                FindObjectOfType<SceneBuilder>().AddPlacedCarObject(car);
 
                 rectTransform.anchoredPosition = originalPosition;
                 Debug.Log("Да неужели попал");
