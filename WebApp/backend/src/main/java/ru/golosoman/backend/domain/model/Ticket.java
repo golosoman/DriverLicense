@@ -27,5 +27,5 @@ public class Ticket {
     private Set<Question> questions = new HashSet<>();
 
     @OneToMany(mappedBy = "ticket")
-    Set<AttemptTicket> attemptTickets;
+    private Set<AttemptTicket> attemptTickets;
 }

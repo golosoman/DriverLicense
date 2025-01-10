@@ -16,21 +16,28 @@ import java.util.List;
 @AllArgsConstructor
 public class AttemptTicket {
     @EmbeddedId
-    AttemptTicketKey id;
+    private AttemptTicketKey id;
 
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 
     @ManyToOne
     @MapsId("ticketId")
     @JoinColumn(name = "ticket_id")
-    Ticket ticket;
+    private Ticket ticket;
 
-    private LocalDateTime lastAttemptDate;
-    private boolean result;
+    @Column(updatable = false) // Дата не должна обновляться
+    private LocalDateTime attemptDate; // Дата попытки
 
-    @ElementCollection
-    private List<Boolean> answers;
+    private boolean result; // Результат попытки
+
+    @OneToMany(mappedBy = "attemptTicket")
+    private List<Answer> answers; // Список ответов
+
+    @PrePersist
+    protected void onCreate() {
+        this.attemptDate = LocalDateTime.now(); // Устанавливаем текущее время
+    }
 }

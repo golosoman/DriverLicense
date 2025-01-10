@@ -41,4 +41,7 @@ public class Question {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "question")
+    private Set<Answer> answers;
 }
