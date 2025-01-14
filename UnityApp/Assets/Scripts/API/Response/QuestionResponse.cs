@@ -27,6 +27,12 @@ public class Category
 }
 
 [System.Serializable]
+public class CategoryList
+{
+    public List<Category> categories;
+}
+
+[System.Serializable]
 public class Question
 {
     public int id;
