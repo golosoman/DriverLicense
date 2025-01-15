@@ -15,16 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttemptTicket {
-    @EmbeddedId
-    private AttemptTicketKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Один уникальный идентификатор для AttemptTicket
 
     @ManyToOne
-    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @MapsId("ticketId")
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
 
@@ -33,7 +32,7 @@ public class AttemptTicket {
 
     private boolean result; // Результат попытки
 
-    @OneToMany(mappedBy = "attemptTicket")
+    @OneToMany(mappedBy = "attemptTicket", cascade = CascadeType.ALL)
     private List<Answer> answers; // Список ответов
 
     @PrePersist

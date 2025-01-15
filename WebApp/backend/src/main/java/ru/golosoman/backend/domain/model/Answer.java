@@ -14,18 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Answer {
-    @EmbeddedId
-    private AnswerKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // Один уникальный идентификатор для Answer
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
-            @JoinColumn(name = "ticket_id", referencedColumnName = "ticket_id", insertable = false, updatable = false)
-    })
+    @JoinColumn(name = "attempt_ticket_id") // Добавляем внешний ключ для связи с AttemptTicket
     private AttemptTicket attemptTicket;
 
     @ManyToOne
-    @MapsId("questionId")
     @JoinColumn(name = "question_id")
     private Question question;
 
