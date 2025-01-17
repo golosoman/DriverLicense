@@ -7,4 +7,5 @@ public static class GlobalState
 {
     public static string userToken = "";
     public static int questionId = -1;
+    public static int ticketId = -1;
 }
