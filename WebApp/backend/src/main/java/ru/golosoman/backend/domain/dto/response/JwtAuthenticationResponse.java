@@ -1,4 +1,4 @@
-package ru.golosoman.backend.domain.dto;
+package ru.golosoman.backend.domain.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

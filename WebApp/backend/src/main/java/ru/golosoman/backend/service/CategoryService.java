@@ -2,7 +2,7 @@ package ru.golosoman.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.golosoman.backend.domain.dto.CreateCategory;
+import ru.golosoman.backend.domain.dto.request.CreateCategory;
 import ru.golosoman.backend.domain.model.Category;
 import ru.golosoman.backend.repository.CategoryRepository;
 

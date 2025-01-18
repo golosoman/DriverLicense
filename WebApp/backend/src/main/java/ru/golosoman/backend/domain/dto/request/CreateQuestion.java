@@ -1,4 +1,4 @@
-package ru.golosoman.backend.domain.dto;
+package ru.golosoman.backend.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateQuestionDTO {
+public class CreateQuestion {
     private String title;
     private String question;
     private String explanation;

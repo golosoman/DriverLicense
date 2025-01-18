@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.golosoman.backend.domain.dto.JwtAuthenticationResponse;
-import ru.golosoman.backend.domain.dto.SignInRequest;
-import ru.golosoman.backend.domain.dto.SignUpRequest;
+import ru.golosoman.backend.domain.dto.response.JwtAuthenticationResponse;
+import ru.golosoman.backend.domain.dto.request.SignInRequest;
+import ru.golosoman.backend.domain.dto.request.SignUpRequest;
 import ru.golosoman.backend.service.AuthenticationService;
 
 @RestController

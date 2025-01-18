@@ -1,4 +1,4 @@
-package ru.golosoman.backend.domain.dto;
+package ru.golosoman.backend.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

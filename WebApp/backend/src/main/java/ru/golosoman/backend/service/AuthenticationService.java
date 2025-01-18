@@ -5,9 +5,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.golosoman.backend.domain.dto.JwtAuthenticationResponse;
-import ru.golosoman.backend.domain.dto.SignInRequest;
-import ru.golosoman.backend.domain.dto.SignUpRequest;
+import ru.golosoman.backend.domain.dto.response.JwtAuthenticationResponse;
+import ru.golosoman.backend.domain.dto.request.SignInRequest;
+import ru.golosoman.backend.domain.dto.request.SignUpRequest;
 import ru.golosoman.backend.domain.model.Role;
 import ru.golosoman.backend.domain.model.User;
 
