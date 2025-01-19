@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatisticsResponse {
+public class TraineeStatisticsResponse {
     private List<CategoryStatistics> categoryStatistics;
-    private List<TicketStatistics> ticketStatistics;
+    private List<TicketStatisticsForTrainee> ticketStatistics;
 }

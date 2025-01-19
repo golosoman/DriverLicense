@@ -2,9 +2,10 @@ package ru.golosoman.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.golosoman.backend.domain.dto.response.statistic.AdminStatisticsResponse;
 import ru.golosoman.backend.domain.dto.response.statistic.CategoryStatistics;
-import ru.golosoman.backend.domain.dto.response.statistic.StatisticsResponse;
-import ru.golosoman.backend.domain.dto.response.statistic.TicketStatistics;
+import ru.golosoman.backend.domain.dto.response.statistic.TraineeStatisticsResponse;
+import ru.golosoman.backend.domain.dto.response.statistic.TicketStatisticsForTrainee;
 import ru.golosoman.backend.domain.model.User;
 
 import ru.golosoman.backend.service.StatisticsService;
@@ -23,12 +24,17 @@ public class StatisticsController {
     private UserService userService;
 
     @GetMapping("/byTrainee")
-    public StatisticsResponse getStatisticsByTrainee() {
-        User user = userService.getCurrentUser ();
+    public TraineeStatisticsResponse getStatisticsByTrainee() {
+        User user = userService.getCurrentUser();
 
         List<CategoryStatistics> categoryStatistics = statisticsService.getCategoryStatisticsForUser (user.getId());
-        List<TicketStatistics> ticketStatistics = statisticsService.getUserAttemptTickets(user.getId());
+        List<TicketStatisticsForTrainee> ticketStatistics = statisticsService.getUserAttemptTickets(user.getId());
 
-        return new StatisticsResponse(categoryStatistics, ticketStatistics);
+        return new TraineeStatisticsResponse(categoryStatistics, ticketStatistics);
+    }
+
+    @GetMapping("/byAdmin")
+    public AdminStatisticsResponse getStatisticsForAdmin() {
+        return statisticsService.getAdminStatistics();
     }
 }
