@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.golosoman.backend.domain.dto.request.CreateQuestion;
+import ru.golosoman.backend.domain.dto.request.CreateQuestionRequest;
 import ru.golosoman.backend.domain.model.Question;
 import ru.golosoman.backend.service.QuestionService;
 
@@ -19,7 +19,7 @@ public class QuestionController {
 
     // Создание нового вопроса
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody CreateQuestion question) {
+    public ResponseEntity<Question> createQuestion(@RequestBody CreateQuestionRequest question) {
         Question newQuestion = questionService.createQuestion(question.getTitle(),
                 question.getQuestion(),
                 question.getExplanation(),

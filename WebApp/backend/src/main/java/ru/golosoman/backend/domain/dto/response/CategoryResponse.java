@@ -1,4 +1,4 @@
-package ru.golosoman.backend.domain.dto.request;
+package ru.golosoman.backend.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateCategory {
+public class CategoryResponse {
     private Long id;
     private String name;
 }

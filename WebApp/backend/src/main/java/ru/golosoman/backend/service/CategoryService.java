@@ -2,7 +2,8 @@ package ru.golosoman.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.golosoman.backend.domain.dto.request.CreateCategory;
+import ru.golosoman.backend.domain.dto.request.CreateCategoryRequest;
+import ru.golosoman.backend.domain.dto.response.CategoryResponse;
 import ru.golosoman.backend.domain.model.Category;
 import ru.golosoman.backend.repository.CategoryRepository;
 
@@ -16,24 +17,24 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public List<CreateCategory> getAllCategories() {
+    public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<CreateCategory> getCategoryById(Long id) {
+    public Optional<CategoryResponse> getCategoryById(Long id) {
         return categoryRepository.findById(id).map(this::convertToDTO);
     }
 
-    public CreateCategory createCategory(CreateCategory categoryDTO) {
+    public CategoryResponse createCategory(CreateCategoryRequest categoryDTO) {
         Category category = new Category();
         category.setName(categoryDTO.getName());
         Category savedCategory = categoryRepository.save(category);
         return convertToDTO(savedCategory);
     }
 
-    public CreateCategory updateCategory(Long id, CreateCategory categoryDTO) {
+    public CategoryResponse updateCategory(Long id, CreateCategoryRequest categoryDTO) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         category.setName(categoryDTO.getName());
@@ -45,8 +46,8 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
-    private CreateCategory convertToDTO(Category category) {
-        CreateCategory categoryDTO = new CreateCategory();
+    private CategoryResponse convertToDTO(Category category) {
+        CategoryResponse categoryDTO = new CategoryResponse();
         categoryDTO.setId(category.getId());
         categoryDTO.setName(category.getName());
         return categoryDTO;

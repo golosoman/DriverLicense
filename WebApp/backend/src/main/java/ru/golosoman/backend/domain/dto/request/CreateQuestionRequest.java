@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateQuestion {
+public class CreateQuestionRequest {
     private String title;
     private String question;
     private String explanation;
