@@ -1,9 +1,28 @@
+--Удаление всех данных из таблицы
+
+--delete from "answer";
+--delete from "attempt_ticket";
+--delete from "question_sign";
+--delete from "question_traffic_light";
+--delete from "question_traffic_participant";
+--delete from "ticket_question";
+--delete from "question";
+--delete from "sign";
+--delete from "ticket";
+--delete from "traffic_light";
+--delete from "traffic_participant";
+--delete from "user";
+--delete from "category";
+
+
+
 -- РАБОТА С ПОЛЬЗОВАТЕЛЯМИ
 --select * from "user";
 
 insert into "user" ("id","username", "role", "password") values
 (1,'admin', 'ROLE_ADMIN', '$2a$10$xjJ62Qx4Sv.GzVAz8tR1FOs4sxef7tBRwMVEkmE6aA784BE5c6Hv.'),
-(2,'user', 'ROLE_USER', '$2a$10$xjJ62Qx4Sv.GzVAz8tR1FOs4sxef7tBRwMVEkmE6aA784BE5c6Hv.');
+(2, 'golosoman', 'ROLE_USER', '$2a$10$xjJ62Qx4Sv.GzVAz8tR1FOs4sxef7tBRwMVEkmE6aA784BE5c6Hv.');
+
 
 
 -- РАБОТА С КАТЕГОРИЯМИ 
@@ -198,3 +217,35 @@ insert into "ticket_question" values
 (5, 3);
 	
 
+
+-- РАБОТА С ПОПЫТКАМИ
+select * from "attempt_ticket";
+--select * from "ticket";
+--select * from "ticket_question";
+select * from "answer";
+
+insert into "attempt_ticket" ("ticket_id", "user_id", "attempt_date", "result") values
+(1, 2, now(), false),
+(2, 2, now(), true),
+(3, 2, now(), true);
+
+insert into "answer" ("attempt_ticket_id", "question_id", "result") values
+(1, 1, true),
+(1, 2, false),
+(1, 3, false),
+(1, 4, false),
+(1, 5, true);
+
+insert into "answer" ("attempt_ticket_id", "question_id", "result") values
+(2, 5, true),
+(2, 4, false),
+(2, 3, false),
+(2, 2, false),
+(2, 1, true);
+
+insert into "answer" ("attempt_ticket_id", "question_id", "result") values
+(3, 2, true),
+(3, 3, false),
+(3, 4, false),
+(3, 5, false),
+(3, 1, true);
