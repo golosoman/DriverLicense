@@ -1,7 +1,10 @@
 package ru.golosoman.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.golosoman.backend.domain.dto.request.CreateStatisticRequest;
 import ru.golosoman.backend.domain.dto.response.statistic.AdminStatisticsResponse;
 import ru.golosoman.backend.domain.dto.response.statistic.CategoryStatistics;
 import ru.golosoman.backend.domain.dto.response.statistic.TraineeStatisticsResponse;
@@ -27,7 +30,7 @@ public class StatisticsController {
     public TraineeStatisticsResponse getStatisticsByTrainee() {
         User user = userService.getCurrentUser();
 
-        List<CategoryStatistics> categoryStatistics = statisticsService.getCategoryStatisticsForUser (user.getId());
+        List<CategoryStatistics> categoryStatistics = statisticsService.getCategoryStatisticsForUser(user.getId());
         List<TicketStatisticsForTrainee> ticketStatistics = statisticsService.getUserAttemptTickets(user.getId());
 
         return new TraineeStatisticsResponse(categoryStatistics, ticketStatistics);
@@ -36,5 +39,12 @@ public class StatisticsController {
     @GetMapping("/byAdmin")
     public AdminStatisticsResponse getStatisticsForAdmin() {
         return statisticsService.getAdminStatistics();
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createStatistic(@RequestBody CreateStatisticRequest request) {
+        User user = userService.getCurrentUser(); // Получаем текущего пользователя
+        statisticsService.createStatistic(request, user); // Передаем пользователя в сервис
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

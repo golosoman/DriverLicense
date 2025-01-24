@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class TicketStatisticsForTrainee {
     private Long id;
     private String ticketName;
-    private LocalDateTime date;
+    private String date;
     private int countErrors;
     private boolean status;
 }
