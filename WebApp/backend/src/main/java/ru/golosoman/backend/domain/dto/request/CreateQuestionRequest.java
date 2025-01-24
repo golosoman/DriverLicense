@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 public class CreateQuestionRequest {
-    private String title;
     private String question;
     private String explanation;
     private String intersectionType;
-    private List<Long> trafficLights;
-    private List<Long> trafficParticipants;
-    private List<Long> signs;
+    private String categoryName;
+    private List<CreateTrafficLightRequest> trafficLights;
+    private List<CreateTrafficParticipantRequest> trafficParticipants;
+    private List<CreateSignRequest> signs;
 }

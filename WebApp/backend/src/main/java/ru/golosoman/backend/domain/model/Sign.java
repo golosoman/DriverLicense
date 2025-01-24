@@ -20,4 +20,9 @@ public class Sign {
     private Long id;
     private String modelName;
     private String sidePosition;
+
+    public Sign(String modelName, String sidePosition) {
+        this.modelName = modelName;
+        this.sidePosition = sidePosition;
+    }
 }

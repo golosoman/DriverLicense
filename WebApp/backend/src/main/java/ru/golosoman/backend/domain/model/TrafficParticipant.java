@@ -23,4 +23,12 @@ public class TrafficParticipant {
     private String numberPosition;
     private String direction;
     private String participantType;
+
+    public TrafficParticipant(String modelName, String direction, String numberPosition, String participantType, String sidePosition) {
+        this.modelName = modelName;
+        this.direction = direction;
+        this.numberPosition = numberPosition;
+        this.participantType = participantType;
+        this.sidePosition = sidePosition;
+    }
 }

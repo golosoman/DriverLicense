@@ -21,4 +21,10 @@ public class TrafficLight {
     private String modelName;
     private String sidePosition;
     private String state;
+
+    public TrafficLight(String modelName, String sidePosition, String state) {
+        this.modelName = modelName;
+        this.sidePosition = sidePosition;
+        this.state = state;
+    }
 }

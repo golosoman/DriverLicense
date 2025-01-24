@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.golosoman.backend.domain.dto.request.CreateQuestionRequest;
-import ru.golosoman.backend.domain.model.Question;
+import ru.golosoman.backend.domain.dto.response.QuestionResponse;
 import ru.golosoman.backend.service.QuestionService;
 
 import java.util.List;
@@ -17,67 +17,45 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    // Создание нового вопроса
-    @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody CreateQuestionRequest question) {
-        Question newQuestion = questionService.createQuestion(question.getTitle(),
-                question.getQuestion(),
-                question.getExplanation(),
-                question.getIntersectionType(),
-                question.getTrafficLights(),
-                question.getTrafficParticipants(),
-                question.getSigns());
-        return new ResponseEntity<>(newQuestion, HttpStatus.CREATED);
-    }
-
     // Получение всех вопросов
     @GetMapping
-    public ResponseEntity<List<Question>> getAllQuestions() {
-        List<Question> questions = questionService.getAllQuestions();
+    public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
+        List<QuestionResponse> questions = questionService.getAllQuestions();
         return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
     // Получение случайного вопроса
     @GetMapping("/random")
-    public ResponseEntity<Question> getRandomQuestion() {
-        Question question = questionService.getRandomQuestion();
-        if (question != null) {
-            return new ResponseEntity<>(question, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<QuestionResponse> getRandomQuestion() {
+        QuestionResponse question = questionService.getRandomQuestion();
+        return question != null ? new ResponseEntity<>(question, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     // Получение вопроса по ID
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
-        Question question = questionService.getQuestionById(id);
-        if (question != null) {
-            return new ResponseEntity<>(question, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable Long id) {
+        QuestionResponse question = questionService.getQuestionById(id);
+        return question != null ? new ResponseEntity<>(question, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Обновление вопроса по ID
+    // Создание нового вопроса
+    @PostMapping
+    public ResponseEntity<QuestionResponse> createQuestion(@RequestBody CreateQuestionRequest request) {
+        QuestionResponse questionResponse = questionService.createQuestion(request);
+        return new ResponseEntity<>(questionResponse, HttpStatus.CREATED);
+    }
+
+    // Обновление вопроса
     @PutMapping("/{id}")
-    public ResponseEntity<Question> updateQuestion(@PathVariable Long id, @RequestBody Question question) {
-        Question updatedQuestion = questionService.updateQuestion(id, question);
-        if (updatedQuestion != null) {
-            return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody CreateQuestionRequest request) {
+        QuestionResponse questionResponse = questionService.updateQuestion(id, request);
+        return new ResponseEntity<>(questionResponse, HttpStatus.OK);
     }
 
-    // Удаление вопроса по ID
+    // Удаление вопроса
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
-        boolean deleted = questionService.deleteQuestion(id);
-        if (deleted) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        questionService.deleteQuestion(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

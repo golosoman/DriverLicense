@@ -38,7 +38,7 @@ public class Question {
     @JoinTable(name = "QuestionSign", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "sign_id"))
     private Set<Sign> signs = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
