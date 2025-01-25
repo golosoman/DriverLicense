@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 [System.Serializable]
 public class TrafficParticipant
@@ -20,6 +21,15 @@ public class Sign
 }
 
 [System.Serializable]
+public class TrafficLight
+{
+    public int id;
+    public string modelName;
+    public string sidePosition;
+    public string state;
+}
+
+[System.Serializable]
 public class Question
 {
     public int id;
@@ -28,6 +38,7 @@ public class Question
     public string intersectionType;
     public TrafficParticipant[] trafficParticipants;
     public Sign[] signs;
+    public TrafficLight[] trafficLights;
     public Category category;
 }
 

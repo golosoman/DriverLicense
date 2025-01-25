@@ -1,10 +1,7 @@
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class CategoriesLoader : MonoBehaviour
 {
@@ -14,40 +11,33 @@ public class CategoriesLoader : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(LoadCategories());
+        LoadCategories();
     }
 
-    private IEnumerator LoadCategories()
+    private void LoadCategories()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(apiUrl))
+        string bearerToken = GlobalState.userToken; // Получаем токен
+        ApiHandler.SendGetRequest(apiUrl, this, OnCategoriesReceived, bearerToken);
+    }
+
+    private void OnCategoriesReceived(ApiResponse response)
+    {
+        if (response.StatusCode != 200)
         {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Error: " + webRequest.error);
-            }
-            else
-            {
-                Debug.Log("Обращение выполнено");
-                string jsonResponse = webRequest.downloadHandler.text;
-                CategoryList categoryList = JsonUtility.FromJson<CategoryList>("{\"categories\":" + jsonResponse + "}");
-                Debug.Log("Полученные данные: " + jsonResponse);
-                // Очищаем существующие элементы в Dropdown
-                categoryDropdown.ClearOptions();
-
-                // Создаем список для хранения названий категорий
-                List<string> categoryNames = new List<string>();
-
-                // Заполняем список названиями категорий
-                foreach (Category category in categoryList.categories)
-                {
-                    categoryNames.Add(category.name);
-                }
-                Debug.Log("Добавляем опции в dropDown");
-                // Добавляем названия категорий в Dropdown
-                categoryDropdown.AddOptions(categoryNames);
-            }
+            Debug.LogError("Error loading categories: " + response.Body);
+            return;
         }
+
+        CategoryList categoryList = JsonUtility.FromJson<CategoryList>("{\"categories\":" + response.Body + "}");
+
+        categoryDropdown.ClearOptions();
+        List<string> categoryNames = new List<string>();
+
+        foreach (Category category in categoryList.categories)
+        {
+            categoryNames.Add(category.name);
+        }
+
+        categoryDropdown.AddOptions(categoryNames);
     }
 }

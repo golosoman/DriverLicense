@@ -17,37 +17,31 @@ public class UserStatisticsManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(GetUserStatistics());
+        LoadUserStatistics();
     }
 
-    private IEnumerator GetUserStatistics()
+    private void LoadUserStatistics()
     {
-        string bearerToken = GlobalState.userToken; // Замените на ваш токен
+        string bearerToken = GlobalState.userToken; // Получаем токен
+        ApiHandler.SendGetRequest(StatisticURL.GET_STATISTIC_FOR_TRAINEE, this, OnUsertatisticsReceived, bearerToken);
+    }
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(StatisticURL.GET_STATISTIC_FOR_TRAINEE)) // Замените на ваш URL
+    private void OnUsertatisticsReceived(ApiResponse response)
+    {
+        if (response.StatusCode != 200)
         {
-            // Добавляем заголовок Authorization
-            webRequest.SetRequestHeader("Authorization", "Bearer " + bearerToken);
-
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Ошибка загрузки данных: " + webRequest.error);
-            }
-            else
-            {
-                // Десериализация JSON
-                string jsonResponse = webRequest.downloadHandler.text;
-                UserStatisticsResponse statistics = JsonUtility.FromJson<UserStatisticsResponse>(jsonResponse);
-
-                // Обновление ScrollView с билетами
-                UpdateScrollView(statistics.ticketStatistics);
-
-                // Обновление гистограммы с категориями
-                UpdateBarChart(statistics.categoryStatistics);
-            }
+            Debug.LogError("Ошибка загрузки данных: " + response.Body);
+            return;
         }
+
+        // Десериализация JSON
+        UserStatisticsResponse statistics = JsonUtility.FromJson<UserStatisticsResponse>(response.Body);
+
+        // Обновление ScrollView с билетами
+        UpdateScrollView(statistics.ticketStatistics);
+
+        // Обновление гистограммы с категориями
+        UpdateBarChart(statistics.categoryStatistics);
     }
 
     private void UpdateScrollView(TicketStatistic[] ticketStats)

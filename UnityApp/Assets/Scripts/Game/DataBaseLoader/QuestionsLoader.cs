@@ -1,51 +1,50 @@
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class QuestionsLoader : MonoBehaviour
 {
     [SerializeField]
-    private GameObject buttonPrefab; // Префаб кнопки
+    private GameObject buttonPrefab;
     [SerializeField]
-    private Transform content; // Контейнер для кнопок (ScrollView)
+    private Transform content;
     [SerializeField]
-    private SceneLoader sceneLoader; // Ссылка на SceneLoader
+    private SceneLoader sceneLoader;
+
     public delegate void QuestionsLoadedHandler();
     public event QuestionsLoadedHandler OnQuestionsLoaded;
-    private string apiUrl = QuestionURL.ALL_QUESTION_URL; // Замените на ваш URL
+
+    private string apiUrl = QuestionURL.ALL_QUESTION_URL;
 
     private void Start()
     {
-        StartCoroutine(LoadQuestions());
+        LoadQuestions();
     }
 
-    private IEnumerator LoadQuestions()
+    private void LoadQuestions()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(apiUrl))
+        string bearerToken = GlobalState.userToken; // Получаем токен
+        ApiHandler.SendGetRequest(apiUrl, this, OnQuestionsReceived, bearerToken);
+    }
+
+    private void OnQuestionsReceived(ApiResponse response)
+    {
+        if (response.StatusCode != 200)
         {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Error: " + webRequest.error);
-            }
-            else
-            {
-                string jsonResponse = webRequest.downloadHandler.text;
-                List<Question> questions = JsonUtility.FromJson<QuestionList>("{\"questions\":" + jsonResponse + "}").questions;
-
-                foreach (Question question in questions)
-                {
-                    CreateButton(question);
-                }
-
-                // После создания всех кнопок вызываем событие
-                OnQuestionsLoaded?.Invoke();
-            }
+            Debug.LogError("Error loading questions: " + response.Body);
+            return;
         }
+
+        List<Question> questions = JsonUtility.FromJson<QuestionList>("{\"questions\":" + response.Body + "}").questions;
+
+        foreach (Question question in questions)
+        {
+            CreateButton(question);
+        }
+
+        OnQuestionsLoaded?.Invoke();
     }
 
     private void CreateButton(Question question)
@@ -60,8 +59,7 @@ public class QuestionsLoader : MonoBehaviour
 
     private void OnButtonClick(int questionId)
     {
-        GlobalState.questionId = questionId; // Предполагается, что у вас есть класс GlobalState
-        // Используем SceneLoader для загрузки сцены
-        sceneLoader.LoadScene(); // Вызываем метод загрузки сцены
+        GlobalState.questionId = questionId;
+        sceneLoader.LoadScene();
     }
 }

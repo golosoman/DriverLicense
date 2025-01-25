@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TicketLoader : MonoBehaviour
 {
@@ -13,39 +12,39 @@ public class TicketLoader : MonoBehaviour
     private Transform content; // Контейнер для кнопок (ScrollView)
     [SerializeField]
     private SceneLoader sceneLoader; // Ссылка на SceneLoader
+
     public delegate void TicketsLoadedHandler();
     public event TicketsLoadedHandler OnTicketsLoaded;
+
     private string apiUrl = TicketURL.ALL_TICKET_URL; // URL для получения всех билетов
 
     private void Start()
     {
-        StartCoroutine(LoadTickets());
+        LoadTickets();
     }
 
-    private IEnumerator LoadTickets()
+    private void LoadTickets()
     {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(apiUrl))
+        string bearerToken = GlobalState.userToken; // Получаем токен
+        ApiHandler.SendGetRequest(apiUrl, this, OnTicketsReceived, bearerToken);
+    }
+
+    private void OnTicketsReceived(ApiResponse response)
+    {
+        if (response.StatusCode != 200)
         {
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Error: " + webRequest.error);
-            }
-            else
-            {
-                string jsonResponse = webRequest.downloadHandler.text;
-                TicketList ticketList = JsonUtility.FromJson<TicketList>("{\"tickets\":" + jsonResponse + "}");
-
-                foreach (Ticket ticket in ticketList.tickets)
-                {
-                    CreateButton(ticket);
-                }
-
-                // После создания всех кнопок вызываем событие
-                OnTicketsLoaded?.Invoke();
-            }
+            Debug.LogError("Error loading tickets: " + response.Body);
+            return;
         }
+
+        TicketList ticketList = JsonUtility.FromJson<TicketList>("{\"tickets\":" + response.Body + "}");
+
+        foreach (Ticket ticket in ticketList.tickets)
+        {
+            CreateButton(ticket);
+        }
+
+        OnTicketsLoaded?.Invoke();
     }
 
     private void CreateButton(Ticket ticket)
@@ -61,7 +60,6 @@ public class TicketLoader : MonoBehaviour
     private void OnButtonClick(int ticketId)
     {
         GlobalState.ticketId = ticketId;
-        // Используем SceneLoader для загрузки сцены
         sceneLoader.LoadScene(); // Вызываем метод загрузки сцены
     }
 }

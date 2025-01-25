@@ -1,15 +1,13 @@
 using UnityEngine;
-using UnityEngine.Networking;
 using XCharts.Runtime;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections;
-using TMPro; // Для работы с UI элементами
 
 public class StatisticsManager : MonoBehaviour
 {
     [SerializeField]
     private BarChart barChart; // Ссылка на компонент BarChart
-
     [SerializeField]
     private GameObject buttonPrefab; // Префаб кнопки для вопросов
     [SerializeField]
@@ -17,37 +15,26 @@ public class StatisticsManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(GetStatistics());
+        GetStatistics();
     }
 
-    private IEnumerator GetStatistics()
+    private void GetStatistics()
     {
-        string bearerToken = GlobalState.userToken; // Замените на ваш токен
+        string bearerToken = GlobalState.userToken; // Получаем токен
+        ApiHandler.SendGetRequest(StatisticURL.GET_STATISTIC_FOR_ADMIN, this, OnStatisticsReceived, bearerToken);
+    }
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(StatisticURL.GET_STATISTIC_FOR_ADMIN))
+    private void OnStatisticsReceived(ApiResponse response)
+    {
+        if (response.StatusCode != 200)
         {
-            // Добавляем заголовок Authorization
-            webRequest.SetRequestHeader("Authorization", "Bearer " + bearerToken);
-
-            yield return webRequest.SendWebRequest();
-
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.LogError("Ошибка загрузки данных: " + webRequest.error);
-            }
-            else
-            {
-                // Десериализация JSON
-                string jsonResponse = webRequest.downloadHandler.text;
-                AdminStatisticsResponse statistics = JsonUtility.FromJson<AdminStatisticsResponse>(jsonResponse);
-
-                // Обновление гистограммы
-                UpdateBarChart(statistics.ticketStatistics);
-
-                // Обновление ScrollView
-                UpdateScrollView(statistics.questionStatistics);
-            }
+            Debug.LogError("Error loading statistics: " + response.Body);
+            return;
         }
+
+        AdminStatisticsResponse statistics = JsonUtility.FromJson<AdminStatisticsResponse>(response.Body);
+        UpdateBarChart(statistics.ticketStatistics);
+        UpdateScrollView(statistics.questionStatistics);
     }
 
     private void UpdateBarChart(TicketStatistics[] ticketStats)
@@ -58,19 +45,15 @@ public class StatisticsManager : MonoBehaviour
             return;
         }
 
-        // Очищаем предыдущие данные
         barChart.RemoveData();
-
-        // Создаем серию
         var serie = barChart.AddSerie<Bar>("Статистика по билетам");
 
         foreach (var ticket in ticketStats)
         {
-            barChart.AddXAxisData(ticket.ticketName); // Добавляем метки по оси X
-            barChart.AddData(0, (float)ticket.percentage); // Добавляем процент в данные
+            barChart.AddXAxisData(ticket.ticketName);
+            barChart.AddData(0, (float)ticket.percentage);
         }
 
-        // Обновляем график
         barChart.RefreshChart();
     }
 
