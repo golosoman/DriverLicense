@@ -3,6 +3,7 @@ package ru.golosoman.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.golosoman.backend.domain.dto.request.CreateQuestionRequest;
 import ru.golosoman.backend.domain.dto.response.QuestionResponse;
@@ -40,6 +41,7 @@ public class QuestionController {
 
     // Создание нового вопроса
     @PostMapping
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<QuestionResponse> createQuestion(@RequestBody CreateQuestionRequest request) {
         QuestionResponse questionResponse = questionService.createQuestion(request);
         return new ResponseEntity<>(questionResponse, HttpStatus.CREATED);
@@ -47,6 +49,7 @@ public class QuestionController {
 
     // Обновление вопроса
     @PutMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody CreateQuestionRequest request) {
         QuestionResponse questionResponse = questionService.updateQuestion(id, request);
         return new ResponseEntity<>(questionResponse, HttpStatus.OK);
@@ -54,6 +57,7 @@ public class QuestionController {
 
     // Удаление вопроса
     @DeleteMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

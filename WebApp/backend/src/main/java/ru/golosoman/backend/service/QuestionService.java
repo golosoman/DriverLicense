@@ -51,15 +51,16 @@ public class QuestionService {
     }
 
     public QuestionResponse createQuestion(CreateQuestionRequest request) {
-        // Проверка и получение или создание категории
-        Category category = categoryRepository.findByName(request.getCategoryName())
-                .orElseGet(() -> categoryRepository.save(new Category(request.getCategoryName())));
-
         // Создание вопроса
         Question question = new Question();
         question.setQuestion(request.getQuestion());
         question.setExplanation(request.getExplanation());
         question.setIntersectionType(request.getIntersectionType());
+
+        // Проверка и получение или создание категории
+        Category category = categoryRepository.findByName(request.getCategoryName())
+                .orElseGet(() -> categoryRepository.save(new Category(request.getCategoryName())));
+
         question.setCategory(category);
 
         // Обработка знаков
