@@ -746,6 +746,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b37d031bf5fe04fbb68e45bd466d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedDirections: 00000000010000000200000003000000
+  laneNumber: 1
+  sidePosition: 2
 --- !u!1 &2935774858015136674
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,6 +870,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b37d031bf5fe04fbb68e45bd466d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedDirections: 00000000010000000200000003000000
+  laneNumber: 1
+  sidePosition: 1
 --- !u!1 &3073625717302105361
 GameObject:
   m_ObjectHideFlags: 0
@@ -38226,6 +38232,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b37d031bf5fe04fbb68e45bd466d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedDirections: 00000000010000000200000003000000
+  laneNumber: 1
+  sidePosition: 3
 --- !u!1 &5569128749153343941
 GameObject:
   m_ObjectHideFlags: 0
@@ -38316,6 +38325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b37d031bf5fe04fbb68e45bd466d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowedDirections: 00000000010000000200000003000000
+  laneNumber: 1
+  sidePosition: 0
 --- !u!1 &5611448269736839681
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,30 +2,29 @@ using UnityEngine;
 
 public class TriggerCarSpawnZone : MonoBehaviour
 {
-    public delegate void CarZoneEventHandler();
+    public AllowedDirectionEnumType[] allowedDirections; // Разрешенные направления движения
+    public int laneNumber = 1; // Номер полосы
+    public SideDirectionEnumType sidePosition; // Сторона света (например, North, South, East, West)
+
+    public delegate void CarZoneEventHandler(GameObject car);
     public event CarZoneEventHandler OnCarEnterZone;
     public event CarZoneEventHandler OnCarExitZone;
 
-
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Вы в зоне!");
-        if (other.gameObject.tag == TagObjectNamesTypes.CAR_IMG)
+        if (other.gameObject.CompareTag(TagObjectNamesTypes.CAR_IMG))
         {
-
-            // Вызываем событие при входе в зону триггера
-            OnCarEnterZone?.Invoke();
+            Debug.Log("Вы в зоне!");
+            OnCarEnterZone?.Invoke(other.gameObject);
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("Вы снаружи зоне!");
-        if (other.gameObject.tag == TagObjectNamesTypes.CAR_IMG)
+        if (other.gameObject.CompareTag(TagObjectNamesTypes.CAR_IMG))
         {
-
-            // Вызываем событие при выходе из зоны триггера
-            OnCarExitZone?.Invoke();
+            Debug.Log("Вы снаружи зоны!");
+            OnCarExitZone?.Invoke(other.gameObject);
         }
     }
 }

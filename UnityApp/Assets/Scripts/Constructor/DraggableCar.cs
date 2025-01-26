@@ -40,12 +40,32 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
         RaycastHit2D hit = Physics2D.Raycast(rectTransform.position, Vector2.zero);
         if (hit.collider != null)
         {
+
             // Проверяем, имеет ли коллайдер тег CarSpawn
             if (hit.collider.CompareTag(TagObjectNamesTypes.CAR_SPAWN))
             {
+                TriggerCarSpawnZone spawnZone = hit.collider.GetComponent<TriggerCarSpawnZone>();
                 ChangeColorToOriginal(); // Меняем цвет на оригинальный
                 // Инстанцируем префаб машины с правильным вращением
                 GameObject car = Instantiate(carPrefab, hit.collider.transform.position, Quaternion.Euler(0, 0, hit.collider.transform.eulerAngles.z));
+
+                // Здесь мы можем получить информацию о точке спавна
+                string direction = spawnZone.allowedDirections[0].ToString(); // Берем первое разрешенное направление
+                int laneNumber = spawnZone.laneNumber;
+                string sidePosition = spawnZone.sidePosition.ToString(); ;
+
+                PlacedObjectData data = new PlacedObjectData
+                {
+                    participantType = "Car",
+                    modelName = car.name, // или другой способ получения имени модели
+                    direction = direction,
+                    numberPosition = laneNumber,
+                    sidePosition = sidePosition,
+                    srcBySpawnPoint = spawnZone
+                };
+
+                // Логируем информацию о размещенном автомобиле
+                Debug.Log($"Автомобиль размещен: {data.modelName}, Направление: {data.direction}, Полоса: {data.numberPosition}, Сторона: {data.sidePosition}");
 
                 // Устанавливаем объект в центр точки спавна и делаем его дочерним элементом Canvas
                 car.transform.SetParent(canvas.transform, false);
@@ -58,7 +78,7 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
                 car.AddComponent<ClickableObject>();
 
                 // Добавляем объект в список размещенных объектов
-                FindObjectOfType<SceneBuilder>().AddPlacedCarObject(car);
+                FindObjectOfType<SceneBuilder>().AddPlacedCarObject(car, data);
 
                 rectTransform.anchoredPosition = originalPosition;
                 Debug.Log("Да неужели попал");

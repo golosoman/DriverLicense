@@ -13,4 +13,12 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler
             Debug.Log("Объект удален");
         }
     }
+
+
+
+    private void OnDestroy()
+    {
+        // Удаляем объект из списка размещенных автомобилей
+        FindObjectOfType<SceneBuilder>().RemovePlacedCarObject(gameObject);
+    }
 }
