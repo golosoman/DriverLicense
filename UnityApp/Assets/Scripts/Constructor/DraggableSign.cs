@@ -11,7 +11,6 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
     private Image image; // Ссылка на компонент Image
     private Color originalColor; // Оригинальный цвет объекта
     private Color highlightColor = Color.yellow; // Цвет при перетаскивании
-    private EventTrigger eventTrigger; // Ссылка на EventTrigger
 
     void Start()
     {
@@ -43,6 +42,7 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
             if (hit.collider.CompareTag(TagObjectNamesTypes.SIGN_SPAWN))
             {
                 ChangeColorToOriginal(); // Меняем цвет на оригинальный
+
                 // Инстанцируем префаб дорожного знака с правильным вращением
                 GameObject sign = Instantiate(signPrefab, hit.collider.transform.position, Quaternion.Euler(0, 0, hit.collider.transform.eulerAngles.z));
 
@@ -53,8 +53,22 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
                 // Добавляем компонент ClickableObject к знаку
                 sign.AddComponent<ClickableObject>();
 
+                // Получаем информацию о точке спавна
+                TriggerSignSpawnZone spawnZone = hit.collider.GetComponent<TriggerSignSpawnZone>();
+                string sidePosition = spawnZone.sidePosition.ToString();
+
+                PlacedSignData signData = new PlacedSignData
+                {
+                    modelName = sign.name, // или другой способ получения имени модели
+                    sidePosition = sidePosition,
+                    srcBySpawnPoint = spawnZone
+                };
+
+                // Логируем информацию о размещенном знаке
+                Debug.Log($"Знак размещен: {signData.modelName}, Сторона: {signData.sidePosition}");
+
                 // Добавляем объект в список размещенных объектов
-                FindObjectOfType<SceneBuilder>().AddPlacedSignObject(sign); // Метод для добавления знаков
+                FindObjectOfType<SceneBuilder>().AddPlacedSignObject(sign, signData); // Метод для добавления знаков
 
                 rectTransform.anchoredPosition = originalPosition;
                 Debug.Log("Знак успешно размещен!");

@@ -1190,10 +1190,10 @@ GameObject:
   - component: {fileID: 842167877}
   - component: {fileID: 842167876}
   - component: {fileID: 842167875}
-  - component: {fileID: 842167874}
+  - component: {fileID: 842167878}
   m_Layer: 5
   m_Name: TrafficLightRed
-  m_TagString: Untagged
+  m_TagString: TrafficLightImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1217,20 +1217,6 @@ RectTransform:
   m_AnchoredPosition: {x: -123.22, y: 0}
   m_SizeDelta: {x: 100, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &842167874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 842167872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e424f28c250ea4cb3a58c32fe8228a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  signPrefab: {fileID: 842167872}
-  canvas: {fileID: 619726671}
 --- !u!225 &842167875
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1281,6 +1267,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842167872}
   m_CullTransparentMesh: 1
+--- !u!114 &842167878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842167872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b450e43dfbfb494f8dd665f7b685607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trafficLightPrefab: {fileID: 842167872}
+  canvas: {fileID: 619726671}
 --- !u!224 &871928778 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1688241666724375691, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
@@ -2281,6 +2281,18 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C\n"
       objectReference: {fileID: 0}
+    - target: {fileID: 3554305284551341756, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2114159324}
+    - target: {fileID: 3554305284551341756, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SaveQuestion
+      objectReference: {fileID: 0}
+    - target: {fileID: 3554305284551341756, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: QuestionManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5802570884610939395, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
       propertyPath: m_Name
       value: BaseButton
@@ -2288,7 +2300,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5802570884610939395, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2114159324}
   m_SourcePrefab: {fileID: 100100000, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
 --- !u!1 &1567506567
 GameObject:
@@ -2437,10 +2452,10 @@ GameObject:
   - component: {fileID: 1747764956}
   - component: {fileID: 1747764955}
   - component: {fileID: 1747764954}
-  - component: {fileID: 1747764953}
+  - component: {fileID: 1747764957}
   m_Layer: 5
   m_Name: TrafficLightGreen
-  m_TagString: Untagged
+  m_TagString: TrafficLightImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2464,20 +2479,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1747764953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1747764951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e424f28c250ea4cb3a58c32fe8228a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  signPrefab: {fileID: 1747764951}
-  canvas: {fileID: 619726671}
 --- !u!225 &1747764954
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2528,6 +2529,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1747764951}
   m_CullTransparentMesh: 1
+--- !u!114 &1747764957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747764951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b450e43dfbfb494f8dd665f7b685607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trafficLightPrefab: {fileID: 1747764951}
+  canvas: {fileID: 619726671}
 --- !u!1 &1766982890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2543,7 +2558,7 @@ GameObject:
   - component: {fileID: 1766982895}
   m_Layer: 5
   m_Name: ImgYieldSign
-  m_TagString: Untagged
+  m_TagString: SignImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3089,7 +3104,7 @@ GameObject:
   - component: {fileID: 1944818846}
   m_Layer: 5
   m_Name: ImgMakeWaySign
-  m_TagString: Untagged
+  m_TagString: SignImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3212,7 +3227,6 @@ MonoBehaviour:
   - {fileID: 3959165635736805179, guid: d1ce5438d2715a94286459e5665a7b40, type: 3}
   - {fileID: 758394078735938629, guid: ffa0d57e291c5cb42beaf69d2b4afe71, type: 3}
   mainArea: {fileID: 1878901830}
-  carObjects: []
 --- !u!224 &1956831019
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3587,6 +3601,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091915134}
   m_CullTransparentMesh: 1
+--- !u!1 &2114159320 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5802570884610939395, guid: 3a971a9145fc36c4183ff50c601c5b30, type: 3}
+  m_PrefabInstance: {fileID: 1551399530}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2114159324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114159320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f421600fa94354849be8b3b954397db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBuilder: {fileID: 1956831018}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

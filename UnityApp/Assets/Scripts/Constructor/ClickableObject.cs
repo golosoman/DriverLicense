@@ -14,11 +14,20 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler
         }
     }
 
-
-
     private void OnDestroy()
     {
         // Удаляем объект из списка размещенных автомобилей
-        FindObjectOfType<SceneBuilder>().RemovePlacedCarObject(gameObject);
+        if (gameObject.CompareTag(TagObjectNamesTypes.CAR_IMG))
+        {
+            FindObjectOfType<SceneBuilder>().RemovePlacedCarObject(gameObject);
+        }
+        if (gameObject.CompareTag(TagObjectNamesTypes.TRAFFIC_LIGHT_IMG))
+        {
+            FindObjectOfType<SceneBuilder>().RemovePlacedTrafficLightObject(gameObject);
+        }
+        if (gameObject.CompareTag(TagObjectNamesTypes.SIGN_IMG))
+        {
+            FindObjectOfType<SceneBuilder>().RemovePlacedSignObject(gameObject);
+        }
     }
 }

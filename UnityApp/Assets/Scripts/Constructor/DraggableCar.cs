@@ -11,14 +11,11 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
     private Image image; // Ссылка на компонент Image
     private Color originalColor; // Оригинальный цвет объекта
     private Color highlightColor = Color.red; // Цвет при перетаскивании
-    private TriggerCarSpawnZone triggerZone; // Ссылка на триггер
-    private EventTrigger eventTrigger; // Ссылка на EventTrigger
 
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         originalPosition = rectTransform.anchoredPosition; // Сохраняем исходную позицию
-
         // Получаем компонент Image и сохраняем оригинальный цвет
         image = GetComponent<Image>();
         originalColor = image.color;
@@ -30,9 +27,10 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
         float scaleFactor = canvas.scaleFactor;
         rectTransform.anchoredPosition += eventData.delta / scaleFactor;
 
-        // Меняем цвет на красный при перетаскивании
+        // Проверяем пересечение с другими UI элементами
         ChangeColorToHighlight();
     }
+
 
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -59,7 +57,7 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
                     participantType = "Car",
                     modelName = car.name, // или другой способ получения имени модели
                     direction = direction,
-                    numberPosition = laneNumber,
+                    numberPosition = laneNumber.ToString(),
                     sidePosition = sidePosition,
                     srcBySpawnPoint = spawnZone
                 };
@@ -99,12 +97,12 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
         }
     }
 
-    private void ChangeColorToOriginal()
+    public void ChangeColorToOriginal()
     {
         image.color = originalColor; // Меняем цвет на оригинальный
     }
 
-    private void ChangeColorToHighlight()
+    public void ChangeColorToHighlight()
     {
         image.color = highlightColor; // Меняем цвет на красный
     }
