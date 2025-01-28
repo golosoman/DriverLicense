@@ -65,11 +65,23 @@ public class SceneBuilder : MonoBehaviour
             // Устанавливаем доступные направления в DirectionSelector
             directionSelector.SetAvailableDirections(allowedDirections);
 
+            // Подписываемся на событие изменения направления
+            directionSelector.OnDirectionChanged += (newDirection) => UpdateCarDirection(car, newDirection);
+
             Debug.Log($"Автомобиль {placeObjectData.modelName} добавлен в словарь.");
         }
         else
         {
             Debug.LogWarning($"Автомобиль {car.name} уже существует в словаре.");
+        }
+    }
+
+    private void UpdateCarDirection(GameObject car, string newDirection)
+    {
+        if (carDictionary.TryGetValue(car, out PlacedObjectData placedObjectData))
+        {
+            placedObjectData.direction = newDirection; // Обновляем направление
+            Debug.Log($"Направление автомобиля {placedObjectData.modelName} изменено на {newDirection}.");
         }
     }
 

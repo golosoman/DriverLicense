@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class DirectionSelector : MonoBehaviour, IPointerClickHandler
 {
@@ -10,6 +10,9 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
     private GameObject dropdownInstance;
 
     private string[] availableDirections; // Доступные направления
+
+    // Событие для изменения направления
+    public event Action<string> OnDirectionChanged;
 
     // Метод для установки доступных направлений
     public void SetAvailableDirections(string[] directions)
@@ -36,8 +39,7 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
     private void ShowDropdown(Vector2 clickPosition)
     {
         // Преобразуем экранные координаты в локальные координаты канваса
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(FindObjectOfType<Canvas>().GetComponent<RectTransform>(), clickPosition, Camera.main, out localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(FindObjectOfType<Canvas>().GetComponent<RectTransform>(), clickPosition, Camera.main, out Vector2 localPoint);
 
         // Создаем экземпляр выпадающего списка
         dropdownInstance = Instantiate(dropdownPrefab, localPoint, Quaternion.identity);
@@ -49,9 +51,9 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
         dropdown.AddOptions(new List<string>(availableDirections));
         dropdown.onValueChanged.AddListener(OnDirectionSelected);
 
-        // Позиционируем dropdown немного ниже точки клика, чтобы он не перекрывал его
+        // Позиционируем dropdown немного ниже точки клика
         RectTransform dropdownRectTransform = dropdownInstance.GetComponent<RectTransform>();
-        dropdownRectTransform.anchoredPosition = new Vector2(localPoint.x, localPoint.y - 50); // Пример сдвига вниз
+        dropdownRectTransform.anchoredPosition = new Vector2(localPoint.x, localPoint.y - 50);
     }
 
     private void HideDropdown()
@@ -67,7 +69,8 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
         string selectedDirection = availableDirections[index];
         Debug.Log($"Направление выбрано: {selectedDirection}");
 
-        // Здесь можно добавить логику для изменения направления автомобиля
+        // Вызываем событие изменения направления
+        OnDirectionChanged?.Invoke(selectedDirection);
 
         HideDropdown(); // Скрываем выпадающий список после выбора
     }

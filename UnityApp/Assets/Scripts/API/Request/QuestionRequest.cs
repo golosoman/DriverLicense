@@ -48,8 +48,16 @@ public class SignRequest
 
     public SignRequest(PlacedSignData placedSignData)
     {
-        this.modelName = placedSignData.modelName;
+        this.modelName = ExtractSignModelName(placedSignData.modelName);
         this.sidePosition = placedSignData.sidePosition;
+    }
+
+    private string ExtractSignModelName(string modelName)
+    {
+        // Извлечение названия знака
+        int startIndex = modelName.IndexOf("Img") + 3; // Индекс после "Img"
+        int endIndex = modelName.IndexOf("("); // Индекс первой открывающейся скобки
+        return modelName.Substring(startIndex, endIndex - startIndex);
     }
 }
 
@@ -62,9 +70,31 @@ public class TrafficLightRequest
 
     public TrafficLightRequest(PlacedTrafficLightData placedTrafficLightData)
     {
-        this.modelName = placedTrafficLightData.modelName;
+        this.modelName = ExtractTrafficLightModelName(placedTrafficLightData.modelName);
         this.sidePosition = placedTrafficLightData.sidePosition; // Исправлено: должно быть sidePosition
-        this.state = placedTrafficLightData.state;
+        this.state = ExtractTrafficLightState(placedTrafficLightData.modelName);
+    }
+
+    private string ExtractTrafficLightModelName(string modelName)
+    {
+        // Извлечение названия светофора
+        int startIndex = modelName.IndexOf("Img") + 3; // Индекс после "Img"
+        int endIndex = modelName.IndexOf("("); // Индекс первой открывающейся скобки
+        return modelName.Substring(startIndex, endIndex - startIndex);
+    }
+
+    private string ExtractTrafficLightState(string modelName)
+    {
+        // Определение состояния светофора
+        if (modelName.ToLower().Contains("red"))
+        {
+            return "Red";
+        }
+        else if (modelName.ToLower().Contains("green"))
+        {
+            return "Green";
+        }
+        return "Unknown"; // Если состояние не определено
     }
 }
 
@@ -79,11 +109,19 @@ public class TrafficParticipantRequest
 
     public TrafficParticipantRequest(PlacedObjectData placedObjectData)
     {
-        this.modelName = placedObjectData.modelName;
+        this.modelName = ExtractCarModelName(placedObjectData.modelName);
         this.sidePosition = placedObjectData.sidePosition;
         this.numberPosition = placedObjectData.numberPosition;
         this.participantType = placedObjectData.participantType;
         this.direction = placedObjectData.direction;
+    }
+
+    private string ExtractCarModelName(string modelName)
+    {
+        // Извлечение названия автомобиля
+        int startIndex = modelName.IndexOf("Img") + 3; // Индекс после "Img"
+        int endIndex = modelName.IndexOf("("); // Индекс первой открывающейся скобки
+        return modelName.Substring(startIndex, endIndex - startIndex);
     }
 }
 
@@ -92,8 +130,8 @@ public class QuestionRequest : BaseRequest
 {
     public string question;
     public string explanation;
-    public string intersectionType;
     public string categoryName;
+    public string intersectionType;
     public List<SignRequest> signs;
     public List<TrafficLightRequest> trafficLights;
     public List<TrafficParticipantRequest> trafficParticipants;
@@ -105,7 +143,7 @@ public class QuestionRequest : BaseRequest
         this.explanation = info.explanation;
         this.categoryName = info.categoryName;
 
-        this.intersectionType = intersectionType;
+        this.intersectionType = ExtractIntersectionType(intersectionType);
 
         // Инициализация списков
         this.signs = new List<SignRequest>();
@@ -125,5 +163,12 @@ public class QuestionRequest : BaseRequest
         {
             this.trafficParticipants.Add(new TrafficParticipantRequest(participant));
         }
+    }
+
+    private string ExtractIntersectionType(string intersectionType)
+    {
+        // Извлечение названия перекрестка
+        int endIndex = intersectionType.IndexOf("("); // Индекс первой открывающейся скобки
+        return endIndex > 0 ? intersectionType.Substring(0, endIndex) : intersectionType; // Возвращаем строку до скобки
     }
 }
