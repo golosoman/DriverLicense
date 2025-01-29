@@ -32,14 +32,19 @@ public class TicketService {
     }
 
     // Получить билет по ID
-    public Optional<TicketResponse> findTicketById(Long id) {
-        return ticketRepository.findById(id).map(this::mapToTicketResponse);
+    public TicketResponse findTicketById(Long id) {
+        return ticketRepository.findById(id)
+                .map(this::mapToTicketResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("Билет с ID " + id + " не найден."));
     }
 
     // Получить случайный билет
     public TicketResponse findRandomTicket() {
         Ticket ticket = ticketRepository.findRandomTicket();
-        return ticket != null ? mapToTicketResponse(ticket) : null;
+        if (ticket == null) {
+            throw new ResourceNotFoundException("Не удалось найти случайный билет");
+        }
+        return mapToTicketResponse(ticket);
     }
 
     // Создать билет

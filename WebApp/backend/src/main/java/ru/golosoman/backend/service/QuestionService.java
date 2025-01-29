@@ -39,7 +39,10 @@ public class QuestionService {
 
     public QuestionResponse getRandomQuestion() {
         Question question = questionRepository.findRandomQuestion();
-        return question != null ? MappingUtil.mapToQuestionResponse(question) : null;
+        if (question == null) {
+            throw new ResourceNotFoundException("Не удалось найти случайный вопрос");
+        }
+        return MappingUtil.mapToQuestionResponse(question);
     }
 
     public QuestionResponse createQuestion(CreateQuestionRequest request) {

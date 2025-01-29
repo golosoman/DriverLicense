@@ -25,14 +25,14 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         List<CategoryResponse> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 
     @Operation(summary = "Получить категорию по ID")
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         CategoryResponse categoryResponse = categoryService.getCategoryById(id);
-        return ResponseEntity.ok(categoryResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryResponse);
     }
 
     @Operation(summary = "Создать новую категорию")
@@ -46,13 +46,13 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id, @RequestBody @Valid CreateCategoryRequest categoryDTO) {
         CategoryResponse updatedCategory = categoryService.updateCategory(id, categoryDTO);
-        return ResponseEntity.ok(updatedCategory);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCategory);
     }
 
     @Operation(summary = "Удалить категорию по ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         categoryService.deleteCategory(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

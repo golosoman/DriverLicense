@@ -25,41 +25,41 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
         List<QuestionResponse> questions = questionService.getAllQuestions();
-        return new ResponseEntity<>(questions, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(questions);
     }
 
     @Operation(summary = "Получить случайный вопрос")
     @GetMapping("/random")
     public ResponseEntity<QuestionResponse> getRandomQuestion() {
         QuestionResponse question = questionService.getRandomQuestion();
-        return question != null ? new ResponseEntity<>(question, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.OK).body(question);
     }
 
     @Operation(summary = "Получить вопрос по ID")
     @GetMapping("/{id}")
     public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         QuestionResponse question = questionService.getQuestionById(id);
-        return question != null ? new ResponseEntity<>(question, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.OK).body(question);
     }
 
     @Operation(summary = "Создать новый вопрос")
     @PostMapping
     public ResponseEntity<QuestionResponse> createQuestion(@RequestBody @Valid CreateQuestionRequest request) {
         QuestionResponse questionResponse = questionService.createQuestion(request);
-        return new ResponseEntity<>(questionResponse, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionResponse);
     }
 
     @Operation(summary = "Обновить вопрос")
     @PutMapping("/{id}")
     public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id, @RequestBody @Valid CreateQuestionRequest request) {
         QuestionResponse questionResponse = questionService.updateQuestion(id, request);
-        return new ResponseEntity<>(questionResponse, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(questionResponse);
     }
 
     @Operation(summary = "Удалить вопрос")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         questionService.deleteQuestion(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
