@@ -7,6 +7,7 @@ import ru.golosoman.backend.domain.model.Question;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
+
     @Query(value = "SELECT * FROM question ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
     Question findRandomQuestion();
 }

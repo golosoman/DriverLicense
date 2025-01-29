@@ -22,26 +22,26 @@ public class MappingUtil {
         );
     }
 
-    private static CategoryResponse mapToCategoryResponse(Category category) {
+    public static CategoryResponse mapToCategoryResponse(Category category) {
         if (category == null) {
             return null;
         }
         return new CategoryResponse(category.getId(), category.getName());
     }
 
-    private static List<SignResponse> mapToSignResponseList(Set<Sign> signs) {
+    public static List<SignResponse> mapToSignResponseList(Set<Sign> signs) {
         return signs.stream()
                 .map(sign -> new SignResponse(sign.getId(), sign.getModelName(), sign.getSidePosition()))
                 .collect(Collectors.toList());
     }
 
-    private static List<TrafficLightResponse> mapToTrafficLightResponseList(Set<TrafficLight> trafficLights) {
+    public static List<TrafficLightResponse> mapToTrafficLightResponseList(Set<TrafficLight> trafficLights) {
         return trafficLights.stream()
                 .map(light -> new TrafficLightResponse(light.getId(), light.getModelName(), light.getSidePosition(), light.getState()))
                 .collect(Collectors.toList());
     }
 
-    private static List<TrafficParticipantResponse> mapToTrafficParticipantResponseList(Set<TrafficParticipant> trafficParticipants) {
+    public static List<TrafficParticipantResponse> mapToTrafficParticipantResponseList(Set<TrafficParticipant> trafficParticipants) {
         return trafficParticipants.stream()
                 .map(participant -> new TrafficParticipantResponse(
                         participant.getId(),

@@ -1,9 +1,12 @@
 package ru.golosoman.backend.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.golosoman.backend.domain.dto.request.CreateTicketRequest;
 import ru.golosoman.backend.domain.dto.response.TicketResponse;
@@ -12,59 +15,53 @@ import ru.golosoman.backend.service.TicketService;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/tickets")
+@Tag(name = "Билеты", description = "Управление билетами")
 public class TicketController {
-
     private final TicketService ticketService;
 
-    @Autowired
-    public TicketController(TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
-
-    // Получить все билеты
+    @Operation(summary = "Получить все билеты")
     @GetMapping
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
         List<TicketResponse> ticketResponses = ticketService.findAllTickets();
         return ResponseEntity.ok(ticketResponses);
     }
 
-    // Получить билет по ID
+    @Operation(summary = "Получить билет по ID")
     @GetMapping("/{id}")
-    public ResponseEntity<TicketResponse> getTicketById(@PathVariable Long id) {
+    public ResponseEntity<TicketResponse> getTicketById(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         return ticketService.findTicketById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Получить случайный билет
+    @Operation(summary = "Получить случайный билет")
     @GetMapping("/random")
     public ResponseEntity<TicketResponse> getRandomTicket() {
         TicketResponse ticketResponse = ticketService.findRandomTicket();
         return ticketResponse != null ? ResponseEntity.ok(ticketResponse) : ResponseEntity.notFound().build();
     }
 
-    // Создать билет
+    @Operation(summary = "Создать новый билет")
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TicketResponse> createTicket(@RequestBody CreateTicketRequest request) {
+    public ResponseEntity<TicketResponse> createTicket(@RequestBody @Valid CreateTicketRequest request) {
         TicketResponse ticketResponse = ticketService.createTicket(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ticketResponse);
     }
 
-    // Обновить билет
+    @Operation(summary = "Обновить билет")
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long id, @RequestBody CreateTicketRequest request) {
-        TicketResponse ticketResponse = ticketService.updateTicket(id, request);
-        return ResponseEntity.ok(ticketResponse);
+    public ResponseEntity<TicketResponse> updateTicket(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id, @RequestBody @Valid CreateTicketRequest request) {
+        TicketResponse updatedTicketResponse = ticketService.updateTicket(id, request);
+        return ResponseEntity.ok(updatedTicketResponse);
     }
 
-    // Удалить билет
+    @Operation(summary = "Удалить билет")
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTicket(@PathVariable @Positive(message = "ID должен быть положительным числом") Long id) {
         ticketService.deleteTicket(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
+

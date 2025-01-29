@@ -1,11 +1,12 @@
 package ru.golosoman.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.golosoman.backend.domain.dto.request.CreateTicketRequest;
 import ru.golosoman.backend.domain.dto.response.TicketResponse;
 import ru.golosoman.backend.domain.model.Question;
 import ru.golosoman.backend.domain.model.Ticket;
+import ru.golosoman.backend.exception.ResourceNotFoundException;
 import ru.golosoman.backend.repository.QuestionRepository;
 import ru.golosoman.backend.repository.TicketRepository;
 import ru.golosoman.backend.util.MappingUtil;
@@ -17,16 +18,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService {
-
     private final TicketRepository ticketRepository;
     private final QuestionRepository questionRepository;
-
-    @Autowired
-    public TicketService(TicketRepository ticketRepository, QuestionRepository questionRepository) {
-        this.ticketRepository = ticketRepository;
-        this.questionRepository = questionRepository;
-    }
 
     // Получить все билеты
     public List<TicketResponse> findAllTickets() {
@@ -52,7 +47,7 @@ public class TicketService {
         Set<Question> questions = new HashSet<>(questionRepository.findAllById(request.getQuestionIds()));
 
         if (questions.size() != request.getQuestionIds().size()) {
-            throw new IllegalArgumentException("Некоторые идентификаторы вопросов не существуют.");
+            throw new ResourceNotFoundException("Некоторые идентификаторы вопросов не существуют.");
         }
 
         Ticket ticket = new Ticket();
@@ -65,12 +60,12 @@ public class TicketService {
     // Обновить билет
     public TicketResponse updateTicket(Long id, CreateTicketRequest request) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Билет с ID " + id + " не найден."));
+                .orElseThrow(() -> new ResourceNotFoundException("Билет с ID " + id + " не найден."));
 
         Set<Question> questions = new HashSet<>(questionRepository.findAllById(request.getQuestionIds()));
 
         if (questions.size() != request.getQuestionIds().size()) {
-            throw new IllegalArgumentException("Некоторые идентификаторы вопросов не существуют.");
+            throw new ResourceNotFoundException("Некоторые идентификаторы вопросов не существуют.");
         }
 
         ticket.setName(request.getName());
@@ -82,7 +77,7 @@ public class TicketService {
     // Удалить билет
     public void deleteTicket(Long id) {
         if (!ticketRepository.existsById(id)) {
-            throw new IllegalArgumentException("Билет с ID " + id + " не найден.");
+            throw new ResourceNotFoundException("Билет с ID " + id + " не найден.");
         }
         ticketRepository.deleteById(id);
     }

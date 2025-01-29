@@ -1,15 +1,14 @@
 package ru.golosoman.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.golosoman.backend.domain.dto.request.CreateStatisticRequest;
 import ru.golosoman.backend.domain.dto.request.StatisticAnswerRequest;
 import ru.golosoman.backend.domain.dto.response.statistic.*;
 import ru.golosoman.backend.domain.model.*;
+import ru.golosoman.backend.exception.ResourceNotFoundException;
 import ru.golosoman.backend.repository.*;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import ru.golosoman.backend.util.UserMathUtil;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,23 +17,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StatisticsService {
-
-    @Autowired
-    private AnswerRepository answerRepository;
-
-    @Autowired
-    private AttemptTicketRepository attemptTicketRepository;
-
-    @Autowired
-    private TicketRepository ticketRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private QuestionRepository questionRepository;
-
+    private final AnswerRepository answerRepository;
+    private final AttemptTicketRepository attemptTicketRepository;
+    private final TicketRepository ticketRepository;
+    private final CategoryRepository categoryRepository;
+    private final QuestionRepository questionRepository;
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public List<CategoryStatistics> getCategoryStatisticsForUser (Long userId) {
@@ -42,11 +31,13 @@ public class StatisticsService {
         List<Category> categories = categoryRepository.findAll();
 
         for (Category category : categories) {
-            List<Answer> answers = answerRepository.findByCategoryId(category.getId());
-            Long totalQuestions = (long) answers.size();
-            Long correctAnswersCount = answerRepository.countCorrectAnswersByCategoryId(category.getId());
+            // Получаем ответы пользователя по вопросам данной категории
+            List<Answer> answers = answerRepository.findByUserIdAndCategoryId(userId, category.getId());
 
-            double percentageCorrect = totalQuestions > 0 ? round((double) correctAnswersCount / totalQuestions * 100, 2) : 0;
+            Long totalQuestions = (long) answers.size();
+            Long correctAnswersCount = answers.stream().filter(Answer::isResult).count();
+
+            double percentageCorrect = totalQuestions > 0 ? UserMathUtil.round((double) correctAnswersCount / totalQuestions * 100, 2) : 0;
 
             statistics.add(new CategoryStatistics(category.getId(), category.getName(), percentageCorrect));
         }
@@ -88,7 +79,7 @@ public class StatisticsService {
         for (Question question : questions) {
             long totalAnswers = question.getAnswers().size();
             long correctAnswers = question.getAnswers().stream().filter(Answer::isResult).count();
-            double percentage = totalAnswers > 0 ? round((double) correctAnswers / totalAnswers * 100, 2) : 0.0;
+            double percentage = totalAnswers > 0 ? UserMathUtil.round((double) correctAnswers / totalAnswers * 100, 2) : 0.0;
 
             stats.add(new QuestionStatistics(question.getId(), question.getQuestion(), percentage));
         }
@@ -107,7 +98,7 @@ public class StatisticsService {
         for (Map.Entry<Long, List<AttemptTicket>> entry : ticketAttempts.entrySet()) {
             long totalAttempts = entry.getValue().size();
             long successfulAttempts = entry.getValue().stream().filter(AttemptTicket::isResult).count();
-            double percentage = totalAttempts > 0 ? round((double) successfulAttempts / totalAttempts * 100, 2) : 0.00;
+            double percentage = totalAttempts > 0 ? UserMathUtil.round((double) successfulAttempts / totalAttempts * 100, 2) : 0.00;
 
             Ticket ticket = entry.getValue().get(0).getTicket(); // Получаем билет из первой попытки
             stats.add(new TicketStatisticsForAdmin(ticket.getId(), ticket.getName(), percentage));
@@ -117,19 +108,14 @@ public class StatisticsService {
     }
 
     public void createStatistic(CreateStatisticRequest request, User user) {
-        // Проверка существования билета
-        if (request.getTicketId() == null) {
-            throw new IllegalArgumentException("ID билета не может быть null.");
-        }
 
         // Создание новой попытки
         AttemptTicket attemptTicket = new AttemptTicket();
         attemptTicket.setUser (user); // Устанавливаем пользователя
         attemptTicket.setResult(request.getResult());
 
-        // Предполагаем, что у вас есть логика для получения билета по ID
         Ticket ticket = ticketRepository.findById(request.getTicketId())
-                .orElseThrow(() -> new IllegalArgumentException("Билет с ID " + request.getTicketId() + " не найден."));
+                .orElseThrow(() -> new ResourceNotFoundException("Билет с ID " + request.getTicketId() + " не найден."));
         attemptTicket.setTicket(ticket); // Устанавливаем билет
 
         // Сохранение попытки для получения ID
@@ -138,7 +124,7 @@ public class StatisticsService {
         // Создание ответов
         for (StatisticAnswerRequest answerRequest : request.getAnswers()) {
             Question question = questionRepository.findById(answerRequest.getQuestionId())
-                    .orElseThrow(() -> new IllegalArgumentException("Вопрос с ID " + answerRequest.getQuestionId() + " не найден."));
+                    .orElseThrow(() -> new ResourceNotFoundException("Вопрос с ID " + answerRequest.getQuestionId() + " не найден."));
 
             Answer answer = new Answer();
             answer.setAttemptTicket(attemptTicket); // Связываем ответ с попыткой
@@ -148,12 +134,4 @@ public class StatisticsService {
             answerRepository.save(answer); // Сохраняем ответ
         }
     }
-
-    private double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
 }
