@@ -17,18 +17,36 @@ import java.util.stream.Collectors;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
+    /**
+     * Получает список всех категорий.
+     *
+     * @return список ответов категорий
+     */
     public List<CategoryResponse> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(MappingUtil::mapToCategoryResponse)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Получает категорию по идентификатору.
+     *
+     * @param id идентификатор категории
+     * @return ответ категории
+     * @throws ResourceNotFoundException если категория не найдена
+     */
     public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(MappingUtil::mapToCategoryResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Категория с ID " + id + " не найдена"));
     }
 
+    /**
+     * Создает новую категорию.
+     *
+     * @param categoryDTO данные для создания категории
+     * @return ответ с созданной категорией
+     */
     public CategoryResponse createCategory(CreateCategoryRequest categoryDTO) {
         Category category = new Category();
         category.setName(categoryDTO.getName());
@@ -36,6 +54,14 @@ public class CategoryService {
         return MappingUtil.mapToCategoryResponse(savedCategory);
     }
 
+    /**
+     * Обновляет существующую категорию.
+     *
+     * @param id идентификатор категории
+     * @param categoryDTO данные для обновления категории
+     * @return ответ с обновленной категорией
+     * @throws ResourceNotFoundException если категория не найдена
+     */
     public CategoryResponse updateCategory(Long id, CreateCategoryRequest categoryDTO) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Категория с ID " + id + " не найдена"));
@@ -44,6 +70,12 @@ public class CategoryService {
         return MappingUtil.mapToCategoryResponse(updatedCategory);
     }
 
+    /**
+     * Удаляет категорию по идентификатору.
+     *
+     * @param id идентификатор категории
+     * @throws ResourceNotFoundException если категория не найдена
+     */
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new ResourceNotFoundException("Категория с ID " + id + " не найдена");

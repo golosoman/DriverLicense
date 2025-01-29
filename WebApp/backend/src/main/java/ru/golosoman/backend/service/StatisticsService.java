@@ -8,7 +8,7 @@ import ru.golosoman.backend.domain.dto.response.statistic.*;
 import ru.golosoman.backend.domain.model.*;
 import ru.golosoman.backend.exception.ResourceNotFoundException;
 import ru.golosoman.backend.repository.*;
-import ru.golosoman.backend.util.UserMathUtil;
+import ru.golosoman.backend.util.MathUtil;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,7 +37,7 @@ public class StatisticsService {
             Long totalQuestions = (long) answers.size();
             Long correctAnswersCount = answers.stream().filter(Answer::isResult).count();
 
-            double percentageCorrect = totalQuestions > 0 ? UserMathUtil.round((double) correctAnswersCount / totalQuestions * 100, 2) : 0;
+            double percentageCorrect = totalQuestions > 0 ? MathUtil.round((double) correctAnswersCount / totalQuestions * 100, 2) : 0;
 
             statistics.add(new CategoryStatistics(category.getId(), category.getName(), percentageCorrect));
         }
@@ -79,7 +79,7 @@ public class StatisticsService {
         for (Question question : questions) {
             long totalAnswers = question.getAnswers().size();
             long correctAnswers = question.getAnswers().stream().filter(Answer::isResult).count();
-            double percentage = totalAnswers > 0 ? UserMathUtil.round((double) correctAnswers / totalAnswers * 100, 2) : 0.0;
+            double percentage = totalAnswers > 0 ? MathUtil.round((double) correctAnswers / totalAnswers * 100, 2) : 0.0;
 
             stats.add(new QuestionStatistics(question.getId(), question.getQuestion(), percentage));
         }
@@ -98,7 +98,7 @@ public class StatisticsService {
         for (Map.Entry<Long, List<AttemptTicket>> entry : ticketAttempts.entrySet()) {
             long totalAttempts = entry.getValue().size();
             long successfulAttempts = entry.getValue().stream().filter(AttemptTicket::isResult).count();
-            double percentage = totalAttempts > 0 ? UserMathUtil.round((double) successfulAttempts / totalAttempts * 100, 2) : 0.00;
+            double percentage = totalAttempts > 0 ? MathUtil.round((double) successfulAttempts / totalAttempts * 100, 2) : 0.00;
 
             Ticket ticket = entry.getValue().get(0).getTicket(); // Получаем билет из первой попытки
             stats.add(new TicketStatisticsForAdmin(ticket.getId(), ticket.getName(), percentage));

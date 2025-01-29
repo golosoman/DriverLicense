@@ -13,7 +13,6 @@ import ru.golosoman.backend.util.MappingUtil;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,31 +22,51 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final QuestionRepository questionRepository;
 
-    // Получить все билеты
+    /**
+     * Получает список всех билетов.
+     *
+     * @return список ответов билетов
+     */
     public List<TicketResponse> findAllTickets() {
         List<Ticket> tickets = ticketRepository.findAll();
         return tickets.stream()
-                .map(this::mapToTicketResponse)
+                .map(MappingUtil::mapToTicketResponse)
                 .collect(Collectors.toList());
     }
 
-    // Получить билет по ID
+    /**
+     * Получает билет по идентификатору.
+     *
+     * @param id идентификатор билета
+     * @return ответ билета
+     * @throws ResourceNotFoundException если билет не найден
+     */
     public TicketResponse findTicketById(Long id) {
         return ticketRepository.findById(id)
-                .map(this::mapToTicketResponse)
+                .map(MappingUtil::mapToTicketResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("Билет с ID " + id + " не найден."));
     }
 
-    // Получить случайный билет
+    /**
+     * Получает случайный билет.
+     *
+     * @return ответ случайный билет
+     * @throws ResourceNotFoundException если не удалось найти случайный билет
+     */
     public TicketResponse findRandomTicket() {
         Ticket ticket = ticketRepository.findRandomTicket();
         if (ticket == null) {
             throw new ResourceNotFoundException("Не удалось найти случайный билет");
         }
-        return mapToTicketResponse(ticket);
+        return MappingUtil.mapToTicketResponse(ticket);
     }
 
-    // Создать билет
+    /**
+     * Создает новый билет.
+     *
+     * @param request данные для создания билета
+     * @return ответ с созданным билетом
+     */
     public TicketResponse createTicket(CreateTicketRequest request) {
         Set<Question> questions = new HashSet<>(questionRepository.findAllById(request.getQuestionIds()));
 
@@ -59,10 +78,17 @@ public class TicketService {
         ticket.setName(request.getName());
         ticket.setQuestions(questions);
         ticket = ticketRepository.save(ticket);
-        return mapToTicketResponse(ticket);
+        return MappingUtil.mapToTicketResponse(ticket);
     }
 
-    // Обновить билет
+    /**
+     * Обновляет существующий билет.
+     *
+     * @param id идентификатор билета
+     * @param request данные для обновления билета
+     * @return ответ с обновленным билетом
+     * @throws ResourceNotFoundException если билет не найден
+     */
     public TicketResponse updateTicket(Long id, CreateTicketRequest request) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Билет с ID " + id + " не найден."));
@@ -76,10 +102,15 @@ public class TicketService {
         ticket.setName(request.getName());
         ticket.setQuestions(questions);
         ticket = ticketRepository.save(ticket);
-        return mapToTicketResponse(ticket);
+        return MappingUtil.mapToTicketResponse(ticket);
     }
 
-    // Удалить билет
+    /**
+     * Удаляет билет по идентификатору.
+     *
+     * @param id идентификатор билета
+     * @throws ResourceNotFoundException если билет не найден
+     */
     public void deleteTicket(Long id) {
         if (!ticketRepository.existsById(id)) {
             throw new ResourceNotFoundException("Билет с ID " + id + " не найден.");
@@ -87,13 +118,5 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
-    private TicketResponse mapToTicketResponse(Ticket ticket) {
-        return new TicketResponse(
-                ticket.getId(),
-                ticket.getName(),
-                ticket.getQuestions().stream()
-                        .map(MappingUtil::mapToQuestionResponse)
-                        .collect(Collectors.toList())
-        );
-    }
+
 }
