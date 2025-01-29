@@ -28,14 +28,11 @@ public class User implements UserDetails {
     @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false, length = 15)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 15)
     private String password;
-
-//    @Column(name = "email", unique = true, nullable = false)
-//    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)

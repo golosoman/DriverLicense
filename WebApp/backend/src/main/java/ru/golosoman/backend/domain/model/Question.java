@@ -16,15 +16,15 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String question;
-    private String explanation;
-    private String intersectionType;
 
-    public Question(String title, String question, String explanation, String intersectionType) {
-        this.question = question;
-        this.explanation = explanation;
-        this.intersectionType = intersectionType;
-    }
+    @Column(length = 150)
+    private String question;
+
+    @Column(length = 150)
+    private String explanation;
+
+    @Column(length = 30)
+    private String intersectionType;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "QuestionTrafficLight", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "traffic_light_id"))

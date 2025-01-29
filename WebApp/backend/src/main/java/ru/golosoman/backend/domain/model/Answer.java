@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Один уникальный идентификатор для Answer
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "attempt_ticket_id") // Добавляем внешний ключ для связи с AttemptTicket
@@ -27,9 +27,9 @@ public class Answer {
     private Question question;
 
     @Column(updatable = false) // Дата не должна обновляться
-    private LocalDateTime answerDate; // Дата ответа на вопрос
+    private LocalDateTime answerDate;
 
-    private boolean result; // true если ответ правильный, false если неправильный
+    private boolean result;
 
     @PrePersist
     protected void onCreate() {

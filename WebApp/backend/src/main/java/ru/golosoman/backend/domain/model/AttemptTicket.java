@@ -17,7 +17,7 @@ import java.util.List;
 public class AttemptTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Один уникальный идентификатор для AttemptTicket
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,12 +28,12 @@ public class AttemptTicket {
     private Ticket ticket;
 
     @Column(updatable = false) // Дата не должна обновляться
-    private LocalDateTime attemptDate; // Дата попытки
+    private LocalDateTime attemptDate;
 
-    private boolean result; // Результат попытки
+    private boolean result;
 
     @OneToMany(mappedBy = "attemptTicket", cascade = CascadeType.ALL)
-    private List<Answer> answers; // Список ответов
+    private List<Answer> answers;
 
     @PrePersist
     protected void onCreate() {
