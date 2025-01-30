@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        String message = ex.getMessage();
+        int code = HttpStatus.NOT_FOUND.value();
+        String date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+
+        ErrorResponse errorResponse = new ErrorResponse(message, code, date);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationExceptions(AuthenticationException ex) {
+        String message = "Ошибка аутентификации: " + ex.getMessage();
+        int code = HttpStatus.UNAUTHORIZED.value();
+        String date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+
+        ErrorResponse errorResponse = new ErrorResponse(message, code, date);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        String message = ex.getMessage();
+        int code = HttpStatus.CONFLICT.value();
+        String date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
+
+        ErrorResponse errorResponse = new ErrorResponse(message, code, date);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
         String message = ex.getMessage();
         int code = HttpStatus.NOT_FOUND.value();
         String date = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new Date());
