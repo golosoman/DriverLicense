@@ -43,6 +43,16 @@ public class DraggableCar : MonoBehaviour, IDragHandler, IEndDragHandler
             if (hit.collider.CompareTag(TagObjectNamesTypes.CAR_SPAWN))
             {
                 TriggerCarSpawnZone spawnZone = hit.collider.GetComponent<TriggerCarSpawnZone>();
+
+                // Проверяем, есть ли уже автомобиль на точке спавна
+                if (spawnZone.currentCar != null)
+                {
+                    Debug.LogWarning($"На точке спавна уже есть автомобиль: {spawnZone.currentCar.name}");
+                    ChangeColorToOriginal();
+                    rectTransform.anchoredPosition = originalPosition;
+                    return;
+                }
+
                 ChangeColorToOriginal(); // Меняем цвет на оригинальный
                 // Инстанцируем префаб машины с правильным вращением
                 GameObject car = Instantiate(carPrefab, hit.collider.transform.position, Quaternion.Euler(0, 0, hit.collider.transform.eulerAngles.z));

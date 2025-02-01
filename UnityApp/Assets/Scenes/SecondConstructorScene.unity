@@ -1192,7 +1192,7 @@ GameObject:
   - component: {fileID: 842167875}
   - component: {fileID: 842167878}
   m_Layer: 5
-  m_Name: TrafficLightRed
+  m_Name: ImgTrafficLightType1Red
   m_TagString: TrafficLightImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2319,7 +2319,7 @@ GameObject:
   - component: {fileID: 1567506572}
   - component: {fileID: 1567506571}
   m_Layer: 5
-  m_Name: ImgCar
+  m_Name: ImgCarType1
   m_TagString: CarImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2454,7 +2454,7 @@ GameObject:
   - component: {fileID: 1747764954}
   - component: {fileID: 1747764957}
   m_Layer: 5
-  m_Name: TrafficLightGreen
+  m_Name: ImgTrafficLightType1Green
   m_TagString: TrafficLightImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2557,7 +2557,7 @@ GameObject:
   - component: {fileID: 1766982892}
   - component: {fileID: 1766982895}
   m_Layer: 5
-  m_Name: ImgYieldSign
+  m_Name: ImgYieldSignType1
   m_TagString: SignImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3103,7 +3103,7 @@ GameObject:
   - component: {fileID: 1944818845}
   - component: {fileID: 1944818846}
   m_Layer: 5
-  m_Name: ImgMakeWaySign
+  m_Name: ImgMakeWaySignType1
   m_TagString: SignImg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

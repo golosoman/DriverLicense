@@ -10,6 +10,7 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
     private GameObject dropdownInstance;
 
     private string[] availableDirections; // Доступные направления
+    private int selectDirectionIndex;
 
     // Событие для изменения направления
     public event Action<string> OnDirectionChanged;
@@ -18,6 +19,7 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
     public void SetAvailableDirections(string[] directions)
     {
         availableDirections = directions;
+        selectDirectionIndex = 0;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -49,6 +51,9 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
         TMP_Dropdown dropdown = dropdownInstance.GetComponent<TMP_Dropdown>();
         dropdown.ClearOptions();
         dropdown.AddOptions(new List<string>(availableDirections));
+
+        // Устанавливаем выбранное значение
+        dropdown.value = selectDirectionIndex; // Устанавливаем знач
         dropdown.onValueChanged.AddListener(OnDirectionSelected);
 
         // Позиционируем dropdown немного ниже точки клика
@@ -66,7 +71,8 @@ public class DirectionSelector : MonoBehaviour, IPointerClickHandler
 
     private void OnDirectionSelected(int index)
     {
-        string selectedDirection = availableDirections[index];
+        selectDirectionIndex = index;
+        string selectedDirection = availableDirections[selectDirectionIndex];
         Debug.Log($"Направление выбрано: {selectedDirection}");
 
         // Вызываем событие изменения направления

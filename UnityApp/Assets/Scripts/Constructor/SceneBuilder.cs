@@ -28,12 +28,18 @@ public class SceneBuilder : MonoBehaviour
 
     public void OnIntersectionChanged(int index)
     {
+        // Удаляем все объекты перед сменой перекрестка
+        ClearAllObjects(carDictionary);
+        ClearAllObjects(signDictionary);
+        ClearAllObjects(trafficLightDictionary);
+
+        // Удаляем текущий перекресток со сцены
         if (currentIntersection != null)
         {
             Destroy(currentIntersection);
         }
 
-        // Инстанцируем префаб
+        // Инстанцируем новый префаб перекрестка
         currentIntersection = Instantiate(intersections[index], mainArea.position, Quaternion.identity, mainArea);
 
         // Устанавливаем масштаб перекрестка
@@ -41,19 +47,30 @@ public class SceneBuilder : MonoBehaviour
         currentIntersection.transform.localScale = new Vector3(scaleValue, scaleValue, 1f);
     }
 
+    private void ClearAllObjects<T>(Dictionary<GameObject, T> dictionary)
+    {
+        foreach (var key in dictionary.Keys)
+        {
+            Destroy(key); // Уничтожаем объект на сцене
+        }
+        dictionary.Clear(); // Очищаем словарь
+    }
+
     public void AddPlacedCarObject(GameObject car, PlacedObjectData placeObjectData)
     {
+        TriggerCarSpawnZone spawnZone = placeObjectData.srcBySpawnPoint;
+
         // Добавляем в словарь
         if (!carDictionary.ContainsKey(car))
         {
             carDictionary[car] = placeObjectData;
+            spawnZone.currentCar = car; // Сохраняем ссылку на текущий автомобиль
 
             // Добавляем DirectionSelector к автомобилю
             DirectionSelector directionSelector = car.AddComponent<DirectionSelector>();
             directionSelector.dropdownPrefab = dropdownPrefab;
 
             // Получаем разрешенные направления из точки спавна
-            TriggerCarSpawnZone spawnZone = placeObjectData.srcBySpawnPoint;
             string[] allowedDirections = new string[spawnZone.allowedDirections.Length];
 
             // Преобразуем enum в строку
@@ -101,10 +118,13 @@ public class SceneBuilder : MonoBehaviour
 
     public void AddPlacedSignObject(GameObject sign, PlacedSignData signData)
     {
+        TriggerSignSpawnZone spawnZone = signData.srcBySpawnPoint;
+
         // Добавляем в словарь
         if (!signDictionary.ContainsKey(sign))
         {
             signDictionary[sign] = signData;
+            spawnZone.currentSign = sign; // Сохраняем ссылку на текущий знак
             Debug.Log($"Знак {signData.modelName} добавлен в словарь.");
         }
         else
@@ -129,10 +149,13 @@ public class SceneBuilder : MonoBehaviour
 
     public void AddPlacedTrafficLightObject(GameObject trafficLight, PlacedTrafficLightData trafficLightData)
     {
+        TriggerTrafficLightZone spawnZone = trafficLightData.srcBySpawnPoint;
+
         // Добавляем в словарь
         if (!trafficLightDictionary.ContainsKey(trafficLight))
         {
             trafficLightDictionary[trafficLight] = trafficLightData;
+            spawnZone.currentTrafficLight = trafficLight; // Сохраняем ссылку на текущий светофор
             Debug.Log($"Светофор {trafficLightData.modelName} добавлен в словарь.");
         }
         else

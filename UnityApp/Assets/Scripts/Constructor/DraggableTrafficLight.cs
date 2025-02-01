@@ -41,6 +41,17 @@ public class DraggableTrafficLight : MonoBehaviour, IDragHandler, IEndDragHandle
         {
             if (hit.collider.CompareTag(TagObjectNamesTypes.TRAFFIC_LIGHT_SPAWN))
             {
+                TriggerTrafficLightZone spawnZone = hit.collider.GetComponent<TriggerTrafficLightZone>();
+
+                // Проверяем, есть ли уже светофор на точке спавна
+                if (spawnZone.currentTrafficLight != null)
+                {
+                    Debug.LogWarning($"На точке спавна уже есть светофор: {spawnZone.currentTrafficLight.name}");
+                    ChangeColorToOriginal();
+                    rectTransform.anchoredPosition = originalPosition;
+                    return;
+                }
+
                 ChangeColorToOriginal();
                 GameObject trafficLight = Instantiate(trafficLightPrefab, hit.collider.transform.position, Quaternion.Euler(0, 0, hit.collider.transform.eulerAngles.z));
                 trafficLight.transform.SetParent(canvas.transform, false);

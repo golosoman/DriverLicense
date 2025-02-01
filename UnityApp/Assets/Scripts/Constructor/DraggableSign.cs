@@ -41,6 +41,17 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
             // Проверяем, имеет ли коллайдер тег signSpawn
             if (hit.collider.CompareTag(TagObjectNamesTypes.SIGN_SPAWN))
             {
+                TriggerSignSpawnZone spawnZone = hit.collider.GetComponent<TriggerSignSpawnZone>();
+
+                // Проверяем, есть ли уже знак на точке спавна
+                if (spawnZone.currentSign != null)
+                {
+                    Debug.LogWarning($"На точке спавна уже есть знак: {spawnZone.currentSign.name}");
+                    ChangeColorToOriginal();
+                    rectTransform.anchoredPosition = originalPosition;
+                    return;
+                }
+
                 ChangeColorToOriginal(); // Меняем цвет на оригинальный
 
                 // Инстанцируем префаб дорожного знака с правильным вращением
@@ -54,7 +65,6 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
                 sign.AddComponent<ClickableObject>();
 
                 // Получаем информацию о точке спавна
-                TriggerSignSpawnZone spawnZone = hit.collider.GetComponent<TriggerSignSpawnZone>();
                 string sidePosition = spawnZone.sidePosition.ToString();
 
                 PlacedSignData signData = new PlacedSignData
