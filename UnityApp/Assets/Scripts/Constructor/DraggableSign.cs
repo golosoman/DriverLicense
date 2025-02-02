@@ -11,6 +11,9 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
     private Image image; // Ссылка на компонент Image
     private Color originalColor; // Оригинальный цвет объекта
     private Color highlightColor = Color.yellow; // Цвет при перетаскивании
+    public BoxCollider2D boxCollider; // Ссылка на BoxCollider2D
+    public Rigidbody2D rb; // Ссылка на Rigidbody2D
+    private bool turnColor = false;
 
     void Start()
     {
@@ -20,20 +23,35 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
         // Получаем компонент Image и сохраняем оригинальный цвет
         image = GetComponent<Image>();
         originalColor = image.color;
+
+        // Отключаем компоненты по умолчанию
+        if (boxCollider != null) boxCollider.enabled = false;
+        if (rb != null) rb.simulated = false; // Отключаем физику
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!turnColor)
+        {
+            ChangeColorToHighlight();
+            turnColor = !turnColor;
+            // Включаем компоненты при перетаскивании
+            if (boxCollider != null) boxCollider.enabled = true;
+            if (rb != null) rb.simulated = true; // Включаем физику
+        }
+
         // Перемещение объекта, учитывая масштаб Canvas
         float scaleFactor = canvas.scaleFactor;
         rectTransform.anchoredPosition += eventData.delta / scaleFactor;
-
-        // Меняем цвет на желтый при перетаскивании
-        ChangeColorToHighlight();
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // Отключаем компоненты после завершения перетаскивания
+        if (boxCollider != null) boxCollider.enabled = false;
+        if (rb != null) rb.simulated = false; // Отключаем физику
+        turnColor = !turnColor;
+
         // Проверяем, попадает ли объект на точку спавна
         RaycastHit2D hit = Physics2D.Raycast(rectTransform.position, Vector2.zero);
         if (hit.collider != null)
@@ -99,12 +117,12 @@ public class DraggableSign : MonoBehaviour, IDragHandler, IEndDragHandler
         }
     }
 
-    private void ChangeColorToOriginal()
+    public void ChangeColorToOriginal()
     {
         image.color = originalColor; // Меняем цвет на оригинальный
     }
 
-    private void ChangeColorToHighlight()
+    public void ChangeColorToHighlight()
     {
         image.color = highlightColor; // Меняем цвет на желтый
     }
