@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class TimerController : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class TimerController : MonoBehaviour
     private TMP_Text timerText; // Ссылка на компонент TextMeshPro
     [SerializeField]
     private float timeLeft = 120f; // 2 минуты в секундах
+
+    public static event Action<string> FinishUnsuccessful; // Событие для завершения с ошибкой
 
     void Start()
     {
@@ -37,9 +40,8 @@ public class TimerController : MonoBehaviour
 
     void TimerExpired()
     {
-        // Здесь можно добавить любое событие по истечении таймера
         Debug.Log("Время вышло!");
-        // Например, можно отобразить сообщение на экране
         timerText.text = "Время вышло!";
+        FinishUnsuccessful?.Invoke("Время вышло!"); // Вызов события
     }
 }

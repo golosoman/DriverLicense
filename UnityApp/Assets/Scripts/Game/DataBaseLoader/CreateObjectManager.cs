@@ -3,36 +3,55 @@ using UnityEngine;
 
 public class CreateObjectManager : ScriptableObject
 {
-    private Dictionary<string, GameObject> roadUserSpawnPoints = new();
-    private Dictionary<string, GameObject> signSpawnPoints = new();
-    private Dictionary<string, GameObject> trafficLightSpawnPoints = new();
+    private Dictionary<string, GameObject> roadUserSpawnPoints;
+    private Dictionary<string, GameObject> signSpawnPoints;
+    private Dictionary<string, GameObject> trafficLightSpawnPoints;
     private IntersectionRoutesManager intersectionManager;
     RoadManager roadUserManager;
     // private RuleChecker ruleChecker;
 
     // private TicketData ticketData;
 
-    public void ProcessTicketData(QuestionData ticketData)
+    public void GetNewSpawnPoint()
+    {
+        roadUserSpawnPoints = new();
+        signSpawnPoints = new();
+        trafficLightSpawnPoints = new();
+    }
+
+    public void ProcessTicketData(Question ticketData)
     {
 
         // this.ticketData = ticketData;
-        CreateIntersection(ticketData.IntersectionType);
-        InitRuleManager(ticketData.IntersectionType, ticketData.TrafficLights, ticketData.Signs, roadUserSpawnPoints);
-        CreateEntities(ticketData.Signs, signSpawnPoints, FilePath.PATH_PREFAB_SIGNS, CreateSign);
-        CreateEntities(ticketData.TrafficLights, trafficLightSpawnPoints, FilePath.PATH_PREFAB_TRAFFIC_LIGHTS, CreateTrafficLight);
-        CreateEntities(ticketData.TrafficParticipants, roadUserSpawnPoints, FilePath.PATH_PREFAB_ROAD_USERS, CreateRoadUser);
+        GetNewSpawnPoint();
+        CreateIntersection(ticketData.intersectionType);
+        InitRuleManager(ticketData.intersectionType, ticketData.trafficLights, ticketData.signs, roadUserSpawnPoints);
+        CreateEntities(ticketData.signs, signSpawnPoints, FilePath.PATH_PREFAB_SIGNS, CreateSign);
+        CreateEntities(ticketData.trafficLights, trafficLightSpawnPoints, FilePath.PATH_PREFAB_TRAFFIC_LIGHTS, CreateTrafficLight);
+        CreateEntities(ticketData.trafficParticipants, roadUserSpawnPoints, FilePath.PATH_PREFAB_ROAD_USERS, CreateRoadUser);
     }
 
-    void InitRuleManager(string intersection, TrafficLightData[] trafficLightDatas, SignData[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints)
+    void InitRuleManager(string intersection, TrafficLight[] trafficLightDatas, Sign[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints)
     {
         roadUserManager = FindObjectOfType<RoadManager>();
         roadUserManager.Initialize(intersection, trafficLightDatas, signDatas, roadUserSpawnPoints);
     }
 
+    private GameObject intersectionContainer;
+
     void CreateIntersection(string intersection)
     {
+        // Удаляем старые объекты, если контейнер уже существует
+        if (intersectionContainer != null)
+        {
+            Destroy(intersectionContainer);
+        }
+
+        // Создаем новый контейнер для объектов перекрестка
+        intersectionContainer = new GameObject("IntersectionContainer");
+
         GameObject intersectionPrefab = PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_INTERSECTIONS}{intersection}");
-        GameObject intersectionInstance = Instantiate(intersectionPrefab, Vector3.zero, Quaternion.identity);
+        GameObject intersectionInstance = Instantiate(intersectionPrefab, Vector3.zero, Quaternion.identity, intersectionContainer.transform);
 
         intersectionManager = intersectionInstance.GetComponent<IntersectionRoutesManager>();
 
@@ -43,6 +62,21 @@ public class CreateObjectManager : ScriptableObject
 
         InitializeDictionaries();
     }
+
+    // void CreateIntersection(string intersection)
+    // {
+    //     GameObject intersectionPrefab = PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_INTERSECTIONS}{intersection}");
+    //     GameObject intersectionInstance = Instantiate(intersectionPrefab, Vector3.zero, Quaternion.identity);
+
+    //     intersectionManager = intersectionInstance.GetComponent<IntersectionRoutesManager>();
+
+    //     if (intersectionManager == null)
+    //     {
+    //         Debug.LogError("IntersectionManager component is missing on the intersection prefab.");
+    //     }
+
+    //     InitializeDictionaries();
+    // }
 
     void CreateEntities<T>(T[] entities, Dictionary<string, GameObject> spawnPoints, string prefabPath, System.Action<T, GameObject> createAction)
     {
@@ -69,15 +103,15 @@ public class CreateObjectManager : ScriptableObject
         }
     }
 
-    void CreateRoadUser(TrafficParticipantData roadUserData, GameObject spawnPoint)
+    void CreateRoadUser(TrafficParticipant roadUserData, GameObject spawnPoint)
     {
         // Debug.Log($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.ModelName}");
-        GameObject roadUserInstance = Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
-        roadUserInstance.name = $"{roadUserData.ModelName}_{roadUserData.SidePosition}_{roadUserData.NumberPosition}";
-        roadUserInstance.tag = GetTagFromTypeParticipant(roadUserData.ParticipantType);
+        GameObject roadUserInstance = Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.modelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
+        roadUserInstance.name = $"{roadUserData.modelName}_{roadUserData.sidePosition}_{roadUserData.numberPosition}";
+        roadUserInstance.tag = GetTagFromTypeParticipant(roadUserData.participantType);
 
-        IntersectionRoutesManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.SidePosition);
-        Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.Direction);
+        IntersectionRoutesManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.sidePosition);
+        Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.direction);
 
         RoadUserMovement roadUserMovement = roadUserInstance.GetComponent<RoadUserMovement>();
         roadUserMovement.Route = route;
@@ -106,23 +140,23 @@ public class CreateObjectManager : ScriptableObject
     //     }
     // }
 
-    void CreateSign(SignData signData, GameObject spawnPoint)
+    void CreateSign(Sign signData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_SIGNS}{signData.ModelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_SIGNS}{signData.modelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
     }
 
-    void CreateTrafficLight(TrafficLightData trafficLightData, GameObject spawnPoint)
+    void CreateTrafficLight(TrafficLight trafficLightData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_TRAFFIC_LIGHTS}{trafficLightData.ModelName}{trafficLightData.State}"), spawnPoint.transform.position, spawnPoint.transform.rotation);
+        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_TRAFFIC_LIGHTS}{trafficLightData.modelName}{trafficLightData.state}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
     }
 
     string GetModelName<T>(T entity)
     {
         return entity switch
         {
-            TrafficParticipantData roadUserData => roadUserData.ModelName,
-            SignData signData => signData.ModelName,
-            TrafficLightData trafficLightData => trafficLightData.ModelName,
+            TrafficParticipant roadUserData => roadUserData.modelName,
+            Sign signData => signData.modelName,
+            TrafficLight trafficLightData => trafficLightData.modelName,
             _ => throw new System.ArgumentException("Unknown entity type")
         };
     }
@@ -131,9 +165,9 @@ public class CreateObjectManager : ScriptableObject
     {
         return entity switch
         {
-            TrafficParticipantData roadUserData => roadUserData.SidePosition,
-            SignData signData => signData.SidePosition,
-            TrafficLightData trafficLightData => trafficLightData.SidePosition,
+            TrafficParticipant roadUserData => roadUserData.sidePosition,
+            Sign signData => signData.sidePosition,
+            TrafficLight trafficLightData => trafficLightData.sidePosition,
             _ => throw new System.ArgumentException("Unknown entity type")
         };
     }

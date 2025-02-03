@@ -20,7 +20,7 @@ public class CarTurnIndicators : MonoBehaviour
     private void Start()
     {
         carMovement = GetComponent<CarMovement>();
-        currentSignal = carMovement.RUD.Direction;
+        currentSignal = carMovement.RUD.direction;
     }
 
     private void Update()

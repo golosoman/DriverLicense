@@ -5,19 +5,18 @@ using Unity.Collections.LowLevel.Unsafe;
 
 public class RoadManager : MonoBehaviour
 {
-    private int countCars;
     private string typeIntersection;
-    private TrafficLightData[] trafficLightDatas;
-    private SignData[] signDatas;
+    private TrafficLight[] trafficLightDatas;
+    private Sign[] signDatas;
     private Dictionary<string, GameObject> roadUserSpawnPoints;
     // private Dictionary<string, Dictionary<RoadUserData, GameObject>> roadUsers;
     public string TypeIntersection { get => typeIntersection; }
     public Dictionary<string, GameObject> RoadUserSpawnPoints { get => roadUserSpawnPoints; }
-    public TrafficLightData[] TrafficLightDatas { get => trafficLightDatas; }
-    public SignData[] SignDatas { get => signDatas; }
+    public TrafficLight[] TrafficLightDatas { get => trafficLightDatas; }
+    public Sign[] SignDatas { get => signDatas; }
     public bool ViolationRules { get; set; }
 
-    public void Initialize(string typeIntersection, TrafficLightData[] trafficLightDatas, SignData[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints)
+    public void Initialize(string typeIntersection, TrafficLight[] trafficLightDatas, Sign[] signDatas, Dictionary<string, GameObject> roadUserSpawnPoints)
     {
         this.typeIntersection = typeIntersection;
         this.trafficLightDatas = trafficLightDatas;

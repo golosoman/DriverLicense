@@ -26,7 +26,7 @@ public class DatabaseLoader : MonoBehaviour
             Debug.Log(jsonData);
             try
             {
-                QuestionData ticketData = JsonConvert.DeserializeObject<QuestionData>(jsonData);
+                Question ticketData = JsonConvert.DeserializeObject<Question>(jsonData);
                 Debug.Log(ticketData);
                 // Debug.Log(ticketData.Id + " " + ticketData.IntersectionType + " " + ticketData.Question + " " + ticketData.Explanation + " " + ticketData.SignsArr.ToString() + " " + ticketData.TrafficLightsArr.ToString() + " " + ticketData.TrafficParticipantsArr.ToString() + " ");
                 createObjectManager.ProcessTicketData(ticketData);

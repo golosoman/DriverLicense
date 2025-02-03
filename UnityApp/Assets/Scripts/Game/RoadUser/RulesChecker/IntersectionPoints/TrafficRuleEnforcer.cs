@@ -6,6 +6,7 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
     public RoadManager RoadUserManager { get; set; }
     public bool hasObstacle = false;
 
+
     private void Start()
     {
         RoadUserManager = FindObjectOfType<RoadManager>();
