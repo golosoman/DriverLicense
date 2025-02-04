@@ -14,9 +14,9 @@ public class CreateObjectManager : ScriptableObject
 
     public void GetNewSpawnPoint()
     {
-        roadUserSpawnPoints = new();
-        signSpawnPoints = new();
-        trafficLightSpawnPoints = new();
+        roadUserSpawnPoints?.Clear();
+        signSpawnPoints?.Clear();
+        trafficLightSpawnPoints?.Clear();
     }
 
     public void ProcessTicketData(Question ticketData)
@@ -44,7 +44,8 @@ public class CreateObjectManager : ScriptableObject
         // Удаляем старые объекты, если контейнер уже существует
         if (intersectionContainer != null)
         {
-            Destroy(intersectionContainer);
+            // Destroy(intersectionContainer);
+            intersectionContainer.SetActive(false);
         }
 
         // Создаем новый контейнер для объектов перекрестка
