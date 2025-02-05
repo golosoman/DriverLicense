@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using TMPro;
 
 public class Registration : MonoBehaviour
 {
+    public static event Action<string> OnErrorOccurred;
+
     [SerializeField]
     private TMP_InputField LoginField;
     [SerializeField]
@@ -12,12 +13,7 @@ public class Registration : MonoBehaviour
     [SerializeField]
     private TMP_InputField RepeatPasswordField;
     [SerializeField]
-    public SceneLoader sceneLoader; // Ссылка на SceneLoader
-
-    [SerializeField]
-    private GameObject errorPanel; // Панель для уведомления
-    [SerializeField]
-    private TMP_Text errorMessageText; // Текст уведомления
+    public SceneLoader sceneLoader;
 
     private string errorMessage;
 
@@ -27,47 +23,43 @@ public class Registration : MonoBehaviour
         string password = PasswordField.text;
         string repeatPassword = RepeatPasswordField.text;
 
-        // Проверяем, что поля не пустые
         if (InputValidator.IsNullOrEmpty(login))
         {
             errorMessage = "Логин введен неверно";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если логин неверный
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
+        }
+        if (InputValidator.ContainsCyrillic(login))
+        {
+            errorMessage = "Логин не должен содержать кириллицу";
+            Debug.LogError(errorMessage);
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
         if (InputValidator.IsNullOrEmpty(password))
         {
             errorMessage = "Пароль введен неверно";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если пароль неверный
-        }
-
-        // Проверяем на наличие кириллицы
-        if (InputValidator.ContainsCyrillic(login))
-        {
-            errorMessage = "Логин не должен содержать кириллицу";
-            Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если логин содержит кириллицу
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
         if (InputValidator.ContainsCyrillic(password))
         {
             errorMessage = "Пароль не должен содержать кириллицу";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если пароль содержит кириллицу
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
         if (!InputValidator.ArePasswordsMatching(password, repeatPassword))
         {
             errorMessage = "Пароли не совпадают";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если пароли не совпадают
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
 
         SignupRequest requestData = new SignupRequest(login, password, repeatPassword);
-        // Отправляем запрос на регистрацию
         string url = AuthURL.SIGN_UP;
         ApiHandler.SendPostRequest(url, requestData, this, HandleRegistrationResponse);
     }
@@ -79,7 +71,6 @@ public class Registration : MonoBehaviour
 
         if (response.StatusCode == 200)
         {
-            // Успешная регистрация
             Debug.Log("Регистрация прошла успешно!");
             AuthResponse authResponse = JsonUtility.FromJson<AuthResponse>(response.Body);
             GlobalState.userToken = authResponse.token;
@@ -87,25 +78,9 @@ public class Registration : MonoBehaviour
         }
         else
         {
-            // Обработка ошибки регистрации
             string errorMsg = "Ошибка регистрации: " + response.Body;
             Debug.LogError(errorMsg);
-            ShowError("Данные неверные. Ошибка 403."); // Сообщение для пользователя
+            OnErrorOccurred?.Invoke("Данные неверные. Ошибка 403.");
         }
-    }
-
-    private void ShowError(string message)
-    {
-        errorMessageText.text = message; // Устанавливаем текст уведомления
-        errorPanel.SetActive(true); // Показываем панель
-
-        // Запускаем корутину для закрытия уведомления через 3 секунды
-        StartCoroutine(HideErrorAfterDelay(3f));
-    }
-
-    private IEnumerator HideErrorAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        errorPanel.SetActive(false); // Скрываем панель
     }
 }

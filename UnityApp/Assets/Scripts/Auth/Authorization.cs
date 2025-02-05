@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Authorization : MonoBehaviour
 {
@@ -12,12 +13,8 @@ public class Authorization : MonoBehaviour
     public SceneLoader sceneLoaderForAdmin; // Ссылка на SceneLoader
     [SerializeField]
     public SceneLoader sceneLoaderForStudent; // Ссылка на SceneLoader
-    [SerializeField]
-    private GameObject errorPanel; // Панель для уведомления
-    [SerializeField]
-    private TMP_Text errorMessageText; // Текст уведомления
-
-    private string errorMessage;
+    private string errorMessage; // Текст уведомления
+    public static event Action<string> OnErrorOccurred;
 
     public void CheckAuthorization()
     {
@@ -29,15 +26,8 @@ public class Authorization : MonoBehaviour
         {
             errorMessage = "Логин введен неверно";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если логин неверный
-        }
-        if (InputValidator.IsNullOrEmpty(password))
-        {
-            errorMessage = "Пароль введен неверно";
-            Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если пароль неверный
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
 
         // Проверяем на наличие кириллицы
@@ -45,19 +35,27 @@ public class Authorization : MonoBehaviour
         {
             errorMessage = "Логин не должен содержать кириллицу";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если логин содержит кириллицу
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
+
+        if (InputValidator.IsNullOrEmpty(password))
+        {
+            errorMessage = "Пароль введен неверно";
+            Debug.LogError(errorMessage);
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
+        }
+
         if (InputValidator.ContainsCyrillic(password))
         {
             errorMessage = "Пароль не должен содержать кириллицу";
             Debug.LogError(errorMessage);
-            ShowError(errorMessage);
-            return; // Выходим из метода, если пароль содержит кириллицу
+            OnErrorOccurred?.Invoke(errorMessage);
+            return;
         }
 
         SignInRequest requestData = new SignInRequest(login, password);
-        // Отправляем запрос на авторизацию
         string url = AuthURL.SIGN_IN;
         ApiHandler.SendPostRequest(url, requestData, this, HandleAuthorizationResponse);
     }
@@ -84,25 +82,9 @@ public class Authorization : MonoBehaviour
         }
         else
         {
-            // Обработка ошибки авторизации
             string errorMsg = "Ошибка авторизации: " + response.Body;
             Debug.LogError(errorMsg);
-            ShowError("Данные неверные. Ошибка 403."); // Сообщение для пользователя
+            OnErrorOccurred?.Invoke("Данные неверные. Ошибка 403.");
         }
-    }
-
-    private void ShowError(string message)
-    {
-        errorMessageText.text = message; // Устанавливаем текст уведомления
-        errorPanel.SetActive(true); // Показываем панель
-
-        // Запускаем корутину для закрытия уведомления через 3 секунды
-        StartCoroutine(HideErrorAfterDelay(3f));
-    }
-
-    private IEnumerator HideErrorAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        errorPanel.SetActive(false); // Скрываем панель
     }
 }

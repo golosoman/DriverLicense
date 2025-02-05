@@ -73,6 +73,9 @@ public class DropdownManager : MonoBehaviour
         }
 
         dropdown.AddOptions(options);
+
+        // Скрываем dropdown, если достигнуто максимальное количество кнопок
+        dropdown.gameObject.SetActive(selectedOptions.Count < maxButtons);
     }
 
     private void OnDropdownValueChanged(int index)
@@ -140,15 +143,7 @@ public class DropdownManager : MonoBehaviour
     public void OnCreateTicketButtonClicked()
     {
         string ticketName = ticketNameInput.text; // Получаем имя билета из input поля
-
-        if (!string.IsNullOrEmpty(ticketName) && selectedIds.Count > 0) // Проверяем, что имя не пустое и есть выбранные вопросы
-        {
-            ticketManager.CreateTicket(ticketName, selectedIds); // Создаем билет
-        }
-        else
-        {
-            Debug.LogWarning("Введите имя билета и выберите хотя бы один вопрос.");
-        }
+        ticketManager.CreateTicket(ticketName, selectedIds); // Создаем билет
     }
 
     public List<int> GetSelectedIds()

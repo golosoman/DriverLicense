@@ -29,9 +29,7 @@ public class SceneBuilder : MonoBehaviour
     public void OnIntersectionChanged(int index)
     {
         // Удаляем все объекты перед сменой перекрестка
-        ClearAllObjects(carDictionary);
-        ClearAllObjects(signDictionary);
-        ClearAllObjects(trafficLightDictionary);
+        ClearAllDict();
 
         // Удаляем текущий перекресток со сцены
         if (currentIntersection != null)
@@ -45,6 +43,13 @@ public class SceneBuilder : MonoBehaviour
         // Устанавливаем масштаб перекрестка
         float scaleValue = 28f;
         currentIntersection.transform.localScale = new Vector3(scaleValue, scaleValue, 1f);
+    }
+
+    public void ClearAllDict()
+    {
+        ClearAllObjects(carDictionary);
+        ClearAllObjects(signDictionary);
+        ClearAllObjects(trafficLightDictionary);
     }
 
     private void ClearAllObjects<T>(Dictionary<GameObject, T> dictionary)
