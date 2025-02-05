@@ -110,6 +110,10 @@ public class CreateObjectManager : ScriptableObject
         GameObject roadUserInstance = Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_ROAD_USERS}{roadUserData.modelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
         roadUserInstance.name = $"{roadUserData.modelName}_{roadUserData.sidePosition}_{roadUserData.numberPosition}";
         roadUserInstance.tag = GetTagFromTypeParticipant(roadUserData.participantType);
+        // Устанавливаем позицию z, чтобы roadUser  не перекрывался другими объектами
+        Vector3 newPosition = roadUserInstance.transform.position;
+        newPosition.z = -1f; // Устанавливаем z на 1, чтобы объект был выше других
+        roadUserInstance.transform.position = newPosition;
 
         IntersectionRoutesManager.Direction roadUserDirection = GetDirectionFromData(roadUserData.sidePosition);
         Transform[] route = intersectionManager.GetRoute(roadUserDirection, roadUserData.direction);

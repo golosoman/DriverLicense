@@ -40,9 +40,9 @@ public class CarMovement : RoadUserMovement
         previousRotationAngle = gameObject.transform.rotation.eulerAngles.z;
         while (IsMoving && CurrentPoint < Route.Length)
         {
-            Vector3 targetPosition = Route[CurrentPoint].position;
+            Vector2 targetPosition = Route[CurrentPoint].position;
 
-            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+            while (Vector2.Distance(transform.position, targetPosition) > 0.1f)
             {
                 MoveTowardsTarget(targetPosition);
                 yield return null;
@@ -73,17 +73,17 @@ public class CarMovement : RoadUserMovement
         return false; // Возвращаем false, если поворота не было
     }
 
-    public override void MoveTowardsTarget(Vector3 targetPosition)
+    public override void MoveTowardsTarget(Vector2 targetPosition)
     {
-        Vector3 direction = targetPosition - transform.position;
+        Vector2 direction = targetPosition - (Vector2)transform.position;
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
-        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        float distanceToTarget = Vector3.Distance((Vector2)transform.position, targetPosition);
         AdjustSpeed(distanceToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
         // Debug.Log(transform.rotation);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, CurrentSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards((Vector2)transform.position, targetPosition, CurrentSpeed * Time.deltaTime);
     }
 }

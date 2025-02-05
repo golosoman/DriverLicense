@@ -82,17 +82,17 @@ public class RoadUserMovement : MonoBehaviour
         Debug.Log("RoadUser has finished the route.");
     }
 
-    public virtual void MoveTowardsTarget(Vector3 targetPosition)
+    public virtual void MoveTowardsTarget(Vector2 targetPosition)
     {
-        Vector3 direction = targetPosition - transform.position;
+        Vector2 direction = targetPosition - (Vector2)transform.position;
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
 
-        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        float distanceToTarget = Vector3.Distance((Vector2)transform.position, targetPosition);
         AdjustSpeed(distanceToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, currentSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards((Vector2)transform.position, targetPosition, currentSpeed * Time.deltaTime);
     }
 
     public virtual void AdjustSpeed(float distanceToTarget)

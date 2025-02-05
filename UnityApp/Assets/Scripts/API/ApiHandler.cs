@@ -38,12 +38,12 @@ public static class ApiHandler
         }
     }
 
-    public static void SendPostRequest(string url, BaseRequest requestData, MonoBehaviour caller, System.Action<ApiResponse> callback)
+    public static void SendPostRequest(string url, BaseRequest requestData, MonoBehaviour caller, System.Action<ApiResponse> callback, string bearerToken = null)
     {
-        caller.StartCoroutine(PostRequest(url, requestData, callback));
+        caller.StartCoroutine(PostRequest(url, requestData, callback, bearerToken));
     }
 
-    private static IEnumerator PostRequest(string url, BaseRequest requestData, System.Action<ApiResponse> callback)
+    private static IEnumerator PostRequest(string url, BaseRequest requestData, System.Action<ApiResponse> callback, string bearerToken)
     {
         string jsonBody = JsonUtility.ToJson(requestData);
         Debug.Log(jsonBody);
@@ -53,7 +53,11 @@ public static class ApiHandler
             www.uploadHandler = new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = new DownloadHandlerBuffer();
             www.SetRequestHeader("Content-Type", "application/json");
-
+            if (!string.IsNullOrEmpty(bearerToken))
+            {
+                www.SetRequestHeader("Authorization", "Bearer " + bearerToken);
+            }
+            Debug.Log(bearerToken);
             yield return www.SendWebRequest();
 
             int statusCode = (int)www.responseCode;
