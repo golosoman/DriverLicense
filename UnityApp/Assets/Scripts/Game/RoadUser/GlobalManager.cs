@@ -19,23 +19,23 @@ public static class GlobalManager
         Debug.Log(carCount);
         if (carCount <= 0)
         {
-            ShowSuccessModal();
+            // ShowSuccessModal();
             FinishSuccess?.Invoke("Поздравляем с успешной сдачей вопроса!"); // Вызов события
         }
     }
 
-    private static ModalManager modalManager; // Ссылка на ModalManager
+    // private static ModalManager modalManager; // Ссылка на ModalManager
 
-    public static void Initialize(ModalManager manager)
-    {
-        modalManager = manager; // Инициализация ссылки на ModalManager
-    }
+    // public static void Initialize(ModalManager manager)
+    // {
+    //     modalManager = manager; // Инициализация ссылки на ModalManager
+    // }
 
-    private static void ShowSuccessModal()
-    {
-        if (modalManager != null)
-        {
-            modalManager.ShowModal("Поздравляем с успешной сдачей вопроса."); // Вызов метода для отображения модального окна
-        }
-    }
+    // private static void ShowSuccessModal()
+    // {
+    //     if (modalManager != null)
+    //     {
+    //         modalManager.ShowModal("Поздравляем с успешной сдачей вопроса."); // Вызов метода для отображения модального окна
+    //     }
+    // }
 }

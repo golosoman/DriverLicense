@@ -1,26 +1,90 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // Не забудьте добавить этот using для работы с UI
 using TMPro;
 
 public class ModalManager : MonoBehaviour
 {
-    public GameObject modalPanel; // Ссылка на панель модального окна
-    public TMP_Text messageText; // Ссылка на текстовое поле (или TextMeshProUGUI, если используете TextMeshPro)
+    [SerializeField]
+    private GameObject finishModalPanel;
+    [SerializeField]
+    private TMP_Text finishModalText;
+    [SerializeField]
+    private GameObject explanationModalPanel;
+    [SerializeField]
+    private TMP_Text explanationModalText;
+    [SerializeField]
+    private GameObject exitModalPanel;
+    [SerializeField]
+    private TMP_Text exitModalText;
 
-    private void Start()
+    private void Awake()
     {
-        HideModal(); // Скрываем модальное окно при старте
-        GlobalManager.Initialize(this); // Передаем ссылку на ModalManager
+        if (finishModalPanel != null)
+            finishModalPanel.SetActive(false);
+
+        if (explanationModalPanel != null)
+            explanationModalPanel.SetActive(false);
+
+        if (exitModalPanel != null)
+            exitModalPanel.SetActive(false);
     }
 
-    public void ShowModal(string message)
+    private void OnEnable()
     {
-        messageText.text = message; // Устанавливаем текст сообщения
-        modalPanel.SetActive(true); // Показываем модальное окно
+        UploadingQuestionsFromTicket.OnExplanationRequested += ShowExplanationModal;
+        UploadingQuestionsFromTicket.OnTicketCompleted += ShowFinishModal;
+        EventButton.OnShowExitModal += ShowExitModal;
     }
 
-    public void HideModal()
+    private void OnDisable()
     {
-        modalPanel.SetActive(false); // Скрываем модальное окно
+        UploadingQuestionsFromTicket.OnExplanationRequested -= ShowExplanationModal;
+        UploadingQuestionsFromTicket.OnTicketCompleted -= ShowFinishModal;
+        EventButton.OnShowExitModal -= ShowExitModal;
+    }
+
+    public void ShowFinishModal(StatisticRequest statistic)
+    {
+        string message;
+        if (statistic.result) message = "Поздравляем \nс успешной сдачей \nбилета!";
+        else message = "Не расстраивайся, в\n следующий раз все \nобязательно получится!";
+        ShowModal(finishModalPanel, finishModalText, message);
+    }
+
+    public void ShowExplanationModal(string message)
+    {
+        ShowModal(explanationModalPanel, explanationModalText, message);
+    }
+
+
+    public void ShowExitModal(string message)
+    {
+        ShowModal(exitModalPanel, exitModalText, message);
+    }
+
+    private void ShowModal(GameObject panel, TMP_Text textComponent, string message)
+    {
+        textComponent.text = message;
+        panel.SetActive(true);
+    }
+
+    public void HideFinishModal()
+    {
+        HideModal(finishModalPanel);
+    }
+
+    public void HideExplanationModal()
+    {
+        HideModal(explanationModalPanel);
+    }
+
+    public void HideExitModal()
+    {
+        HideModal(exitModalPanel);
+    }
+
+    private void HideModal(GameObject panel)
+    {
+        panel.SetActive(false);
     }
 }

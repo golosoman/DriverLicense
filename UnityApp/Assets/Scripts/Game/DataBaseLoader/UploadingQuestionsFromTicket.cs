@@ -8,7 +8,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
     private int currentQuestionIndex = 0;
     private List<Question> questions; // Список вопросов
     private List<Answer> answers = new List<Answer>(); // Список ответов
-    private int ticketId;
+    private Ticket ticketData;
     private int incorrectAnswers = 0;
 
     private string apiUrl = "http://localhost:8080/api/tickets/random"; // URL для получения случайного билета
@@ -16,14 +16,17 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
     public delegate void TicketCompletionHandler(StatisticRequest statisticRequest);
     public static event TicketCompletionHandler OnTicketCompleted;
 
+    public delegate void ExplanationHandler(string explanation);
+    public static event ExplanationHandler OnExplanationRequested;
+
     void Start()
     {
         createObjectManager = ScriptableObject.CreateInstance<CreateObjectManager>();
         LoadTickets();
 
-        // Подписка на события успешного и неуспешного завершения
         GlobalManager.FinishSuccess += OnFinishSuccess;
         TimerController.FinishUnsuccessful += OnFinishUnsuccessful;
+        EventButton.OnShowExplanation += HandleShowExplanation;
     }
 
     private void LoadTickets()
@@ -42,7 +45,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
 
         Ticket ticket = JsonUtility.FromJson<Ticket>(response.Body);
         questions = ticket.questions; // Извлекаем вопросы из билета
-        ticketId = ticket.id; // Получаем ID билета
+        ticketData = ticket; // Получаем ID билета
 
         DisplayNextQuestion(); // Отображаем первый вопрос
     }
@@ -92,7 +95,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         bool overallResult = incorrectAnswers <= 2; // Определяем общий результат
         StatisticRequest statisticRequest = new StatisticRequest
         {
-            ticketId = ticketId,
+            ticketId = ticketData.id,
             result = overallResult,
             answers = answers
         };
@@ -100,10 +103,18 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         OnTicketCompleted?.Invoke(statisticRequest); // Генерируем событие завершения билета
     }
 
+    private void HandleShowExplanation(string message)
+    {
+        if (ticketData != null && !string.IsNullOrEmpty(questions[currentQuestionIndex].explanation))
+        {
+            OnExplanationRequested?.Invoke(questions[currentQuestionIndex].explanation);
+        }
+    }
+
     private void OnDestroy()
     {
-        // Отписка от событий при уничтожении объекта
         GlobalManager.FinishSuccess -= OnFinishSuccess;
         TimerController.FinishUnsuccessful -= OnFinishUnsuccessful;
+        EventButton.OnShowExplanation -= HandleShowExplanation;
     }
 }
