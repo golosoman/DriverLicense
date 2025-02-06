@@ -6,18 +6,64 @@ using Newtonsoft.Json;
 public class DatabaseLoader : MonoBehaviour
 {
     private CreateObjectManager createObjectManager;
+    public delegate void CollisionHandler(string message);
+    public static event CollisionHandler OnCollisionHandler;
+
+    public delegate void QuestionCompletionHandler(string message);
+    public static event QuestionCompletionHandler OnQuestionCompleted;
+
+    public delegate void TimerStopHandler(string message);
+    public static event TimerStopHandler OnTimerStopHandler;
+
+    public delegate void ExplanationHandler(string explanation);
+    public static event ExplanationHandler OnExplanationRequested;
+
+    private Question question;
     // private TrafficRulesManager trafficRulesManager;
 
     void Start()
     {
         createObjectManager = ScriptableObject.CreateInstance<CreateObjectManager>();
+        RoadUsersCollisionHandler.onCollisionWithRoadUser += OnCollision;
+        GlobalManager.FinishSuccess += OnFinishSuccess;
+        TimerController.FinishUnsuccessful += OnFinishUnsuccessful;
+        EventButton.OnShowExplanation += HandleShowExplanation;
         StartCoroutine(LoadTicketData());
+    }
+
+    private void OnCollision(string message)
+    {
+        OnCollisionHandler.Invoke(message);
+        Debug.Log(message); // Обработка события завершения с ошибкой
+    }
+
+    private void OnFinishSuccess(string message)
+    {
+        Debug.Log(message); // Обработка события успешного завершения
+        OnQuestionCompleted?.Invoke(message);
+    }
+
+    private void OnFinishUnsuccessful(string message)
+    {
+        Debug.Log(message); // Обработка события завершения с ошибкой
+        OnTimerStopHandler?.Invoke("Вопрос завершен неудачно, т.к. время его выполнения вышло.");
+    }
+
+    private void HandleShowExplanation(string message)
+    {
+        if (question != null && !string.IsNullOrEmpty(question.explanation))
+        {
+            OnExplanationRequested?.Invoke(question.explanation);
+        }
     }
 
     IEnumerator LoadTicketData()
     {
-        Debug.Log(QuestionURL.GET_TICKET_BY_ID);
-        UnityWebRequest request = UnityWebRequest.Get(QuestionURL.ALL_QUESTION_URL + "/" + GlobalState.questionId);
+        string url;
+        if (GlobalState.questionId != -1) url = QuestionURL.GET_QUESTION_BY_ID(GlobalState.questionId);
+        else url = QuestionURL.RANDOM_QESTION_URL;
+
+        UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -26,10 +72,10 @@ public class DatabaseLoader : MonoBehaviour
             Debug.Log(jsonData);
             try
             {
-                Question ticketData = JsonConvert.DeserializeObject<Question>(jsonData);
-                Debug.Log(ticketData);
+                question = JsonConvert.DeserializeObject<Question>(jsonData);
+                Debug.Log(question);
                 // Debug.Log(ticketData.Id + " " + ticketData.IntersectionType + " " + ticketData.Question + " " + ticketData.Explanation + " " + ticketData.SignsArr.ToString() + " " + ticketData.TrafficLightsArr.ToString() + " " + ticketData.TrafficParticipantsArr.ToString() + " ");
-                createObjectManager.ProcessTicketData(ticketData);
+                createObjectManager.ProcessTicketData(question);
             }
             catch (JsonException ex)
             {
@@ -40,6 +86,16 @@ public class DatabaseLoader : MonoBehaviour
         {
             Debug.LogError("Failed to load ticket data: " + request.error);
         }
+    }
+
+    private void OnDestroy()
+    {
+        RoadUsersCollisionHandler.onCollisionWithRoadUser -= OnCollision;
+        GlobalManager.FinishSuccess -= OnFinishSuccess;
+        TimerController.FinishUnsuccessful -= OnFinishUnsuccessful;
+        EventButton.OnShowExplanation -= HandleShowExplanation;
+
+        GlobalState.ClearData();
     }
 }
 

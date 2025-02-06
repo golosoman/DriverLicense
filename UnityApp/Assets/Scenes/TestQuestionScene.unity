@@ -585,7 +585,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6656254538037231098, guid: b9dde841c2a14c64b9000d8ecf4ac982, type: 3}
       propertyPath: m_text
-      value: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0431\u0438\u043B\u0435\u0442"
+      value: "\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0432\u043E\u043F\u0440\u043E\u0441"
       objectReference: {fileID: 0}
     - target: {fileID: 7628593049488418297, guid: b9dde841c2a14c64b9000d8ecf4ac982, type: 3}
       propertyPath: m_SizeDelta.x
@@ -735,8 +735,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82682c03218c5448854e249dc955772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoaderForAdmin: {fileID: 0}
-  sceneLoaderForStudent: {fileID: 0}
+  sceneLoaderForAdmin: {fileID: 1565670376}
+  sceneLoaderForStudent: {fileID: 1445512393}
 --- !u!1 &1281032519
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,6 +881,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: 2
+--- !u!1 &1463961457 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4238550919540182398, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
+  m_PrefabInstance: {fileID: 1803006520}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1463961462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463961457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f82682c03218c5448854e249dc955772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneLoaderForAdmin: {fileID: 1565670376}
+  sceneLoaderForStudent: {fileID: 1445512393}
 --- !u!1 &1491414320
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,19 +1186,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6559467774859715009, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6559467774859715009, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2096439689}
+      objectReference: {fileID: 1463961462}
     - target: {fileID: 6559467774859715009, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Hide
+      value: CheckUserRole
       objectReference: {fileID: 0}
     - target: {fileID: 6559467774859715009, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: HideModalWindow, Assembly-CSharp
+      value: UserRoleChecker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6559467774859715009, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 9023333740709280758, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       propertyPath: m_Pivot.y
@@ -1209,6 +1232,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4480354682861588883, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2096439689}
+    - targetCorrespondingSourceObject: {fileID: 4238550919540182398, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1463961462}
   m_SourcePrefab: {fileID: 100100000, guid: 7435a5024e049e345b35e7444e52cbf5, type: 3}
 --- !u!1001 &2022004071
 PrefabInstance:
@@ -1413,6 +1439,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 791101033}
     m_Modifications:
+    - target: {fileID: 192013579775004559, guid: 051b7afc014d9224d8fff6f5b40fc3b6, type: 3}
+      propertyPath: timeLeft
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 296833554506800796, guid: 051b7afc014d9224d8fff6f5b40fc3b6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

@@ -32,24 +32,34 @@ public class ModalManager : MonoBehaviour
     private void OnEnable()
     {
         UploadingQuestionsFromTicket.OnExplanationRequested += ShowExplanationModal;
-        UploadingQuestionsFromTicket.OnTicketCompleted += ShowFinishModal;
+        UploadingQuestionsFromTicket.OnTicketCompletedSecond += ShowFinishModal;
+        UploadingQuestionsFromTicket.OnCollisionHandler += ShowExplanationModal;
+
         EventButton.OnShowExitModal += ShowExitModal;
+
+        DatabaseLoader.OnCollisionHandler += ShowFinishModal;
+        DatabaseLoader.OnQuestionCompleted += ShowFinishModal;
+        DatabaseLoader.OnTimerStopHandler += ShowFinishModal;
+        DatabaseLoader.OnExplanationRequested += ShowExplanationModal;
     }
 
     private void OnDisable()
     {
         UploadingQuestionsFromTicket.OnExplanationRequested -= ShowExplanationModal;
-        UploadingQuestionsFromTicket.OnTicketCompleted -= ShowFinishModal;
+        UploadingQuestionsFromTicket.OnTicketCompletedSecond -= ShowFinishModal;
         EventButton.OnShowExitModal -= ShowExitModal;
+
+        DatabaseLoader.OnCollisionHandler -= ShowFinishModal;
+        DatabaseLoader.OnQuestionCompleted -= ShowFinishModal;
+        DatabaseLoader.OnTimerStopHandler -= ShowFinishModal;
+        DatabaseLoader.OnExplanationRequested -= ShowExplanationModal;
     }
 
-    public void ShowFinishModal(StatisticRequest statistic)
+    public void ShowFinishModal(string message)
     {
-        string message;
-        if (statistic.result) message = "Поздравляем \nс успешной сдачей \nбилета!";
-        else message = "Не расстраивайся, в\n следующий раз все \nобязательно получится!";
         ShowModal(finishModalPanel, finishModalText, message);
     }
+
 
     public void ShowExplanationModal(string message)
     {

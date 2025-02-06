@@ -152,7 +152,7 @@ public class CreateObjectManager : ScriptableObject
 
     void CreateTrafficLight(TrafficLight trafficLightData, GameObject spawnPoint)
     {
-        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_TRAFFIC_LIGHTS}{trafficLightData.modelName}{trafficLightData.state}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
+        Instantiate(PrefabManager.GetPrefab($"{FilePath.PATH_PREFAB_TRAFFIC_LIGHTS}{trafficLightData.modelName}"), spawnPoint.transform.position, spawnPoint.transform.rotation, intersectionContainer.transform);
     }
 
     string GetModelName<T>(T entity)

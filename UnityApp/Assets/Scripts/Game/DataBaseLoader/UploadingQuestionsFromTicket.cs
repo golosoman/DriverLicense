@@ -10,11 +10,14 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
     private List<Answer> answers = new List<Answer>(); // Список ответов
     private Ticket ticketData;
     private int incorrectAnswers = 0;
-
-    private string apiUrl = "http://localhost:8080/api/tickets/random"; // URL для получения случайного билета
-
     public delegate void TicketCompletionHandler(StatisticRequest statisticRequest);
     public static event TicketCompletionHandler OnTicketCompleted;
+
+    public delegate void TicketCompletionSecondHandler(string message);
+    public static event TicketCompletionSecondHandler OnTicketCompletedSecond;
+
+    public delegate void CollisionHandler(string message);
+    public static event CollisionHandler OnCollisionHandler;
 
     public delegate void ExplanationHandler(string explanation);
     public static event ExplanationHandler OnExplanationRequested;
@@ -27,12 +30,27 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         GlobalManager.FinishSuccess += OnFinishSuccess;
         TimerController.FinishUnsuccessful += OnFinishUnsuccessful;
         EventButton.OnShowExplanation += HandleShowExplanation;
+        RoadUsersCollisionHandler.onCollisionWithRoadUser += OnCollision;
     }
 
     private void LoadTickets()
     {
         string bearerToken = GlobalState.userToken; // Получаем токен
-        ApiHandler.SendGetRequest(apiUrl, this, OnTicketsReceived, bearerToken);
+        string url;
+        if (GlobalState.ticketId != -1) url = TicketURL.GET_TICKET_BY_ID(GlobalState.ticketId);
+        else url = TicketURL.RANDOM_TICKET_URL;
+
+        ApiHandler.SendGetRequest(url, this, OnTicketsReceived, bearerToken);
+    }
+
+    private void OnCollision(string message)
+    {
+        OnCollisionHandler.Invoke(message);
+        Debug.Log(message); // Обработка события завершения с ошибкой
+        RecordAnswer(false);
+        incorrectAnswers++;
+        currentQuestionIndex++;
+        DisplayNextQuestion(); // Переход к следующему вопросу
     }
 
     private void OnTicketsReceived(ApiResponse response)
@@ -52,6 +70,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
 
     void DisplayNextQuestion()
     {
+        GlobalManager.carCount = 0;
         if (currentQuestionIndex < questions.Count)
         {
             createObjectManager.ProcessTicketData(questions[currentQuestionIndex]);
@@ -101,6 +120,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         };
 
         OnTicketCompleted?.Invoke(statisticRequest); // Генерируем событие завершения билета
+        OnTicketCompletedSecond?.Invoke(statisticRequest.result ? "Поздравляем \nс успешной сдачей \nбилета!" : "Не расстраивайся, в\n следующий раз все \nобязательно получится!");
     }
 
     private void HandleShowExplanation(string message)
@@ -116,5 +136,8 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         GlobalManager.FinishSuccess -= OnFinishSuccess;
         TimerController.FinishUnsuccessful -= OnFinishUnsuccessful;
         EventButton.OnShowExplanation -= HandleShowExplanation;
+        RoadUsersCollisionHandler.onCollisionWithRoadUser -= OnCollision;
+
+        GlobalState.ClearData();
     }
 }

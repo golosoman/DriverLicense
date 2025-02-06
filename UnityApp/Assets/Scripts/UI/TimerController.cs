@@ -15,6 +15,8 @@ public class TimerController : MonoBehaviour
     {
         UpdateTimerDisplay();
         InvokeRepeating("UpdateTimer", 1f, 1f); // Обновляем таймер каждую секунду
+        UploadingQuestionsFromTicket.OnTicketCompletedSecond += CompleteHandler;
+        DatabaseLoader.OnQuestionCompleted += CompleteHandler;
     }
 
     void UpdateTimer()
@@ -27,7 +29,7 @@ public class TimerController : MonoBehaviour
         else
         {
             TimerExpired();
-            CancelInvoke("UpdateTimer"); // Останавливаем обновление таймера
+            TimerStop();
         }
     }
 
@@ -41,7 +43,22 @@ public class TimerController : MonoBehaviour
     void TimerExpired()
     {
         Debug.Log("Время вышло!");
-        timerText.text = "Время вышло!";
+        timerText.text = "00:00";
         FinishUnsuccessful?.Invoke("Время вышло!"); // Вызов события
+    }
+
+    private void TimerStop()
+    {
+        CancelInvoke("UpdateTimer"); // Останавливаем обновление таймера
+    }
+
+    private void CompleteHandler(string message)
+    {
+        TimerStop();
+    }
+
+    private void OnDestroy()
+    {
+        UploadingQuestionsFromTicket.OnTicketCompletedSecond -= CompleteHandler;
     }
 }

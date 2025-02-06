@@ -476,8 +476,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 540e7d605410a6045ad4d2dd43ccc24b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notificationPanel: {fileID: 1177699202}
-  notificationText: {fileID: 361506453}
+  errorNotificationPanel: {fileID: 1177699202}
+  errorNotificationText: {fileID: 361506453}
+  trueNotificationPanel: {fileID: 0}
+  trueNotificationText: {fileID: 0}
 --- !u!4 &946377693
 Transform:
   m_ObjectHideFlags: 0
