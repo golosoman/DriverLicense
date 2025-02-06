@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.golosoman.backend.domain.dto.response.JwtAuthenticationResponse;
 import ru.golosoman.backend.domain.dto.request.SignInRequest;
 import ru.golosoman.backend.domain.dto.request.SignUpRequest;
+import ru.golosoman.backend.domain.dto.response.UserResponse;
 import ru.golosoman.backend.domain.model.Role;
 import ru.golosoman.backend.domain.model.User;
 
@@ -57,5 +58,10 @@ public class AuthenticationService {
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
+    }
+
+    public UserResponse getCurrentUser() {
+        User user = userService.getCurrentUser();
+        return new UserResponse(user.getUsername(), user.getRole());
     }
 }
