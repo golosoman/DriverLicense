@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,9 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
     public delegate void ExplanationHandler(string explanation);
     public static event ExplanationHandler OnExplanationRequested;
 
+    public delegate void ObstacleHandler(string message);
+    public static event ObstacleHandler OnObstacleHanlder;
+
     void Start()
     {
         createObjectManager = ScriptableObject.CreateInstance<CreateObjectManager>();
@@ -31,6 +35,17 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         TimerController.FinishUnsuccessful += OnFinishUnsuccessful;
         EventButton.OnShowExplanation += HandleShowExplanation;
         RoadUsersCollisionHandler.onCollisionWithRoadUser += OnCollision;
+        TrafficRuleEnforcer.OnObstacleHanlder += HandleObstacleHandler;
+    }
+
+    private void HandleObstacleHandler(string message)
+    {
+        OnObstacleHanlder.Invoke(message);
+        Debug.Log(message); // Обработка события завершения с ошибкой
+        RecordAnswer(false);
+        incorrectAnswers++;
+        currentQuestionIndex++;
+        DisplayNextQuestion(); // Переход к следующему вопросу
     }
 
     private void LoadTickets()
@@ -137,7 +152,7 @@ public class UploadingQuestionsFromTicket : MonoBehaviour
         TimerController.FinishUnsuccessful -= OnFinishUnsuccessful;
         EventButton.OnShowExplanation -= HandleShowExplanation;
         RoadUsersCollisionHandler.onCollisionWithRoadUser -= OnCollision;
-
+        TrafficRuleEnforcer.OnObstacleHanlder -= HandleObstacleHandler;
         GlobalState.ClearData();
     }
 }

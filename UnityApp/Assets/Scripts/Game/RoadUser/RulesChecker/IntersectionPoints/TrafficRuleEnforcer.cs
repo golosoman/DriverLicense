@@ -6,6 +6,9 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
     public RoadManager RoadUserManager { get; set; }
     public bool hasObstacle = false;
 
+    public delegate void ObstacleHandler(string message);
+    public static event ObstacleHandler OnObstacleHanlder;
+
 
     private void Start()
     {
@@ -17,17 +20,18 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             CarMovement userMovement = other.gameObject.GetComponent<CarMovement>();
-            Vector3 position = gameObject.transform.position;
-
+            Vector2 position = gameObject.transform.position;
+            // CheckRuleForEquivalentIntersection(other.gameObject, userMovement, position);
+            CheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
             // if (RoadUserManager.TrafficLightDatas.Length > 0)
             // {
             //     CheckRuleForRegulatedIntersection(other.gameObject, userMovement, position);
             // }
-            if (RoadUserManager.SignDatas.Length > 0)
-            {
-                CheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
-            }
-            // if (true)
+            // else if (RoadUserManager.SignDatas.Length > 0)
+            // {
+            //     CheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
+            // }
+            // else
             // {
             //     CheckRuleForEquivalentIntersection(other.gameObject, userMovement, position);
             // }
@@ -39,29 +43,36 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         if (other.gameObject.tag == TagObjectNamesTypes.CAR)
         {
             CarMovement userMovement = other.gameObject.GetComponent<CarMovement>();
-            Vector3 position = gameObject.transform.position;
-
+            Vector2 position = gameObject.transform.position;
+            // ReCheckRuleForEquivalentIntersection(position);
+            ReCheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
             // if (RoadUserManager.TrafficLightDatas.Length > 0)
             // {
             //     ReCheckRuleForRegulatedIntersection(position);
             // }
-            if (RoadUserManager.SignDatas.Length > 0)
-            {
-                ReCheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
-            }
-            // if (true)
+            // else if (RoadUserManager.SignDatas.Length > 0)
+            // {
+            //     ReCheckRuleForUnregulatedIntersection(other.gameObject, userMovement, position);
+            // }
+            // else
             // {
             //     ReCheckRuleForEquivalentIntersection(position);
             // }
         }
     }
 
-    protected void ReCheckRuleForRegulatedIntersection(Vector3 pointPosition)
+    public void CheckRuleForUnregulatedIntersection(GameObject gameObject, CarMovement userMovement, Vector2 pointPosition)
     {
-        // Реализация для повторной проверки регулируемого перекрестка
+        Debug.Log("Проверяем ПДД на нерегулируемом перекрестке!");
+        hasObstacle = !CheckPriority(gameObject, userMovement, pointPosition);
+        if (hasObstacle)
+        {
+            userMovement.StopMovement();
+            ShowUserDialog();
+        }
     }
 
-    protected void ReCheckRuleForUnregulatedIntersection(GameObject car, CarMovement userMovement, Vector3 pointPosition)
+    protected void ReCheckRuleForUnregulatedIntersection(GameObject car, CarMovement userMovement, Vector2 pointPosition)
     {
         hasObstacle = !ReCheckPriority(car, userMovement, pointPosition);
         if (userMovement.HasTurned())
@@ -76,17 +87,18 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         }
     }
 
-    protected void ReCheckRuleForEquivalentIntersection(Vector3 pointPosition)
+    protected void ReCheckRuleForEquivalentIntersection(Vector2 pointPosition)
     {
         hasObstacle = ReCheckObstacleOnRight(pointPosition);
         if (hasObstacle)
         {
+            OnObstacleHanlder?.Invoke("Машина не пропустила помеху!");
             Debug.Log("Машина не пропустила помеху!");
             RoadUserManager.ViolationRules = true;
         }
     }
 
-    protected void CheckRuleForEquivalentIntersection(GameObject gameObject, CarMovement userMovement, Vector3 pointPosition)
+    protected void CheckRuleForEquivalentIntersection(GameObject gameObject, CarMovement userMovement, Vector2 pointPosition)
     {
         hasObstacle = CheckObstacleOnRight(gameObject, userMovement, pointPosition);
 
@@ -97,28 +109,23 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         }
     }
 
-    public void CheckRuleForUnregulatedIntersection(GameObject gameObject, CarMovement userMovement, Vector3 pointPosition)
+    protected void ReCheckRuleForRegulatedIntersection(Vector2 pointPosition)
     {
-        Debug.Log("Проверяем ПДД на нерегулируемом перекрестке!");
-        hasObstacle = !CheckPriority(gameObject, userMovement, pointPosition);
-        if (hasObstacle)
-        {
-            userMovement.StopMovement();
-            ShowUserDialog();
-        }
+        // Реализация для повторной проверки регулируемого перекрестка
     }
 
-    public void CheckRuleForRegulatedIntersection(GameObject gameObject, RoadUserMovement userMovement, Vector3 pointPosition)
+    public void CheckRuleForRegulatedIntersection(GameObject gameObject, RoadUserMovement userMovement, Vector2 pointPosition)
     {
         // Реализация для регулируемого перекрестка
     }
 
-    protected bool CheckPriorityInternal(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition, string sideDirection)
+    protected bool CheckPriorityInternal(GameObject gameObject, CarMovement userMovement, Vector2 rayPosition, string sideDirection)
     {
-        Vector3 direction = RoadUserManager.RoadUserSpawnPoints[sideDirection].transform.position;
+        Vector2 direction = RoadUserManager.RoadUserSpawnPoints[sideDirection].transform.position;
         RaycastHit2D firstRay = RaycastingUtils.LetOutRay(rayPosition, (direction - rayPosition).normalized);
         RaycastHit2D secondRay = RaycastingUtils.LetOutRay(rayPosition, Quaternion.Euler(0f, 0f, 6f) * (direction - rayPosition).normalized);
         GameObject otherCar = RaycastingUtils.CheckRoadUser(firstRay) != null ? firstRay.collider.gameObject : RaycastingUtils.CheckRoadUser(secondRay) != null ? secondRay.collider.gameObject : null;
+
         if (otherCar != null)
         {
             CarMovement otherCarMovement = otherCar.GetComponent<CarMovement>();
@@ -142,7 +149,7 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         }
     }
 
-    protected bool ReCheckPriorityInternal(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition, Vector2 rightDirection, Vector2 downDirection)
+    protected bool ReCheckPriorityInternal(GameObject gameObject, CarMovement userMovement, Vector2 rayPosition, Vector2 rightDirection, Vector2 downDirection)
     {
         GameObject rightCar = RaycastingUtils.CheckRoadUser(RaycastingUtils.LetOutRay(rayPosition, rightDirection));
         GameObject downCar = RaycastingUtils.CheckRoadUser(RaycastingUtils.LetOutRay(rayPosition, downDirection, 12));
@@ -174,10 +181,10 @@ public abstract class TrafficRuleEnforcer : MonoBehaviour
         return true;
     }
 
-    public abstract bool CheckObstacleOnRight(GameObject gameObject, RoadUserMovement userMovement, Vector3 rayPosition);
-    public abstract bool ReCheckObstacleOnRight(Vector3 rayPosition);
-    public abstract bool CheckPriority(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition);
-    public abstract bool ReCheckPriority(GameObject gameObject, CarMovement userMovement, Vector3 rayPosition);
+    public abstract bool CheckObstacleOnRight(GameObject gameObject, RoadUserMovement userMovement, Vector2 rayPosition);
+    public abstract bool ReCheckObstacleOnRight(Vector2 rayPosition);
+    public abstract bool CheckPriority(GameObject gameObject, CarMovement userMovement, Vector2 rayPosition);
+    public abstract bool ReCheckPriority(GameObject gameObject, CarMovement userMovement, Vector2 rayPosition);
 
 
     public virtual void ShowUserDialog()

@@ -66,9 +66,9 @@ public class RoadUserMovement : MonoBehaviour
 
         while (isMoving && currentPoint < route.Length)
         {
-            Vector3 targetPosition = route[currentPoint].position;
+            Vector2 targetPosition = route[currentPoint].position;
 
-            while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+            while (Vector2.Distance(transform.position, targetPosition) > 0.1f)
             {
                 MoveTowardsTarget(targetPosition);
                 yield return null;
@@ -88,11 +88,11 @@ public class RoadUserMovement : MonoBehaviour
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
 
-        float distanceToTarget = Vector3.Distance((Vector2)transform.position, targetPosition);
+        float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPosition);
         AdjustSpeed(distanceToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        transform.position = Vector3.MoveTowards((Vector2)transform.position, targetPosition, currentSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards((Vector2)transform.position, targetPosition, currentSpeed * Time.deltaTime);
     }
 
     public virtual void AdjustSpeed(float distanceToTarget)

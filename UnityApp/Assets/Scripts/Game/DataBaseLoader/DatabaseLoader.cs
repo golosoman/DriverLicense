@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using System;
 
 public class DatabaseLoader : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class DatabaseLoader : MonoBehaviour
     public delegate void ExplanationHandler(string explanation);
     public static event ExplanationHandler OnExplanationRequested;
 
+    public delegate void ObstacleHandler(string message);
+    public static event ObstacleHandler OnObstacleHanlder;
+
     private Question question;
     // private TrafficRulesManager trafficRulesManager;
 
@@ -28,7 +32,14 @@ public class DatabaseLoader : MonoBehaviour
         GlobalManager.FinishSuccess += OnFinishSuccess;
         TimerController.FinishUnsuccessful += OnFinishUnsuccessful;
         EventButton.OnShowExplanation += HandleShowExplanation;
+        TrafficRuleEnforcer.OnObstacleHanlder += HandleObstacleHandler;
         StartCoroutine(LoadTicketData());
+    }
+
+    private void HandleObstacleHandler(string message)
+    {
+        OnObstacleHanlder.Invoke(message);
+        Debug.Log(message); // Обработка события завершения с ошибкой
     }
 
     private void OnCollision(string message)
@@ -94,7 +105,7 @@ public class DatabaseLoader : MonoBehaviour
         GlobalManager.FinishSuccess -= OnFinishSuccess;
         TimerController.FinishUnsuccessful -= OnFinishUnsuccessful;
         EventButton.OnShowExplanation -= HandleShowExplanation;
-
+        TrafficRuleEnforcer.OnObstacleHanlder -= HandleObstacleHandler;
         GlobalState.ClearData();
     }
 }

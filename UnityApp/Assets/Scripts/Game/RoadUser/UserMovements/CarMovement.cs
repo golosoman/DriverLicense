@@ -79,11 +79,11 @@ public class CarMovement : RoadUserMovement
         float targetAngleZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
 
         Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngleZ);
-        float distanceToTarget = Vector3.Distance((Vector2)transform.position, targetPosition);
+        float distanceToTarget = Vector2.Distance((Vector2)transform.position, targetPosition);
         AdjustSpeed(distanceToTarget);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
         // Debug.Log(transform.rotation);
-        transform.position = Vector3.MoveTowards((Vector2)transform.position, targetPosition, CurrentSpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards((Vector2)transform.position, targetPosition, CurrentSpeed * Time.deltaTime);
     }
 }

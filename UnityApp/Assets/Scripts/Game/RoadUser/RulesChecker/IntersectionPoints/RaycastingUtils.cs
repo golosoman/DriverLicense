@@ -2,9 +2,10 @@ using UnityEngine;
 
 public static class RaycastingUtils
 {
-    public static RaycastHit2D LetOutRay(Vector3 startPostition, Vector3 nextPosition, float lengthRay = 7f)
+    public static RaycastHit2D LetOutRay(Vector2 startPostition, Vector2 nextPosition, float lengthRay = 7f)
     {
-        RaycastHit2D hit = Physics2D.Raycast(startPostition, nextPosition, lengthRay);
+        int layerMask = LayerMask.GetMask("RaycastLayer"); // или любой другой слой
+        RaycastHit2D hit = Physics2D.Raycast(startPostition, nextPosition, lengthRay, layerMask);
 
         Debug.DrawLine(startPostition,
                        startPostition + nextPosition * lengthRay,
@@ -15,7 +16,8 @@ public static class RaycastingUtils
 
     public static GameObject CheckRoadUser(RaycastHit2D hit)
     {
-        if (hit.collider != null && hit.collider.gameObject.CompareTag("Car"))
+        Debug.Log(hit.collider);
+        if (hit.collider != null && hit.collider.gameObject.CompareTag(TagObjectNamesTypes.CAR))
         {
             Debug.Log("Обнаружен транспорт (машина): " + hit.collider.gameObject.name);
             return hit.collider.gameObject;

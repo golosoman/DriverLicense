@@ -34,13 +34,16 @@ public class ModalManager : MonoBehaviour
         UploadingQuestionsFromTicket.OnExplanationRequested += ShowExplanationModal;
         UploadingQuestionsFromTicket.OnTicketCompletedSecond += ShowFinishModal;
         UploadingQuestionsFromTicket.OnCollisionHandler += ShowExplanationModal;
+        // UploadingQuestionsFromTicket.OnObstacleHanlder += ShowExplanationModal;
 
         EventButton.OnShowExitModal += ShowExitModal;
+        CheckerHandler.OnHasObstacle += ShowExplanationModal;
 
         DatabaseLoader.OnCollisionHandler += ShowFinishModal;
         DatabaseLoader.OnQuestionCompleted += ShowFinishModal;
         DatabaseLoader.OnTimerStopHandler += ShowFinishModal;
         DatabaseLoader.OnExplanationRequested += ShowExplanationModal;
+        // DatabaseLoader.OnObstacleHanlder += ShowFinishModal;
     }
 
     private void OnDisable()

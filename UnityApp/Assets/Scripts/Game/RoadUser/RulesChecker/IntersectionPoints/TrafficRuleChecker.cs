@@ -6,10 +6,10 @@ public static class TrafficRuleChecker
     {
         if (otherRoadUserMovement.CurrentPoint + 1 < otherRoadUserMovement.Route.Length && roadUserMovement.CurrentPoint + 1 < roadUserMovement.Route.Length)
         {
-            Vector3 roadUserPositionStart = roadUser.transform.position;
-            Vector3 roadUserPositionEnd = roadUserMovement.Route[roadUserMovement.CurrentPoint + 1].transform.position;
-            Vector3 otherRoadUserPositionStart = otherRoadUser.transform.position;
-            Vector3 otherRoadUserPositionEnd = otherRoadUserMovement.Route[otherRoadUserMovement.CurrentPoint + 1].transform.position;
+            Vector2 roadUserPositionStart = roadUser.transform.position;
+            Vector2 roadUserPositionEnd = roadUserMovement.Route[roadUserMovement.CurrentPoint + 1].transform.position;
+            Vector2 otherRoadUserPositionStart = otherRoadUser.transform.position;
+            Vector2 otherRoadUserPositionEnd = otherRoadUserMovement.Route[otherRoadUserMovement.CurrentPoint + 1].transform.position;
 
             if (CheckIntersectionVectorType(roadUserPositionStart, roadUserPositionEnd, otherRoadUserPositionStart, otherRoadUserPositionEnd))
             {
@@ -19,9 +19,9 @@ public static class TrafficRuleChecker
         return false;
     }
 
-    public static bool CheckIntersectionVectorType(Vector3 P1_0, Vector3 P1_1, Vector3 P2_0, Vector3 P2_1)
+    public static bool CheckIntersectionVectorType(Vector2 P1_0, Vector2 P1_1, Vector2 P2_0, Vector2 P2_1)
     {
-        Vector3 d1 = P1_1 - P1_0; // Вектор направления первого участника
+        Vector2 d1 = P1_1 - P1_0; // Вектор направления первого участника
         Vector2 d2 = P2_1 - P2_0; // Вектор направления второго участника
 
         float det = d1.x * d2.y - d1.y * d2.x; // Определитель системы уравнений
@@ -63,7 +63,7 @@ public static class TrafficRuleChecker
         return false;
     }
 
-    public static bool CheckObstacleWithRays(GameObject gameObject, RoadUserMovement userMovement, Vector3 rayPosition, Vector3 direction)
+    public static bool CheckObstacleWithRays(GameObject gameObject, RoadUserMovement userMovement, Vector2 rayPosition, Vector2 direction)
     {
         RaycastHit2D firstRay = RaycastingUtils.LetOutRay(rayPosition, (direction - rayPosition).normalized);
         RaycastHit2D secondRay = RaycastingUtils.LetOutRay(rayPosition, Quaternion.Euler(0f, 0f, 6f) * (direction - rayPosition).normalized);

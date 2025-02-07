@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3606671539020498014}
   - component: {fileID: 2386761305604027294}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: LeftHandIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 6705875288476869104}
   - component: {fileID: 9106395953161560032}
   - component: {fileID: 4854981729239525004}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: CarType1
   m_TagString: Car
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ BoxCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 12
+  m_LayerOverridePriority: 10
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -316,7 +316,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8064956289809089376}
   - component: {fileID: 474522206679402394}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: RightHandIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
