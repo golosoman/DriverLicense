@@ -60,6 +60,7 @@ public abstract class CheckerHandler : MonoBehaviour
     protected void CheckTrafficRules(GameObject trafficParticipant)
     {
         CheckRuleForEquivalentIntersection(trafficParticipant);
+        // CheckRuleForUnregulatedIntersection(trafficParticipant);
         // if (RoadUserManager.TrafficLightDatas.Length > 0)
         // {
         //     CheckRuleForRegulatedIntersection(trafficParticipant);
@@ -77,6 +78,7 @@ public abstract class CheckerHandler : MonoBehaviour
     protected void ReCheckTrafficRules(GameObject trafficParticipant)
     {
         ReCheckRuleForEquivalentIntersection(trafficParticipant);
+        // ReCheckRuleForUnregulatedIntersection(trafficParticipant);
         // if (RoadUserManager.TrafficLightDatas.Length > 0)
         // {
         //     ReCheckRuleForRegulatedIntersection(trafficParticipant);
@@ -91,26 +93,28 @@ public abstract class CheckerHandler : MonoBehaviour
         // }
     }
 
+    public abstract void CheckObstacleOnRight(GameObject trafficParticipant);
+    public abstract void ReCheckObstacleOnRight(GameObject trafficParticipant);
+    public abstract void CheckSignPriority(GameObject trafficParticipant);
+    public abstract void ReCheckSignPriority(GameObject trafficParticipant);
+
     protected void CheckRuleForRegulatedIntersection(GameObject trafficParticipant)
     {
     }
-
-    public abstract void CheckObstacleOnRight(GameObject gameObject);
-    public abstract void ReCheckObstacleOnRight(GameObject gameObject);
 
     protected void ReCheckRuleForRegulatedIntersection(GameObject trafficParticipant)
     {
 
     }
 
-    protected void CheckRuleForUnregulatedIntersection()
+    protected void CheckRuleForUnregulatedIntersection(GameObject trafficParticipant)
     {
-        // Логика для нерегулируемого перекрестка
+        CheckSignPriority(trafficParticipant);
     }
 
-    protected void ReCheckRuleForUnregulatedIntersection()
+    protected void ReCheckRuleForUnregulatedIntersection(GameObject trafficParticipant)
     {
-        // Логика для нерегулируемого перекрестка
+        ReCheckSignPriority(trafficParticipant);
     }
 
     protected void CheckRuleForEquivalentIntersection(GameObject trafficParticipant)
