@@ -186,6 +186,58 @@ public class CarPoint1Checker : CarPointHandler
         Debug.Log("CheckFirstCar обработан.");
     }
 
+    // ПРОЕЗД РЕГУЛИРУЕМЫХ ПЕРЕКРЕСТКОВ
+    private void OnPaintWay1CheckTrafficLightPriorityEnterHandler(GameObject trafficParticipant)
+    {
+        CarMovement trafficParticipantMovement = trafficParticipant.GetComponent<CarMovement>();
+
+        if (trafficParticipantMovement.HasPriority)
+        {
+            GameObject otherTrafficParticipant = CarInSpawnPoint();
+            if (otherTrafficParticipant != null && otherTrafficParticipant != trafficParticipant)
+            {
+                CarMovement otherTrafficParticipantMovement = otherTrafficParticipant.GetComponent<CarMovement>();
+                if (otherTrafficParticipantMovement.HasPriority && TrafficRuleChecker
+                    .CheckIntersectionWithAnotherRoadUser(trafficParticipant, otherTrafficParticipant, trafficParticipantMovement, otherTrafficParticipantMovement))
+                {
+                    // Debug.Log($"Car is in spawn point at point {pointNumber}! Sending stopCar event.");
+                    OnStopCar?.Invoke(trafficParticipant);
+                }
+            }
+        }
+        else
+        {
+            OnStopCar?.Invoke(trafficParticipant);
+            OnHasObstacle?.Invoke(trafficParticipant);
+        }
+    }
+
+    private void OnPointWay1CheckTrafficLightPriorityExitHandler(GameObject trafficParticipant)
+    {
+        CarMovement trafficParticipantMovement = trafficParticipant.GetComponent<CarMovement>();
+
+        if (trafficParticipantMovement.HasPriority)
+        {
+            GameObject otherTrafficParticipant = CarInSpawnPoint();
+            // Debug.Log(otherTrafficParticipant);
+            if (otherTrafficParticipant != null && otherTrafficParticipant != trafficParticipant)
+            {
+                CarMovement otherTrafficParticipantMovement = otherTrafficParticipant.GetComponent<CarMovement>();
+                if (otherTrafficParticipantMovement.HasPriority && TrafficRuleChecker
+                    .CheckIntersectionWithAnotherRoadUser(trafficParticipant, otherTrafficParticipant, trafficParticipantMovement, otherTrafficParticipantMovement))
+                {
+                    // Debug.Log($"Car is in spawn point at point {pointNumber}! Sending stopCar event.");
+                    OnStopCar?.Invoke(trafficParticipant);
+                    OnHasObstacle?.Invoke(trafficParticipant);
+                }
+            }
+        }
+        else
+        {
+            OnStopCar?.Invoke(trafficParticipant);
+            OnHasObstacle?.Invoke(trafficParticipant);
+        }
+    }
 
     // Переменные для отслеживания ответов
     public static bool CheckAnotherCarResponseReceived { get; set; }
@@ -198,10 +250,10 @@ public class CarPoint1Checker : CarPointHandler
         Point1Checker.OnPointWay1CheckObstacleExit += OnPointWay1ExitHandler;
         Point1Checker.OnPointWay1CheckPriority1Enter += OnPointWay1CheckPriority1EnterHandler;
         Point1Checker.OnPointWay1CheckPriorityExit += OnPointWay1CheckPriorityExitHandler;
+        Point1Checker.OnPaintWay1CheckTrafficLightPriorityEnter += OnPaintWay1CheckTrafficLightPriorityEnterHandler;
+        Point1Checker.OnPointWay1CheckTrafficLightPriorityExit += OnPointWay1CheckTrafficLightPriorityExitHandler;
         CarPoint3Checker.OnCheckAnotherCar += OnCheckAnotherCarHandler;
     }
-
-
 
     protected override void UnsubscribeFromEvents()
     {
@@ -209,6 +261,8 @@ public class CarPoint1Checker : CarPointHandler
         Point1Checker.OnPointWay1CheckObstacleExit -= OnPointWay1ExitHandler;
         Point1Checker.OnPointWay1CheckPriority1Enter -= OnPointWay1CheckPriority1EnterHandler;
         Point1Checker.OnPointWay1CheckPriorityExit -= OnPointWay1CheckPriorityExitHandler;
+        Point1Checker.OnPaintWay1CheckTrafficLightPriorityEnter -= OnPaintWay1CheckTrafficLightPriorityEnterHandler;
+        Point1Checker.OnPointWay1CheckTrafficLightPriorityExit -= OnPointWay1CheckTrafficLightPriorityExitHandler;
         CarPoint3Checker.OnCheckAnotherCar += OnCheckAnotherCarHandler;
     }
 }

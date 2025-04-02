@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class GlobalState
 {
-    public static string userToken = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjIsInN1YiI6ImdvbG9zb21hbiIsImlhdCI6MTczOTAwMjQ0NywiZXhwIjoxNzM5MTQ2NDQ3fQ.yjv01KRQ8S5UFlRtMCCmh9MqzDiQD5SfT5PKrJ6Tcts";
+    public static string userToken = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjIsInN1YiI6ImdvbG9zb21hbiIsImlhdCI6MTc0MzUyOTU1MywiZXhwIjoxNzQzNjczNTUzfQ.apRzOlqpAQfOCEIdVtgi9dDmWV3Qsgq8ysdbQ3Unas4";
     public static int questionId = 28;
     public static int ticketId = -1;
 

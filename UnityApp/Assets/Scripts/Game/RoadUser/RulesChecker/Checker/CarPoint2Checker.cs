@@ -176,6 +176,59 @@ public class CarPoint2Checker : CarPointHandler
         Debug.Log("CheckFirstCar обработан.");
     }
 
+    // ПРОЕЗД РЕГУЛИРУЕМЫХ ПЕРЕКРЕСТКОВ
+    private void OnPaintWay2CheckTrafficLightPriorityEnterHandler(GameObject trafficParticipant)
+    {
+        CarMovement trafficParticipantMovement = trafficParticipant.GetComponent<CarMovement>();
+
+        if (trafficParticipantMovement.HasPriority)
+        {
+            GameObject otherTrafficParticipant = CarInSpawnPoint();
+            if (otherTrafficParticipant != null && otherTrafficParticipant != trafficParticipant)
+            {
+                CarMovement otherTrafficParticipantMovement = otherTrafficParticipant.GetComponent<CarMovement>();
+                if (otherTrafficParticipantMovement.HasPriority && TrafficRuleChecker
+                    .CheckIntersectionWithAnotherRoadUser(trafficParticipant, otherTrafficParticipant, trafficParticipantMovement, otherTrafficParticipantMovement))
+                {
+                    // Debug.Log($"Car is in spawn point at point {pointNumber}! Sending stopCar event.");
+                    OnStopCar?.Invoke(trafficParticipant);
+                }
+            }
+        }
+        else
+        {
+            OnStopCar?.Invoke(trafficParticipant);
+            OnHasObstacle?.Invoke(trafficParticipant);
+        }
+    }
+
+    private void OnPointWay2CheckTrafficLightPriorityExitHandler(GameObject trafficParticipant)
+    {
+        CarMovement trafficParticipantMovement = trafficParticipant.GetComponent<CarMovement>();
+
+        if (trafficParticipantMovement.HasPriority)
+        {
+            GameObject otherTrafficParticipant = CarInSpawnPoint();
+            // Debug.Log(otherTrafficParticipant);
+            if (otherTrafficParticipant != null && otherTrafficParticipant != trafficParticipant)
+            {
+                CarMovement otherTrafficParticipantMovement = otherTrafficParticipant.GetComponent<CarMovement>();
+                if (otherTrafficParticipantMovement.HasPriority && TrafficRuleChecker
+                    .CheckIntersectionWithAnotherRoadUser(trafficParticipant, otherTrafficParticipant, trafficParticipantMovement, otherTrafficParticipantMovement))
+                {
+                    // Debug.Log($"Car is in spawn point at point {pointNumber}! Sending stopCar event.");
+                    OnStopCar?.Invoke(trafficParticipant);
+                    OnHasObstacle?.Invoke(trafficParticipant);
+                }
+            }
+        }
+        else
+        {
+            OnStopCar?.Invoke(trafficParticipant);
+            OnHasObstacle?.Invoke(trafficParticipant);
+        }
+    }
+
     // Переменные для отслеживания ответов
     public static bool CheckAnotherCarResponseReceived { get; set; }
 
@@ -185,6 +238,8 @@ public class CarPoint2Checker : CarPointHandler
         Point2Checker.OnPointWay2CheckObstacleExit += OnPointWay2ExitHandler;
         Point2Checker.OnPointWay2CheckPriority1Enter += OnPointWay2CheckPriority1EnterHandler;
         Point2Checker.OnPointWay2CheckPriorityExit += OnPointWay2CheckPriorityExitHandler;
+        Point2Checker.OnPaintWay2CheckTrafficLightPriorityEnter += OnPaintWay2CheckTrafficLightPriorityEnterHandler;
+        Point2Checker.OnPointWay2CheckTrafficLightPriorityExit += OnPointWay2CheckTrafficLightPriorityExitHandler;
         CarPoint4Checker.OnCheckAnotherCar += OnCheckAnotherCarHandler;
     }
 
@@ -194,6 +249,8 @@ public class CarPoint2Checker : CarPointHandler
         Point2Checker.OnPointWay2CheckObstacleExit -= OnPointWay2ExitHandler;
         Point2Checker.OnPointWay2CheckPriority1Enter -= OnPointWay2CheckPriority1EnterHandler;
         Point2Checker.OnPointWay2CheckPriorityExit -= OnPointWay2CheckPriorityExitHandler;
+        Point2Checker.OnPaintWay2CheckTrafficLightPriorityEnter -= OnPaintWay2CheckTrafficLightPriorityEnterHandler;
+        Point2Checker.OnPointWay2CheckTrafficLightPriorityExit -= OnPointWay2CheckTrafficLightPriorityExitHandler;
         CarPoint4Checker.OnCheckAnotherCar -= OnCheckAnotherCarHandler;
     }
 }

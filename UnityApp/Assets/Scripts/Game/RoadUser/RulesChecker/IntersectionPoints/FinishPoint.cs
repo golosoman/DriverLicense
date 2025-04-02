@@ -15,12 +15,16 @@ public class FinishPoint : MonoBehaviour
             if (destroyObject)
             {
                 Destroy(other.gameObject);
-                GlobalManager.DecrementCarCount(); // Уменьшаем счетчик машин
+                GlobalManager.DecrementCarCount();
             }
             else
             {
                 other.gameObject.SetActive(false);
-                GlobalManager.DecrementCarCount(); // Уменьшаем счетчик машин
+
+                if (GlobalManager.carHasPriorityCount > 0)
+                    GlobalManager.DecrementCarHasPriorityCount();
+
+                GlobalManager.DecrementCarCount();
             }
         }
     }

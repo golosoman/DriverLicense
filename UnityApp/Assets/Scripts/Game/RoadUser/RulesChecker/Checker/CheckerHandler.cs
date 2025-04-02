@@ -12,7 +12,6 @@ public abstract class CheckerHandler : MonoBehaviour
     protected virtual void Start()
     {
         BaseInit();
-
     }
 
     private void HasObstacleHandler(GameObject trafficParticipant)
@@ -59,7 +58,8 @@ public abstract class CheckerHandler : MonoBehaviour
 
     protected void CheckTrafficRules(GameObject trafficParticipant)
     {
-        CheckRuleForEquivalentIntersection(trafficParticipant);
+        CheckRuleForRegulatedIntersection(trafficParticipant);
+        // CheckRuleForEquivalentIntersection(trafficParticipant);
         // CheckRuleForUnregulatedIntersection(trafficParticipant);
         // if (RoadUserManager.TrafficLightDatas.Length > 0)
         // {
@@ -77,7 +77,8 @@ public abstract class CheckerHandler : MonoBehaviour
 
     protected void ReCheckTrafficRules(GameObject trafficParticipant)
     {
-        ReCheckRuleForEquivalentIntersection(trafficParticipant);
+        ReCheckRuleForRegulatedIntersection(trafficParticipant);
+        // ReCheckRuleForEquivalentIntersection(trafficParticipant);
         // ReCheckRuleForUnregulatedIntersection(trafficParticipant);
         // if (RoadUserManager.TrafficLightDatas.Length > 0)
         // {
@@ -93,6 +94,8 @@ public abstract class CheckerHandler : MonoBehaviour
         // }
     }
 
+    public abstract void CheckTrafficLightPriority(GameObject trafficParticipant);
+    public abstract void RecheckTrafficLightPriority(GameObject trafficParticipant);
     public abstract void CheckObstacleOnRight(GameObject trafficParticipant);
     public abstract void ReCheckObstacleOnRight(GameObject trafficParticipant);
     public abstract void CheckSignPriority(GameObject trafficParticipant);
@@ -100,11 +103,12 @@ public abstract class CheckerHandler : MonoBehaviour
 
     protected void CheckRuleForRegulatedIntersection(GameObject trafficParticipant)
     {
+        CheckTrafficLightPriority(trafficParticipant);
     }
 
     protected void ReCheckRuleForRegulatedIntersection(GameObject trafficParticipant)
     {
-
+        RecheckTrafficLightPriority(trafficParticipant);
     }
 
     protected void CheckRuleForUnregulatedIntersection(GameObject trafficParticipant)
